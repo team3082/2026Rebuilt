@@ -7,7 +7,6 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
@@ -52,7 +51,7 @@ public class Robot extends LoggedRobot {
     OI.init();
 
 
-    Logger.recordMetadata("ProjectName", "2025Reefscape"); // Set a metadata value
+    Logger.recordMetadata("ProjectName", "2026Rebuilt"); // Set a metadata value
     if (isReal()) {
       Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
@@ -68,7 +67,6 @@ public class Robot extends LoggedRobot {
 
     Logger.start(); // Start logging
 
-    actuator = new PWM(1);
   }
 
   @Override
@@ -92,8 +90,6 @@ public class Robot extends LoggedRobot {
     SwerveManager.rotateAndDrive(0, new Vector2(1, 1));
   }
 
-  PWM actuator;
-
   @Override
   public void teleopInit() {
   }
@@ -101,9 +97,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
     OI.userInput();
-    try {
-      actuator.setPosition(0.9);
-    } catch (Exception e) {}
 
   }
 

@@ -71,45 +71,6 @@ public final class Tuning {
         public static final double ROTSPEED = 0.3;
     }
 
-    public static final class Elevator {
-        public static final double ELEVATOR_P = 0.35;
-        public static final double ELEVATOR_I = 0.0;
-        public static final double ELEVATOR_D = 0.005;
-        public static final double ELEVATOR_G = 0.05; 
-
-        public static final double MOTION_MAGIC_CRUISE_VELOCITY = 1500;
-        public static final double MOTION_MAGIC_ACCELERATION = 750;
-        public static final double MOTION_MAGIC_JERK = 1500;
-
-        public static final double HEIGHT_DEADBAND = 1.0;
-    }
-
-    public static final class EndEffector {
-        public static final double PIVOT_P = 0.2;
-        public static final double PIVOT_I = 0.0;
-        public static final double PIVOT_D = 0.0;
-
-        public static final double MOTION_MAGIC_CRUISE_VELOCITY = 600;
-        public static final double MOTION_MAGIC_ACCELERATION = 300;
-        public static final double MOTION_MAGIC_JERK = 0.0;
-
-        public static final double SAFE_ANGLE = Math.toRadians(30.0); 
-
-        public static final double PIVOT_DEADBAND = Math.toRadians(1.0);
-
-        public static final double INTAKE_SPEED = 0.4;
-    }
-  
-    public static final class Intake {
-        public static final double STOW_ANGLE = 0.0;
-        public static final double FEED_ANGLE = 90.0;
-        public static final double HOLD_ANGLE = 0.0;
-        public static final double EJECT_ANGLE = 0.0;
-
-        public static final double FEED_SPEED = 800.0;
-        public static final double EJECT_SPEED = 0.0;
-    }
-
     public static final class AutoPaths {
       
         public static Curve getAutoPath(Curve path) {

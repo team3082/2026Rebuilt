@@ -34,20 +34,10 @@ public class Constants {
         public static final double LENGTH = 35.0;
         public static final double MODULEOFFSET = 2.625;
 
-        // public static final double SWERVEMODX0 = (WIDTH / 2) - MODULEOFFSET;
-        // public static final double SWERVEMODX1 = -1 * (WIDTH / 2) + MODULEOFFSET;
-        // public static final double SWERVEMODX2 = -1 * (WIDTH / 2) + MODULEOFFSET;
-        // public static final double SWERVEMODX3 = (WIDTH / 2) - MODULEOFFSET;
-
         public static final double SWERVEMODX0 = Math.abs((WIDTH / 2.0) - MODULEOFFSET);
         public static final double SWERVEMODX1 = -Math.abs((WIDTH / 2.0) - MODULEOFFSET);
         public static final double SWERVEMODX2 = -Math.abs((WIDTH / 2.0) - MODULEOFFSET);
         public static final double SWERVEMODX3 = Math.abs((WIDTH / 2.0) - MODULEOFFSET);
-
-        // public static final double SWERVEMODY0 = -1 * (LENGTH / 2) + MODULEOFFSET;
-        // public static final double SWERVEMODY1 = -1 * (LENGTH / 2) + MODULEOFFSET;
-        // public static final double SWERVEMODY2 = (LENGTH / 2) - MODULEOFFSET;
-        // public static final double SWERVEMODY3 = (LENGTH / 2) - MODULEOFFSET;
 
         public static final double SWERVEMODY0 = -Math.abs((LENGTH / 2.0) - MODULEOFFSET);
         public static final double SWERVEMODY1 = -Math.abs((LENGTH / 2.0) - MODULEOFFSET);
@@ -120,14 +110,6 @@ public class Constants {
 
         }
 
-    }
-
-    public static final class AlgaeIntake {
-        public static final int INTAKEPIVOT_ID = 0;
-        public static final int TOP_MOTOR_ID = 0;
-        public static final int SENSOR_CHANNEL = 0;
-
-        public static final double INTAKE_GEAR_RATIO = 0.0;
     }
     
     public static final double METERSTOINCHES = 39.3701;
