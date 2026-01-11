@@ -1,0 +1,30 @@
+{
+  "snapPoints": [
+    {
+      "position": {
+        "x": 469.6711055418371,
+        "y": 24.296546953140933
+      },
+      "name": "Blue Trench Bottom",
+      "color": "blue",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1768160722256"
+    },
+    {
+      "position": {
+        "x": 469.6128063782257,
+        "y": 292.5075652497071
+      },
+      "name": "Blue Trench Up",
+      "color": "blue",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1768161719888"
+    }
+  ],
+  "snapSettings": {
+    "enabled": true,
+    "radius": 6
+  }
+}

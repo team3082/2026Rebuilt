@@ -1,0 +1,56 @@
+{
+  "id": "1768160629695",
+  "name": "BasicAuto",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 391.94776240091824,
+        "y": 241.1387862879399
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 490.80268935902006,
+        "y": 196.870648085471
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1761525063428,
+      "u": 0.5,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 1
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-01-11T19:43:49.695Z",
+  "lastModified": "2026-01-11T19:44:00.580Z"
+}
