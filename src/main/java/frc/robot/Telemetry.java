@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import frc.robot.auto.Auto;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwerveManager;
@@ -31,7 +32,7 @@ public class Telemetry {
     // Views
     private static Field2d fieldView = new Field2d();
     public static LoggedMechanism2d subsystemView = new LoggedMechanism2d(65/Constants.METERSTOINCHES, 120/Constants.METERSTOINCHES);
-    //public static Mechanism2d subsytemView = new Mechanism2d(65, 120);
+    public static Mechanism2d subsytemView = new Mechanism2d(10, 10);
     public static Mechanism2d swerveView = new Mechanism2d(60, 60);
 
     // Logging
@@ -71,6 +72,8 @@ public class Telemetry {
         
 
         robotTab.add("Auto Selector", Auto.routineManager.autoSelector);
+
+        robotTab.add("Subsystem Mech", subsystemView);
     }
 
     public static void update() {
@@ -149,6 +152,8 @@ public class Telemetry {
             System.out.println("Oopsies!: " + e);
         }
     }
+
+    
 
     
 }
