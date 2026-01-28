@@ -98,7 +98,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    Intake.stopIntaking();
+    Intake.stopIntake();
   }
 
   @Override

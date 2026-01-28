@@ -6,40 +6,70 @@ import frc.robot.Constants;
 
 public class Intake {
     private static TalonFX intakeMotor;
-     private static IntakeState state;
-     private static double speed;
+    private static TalonFX downMotor;
+    private static IntakeState state;
+    private static double speed;
+    private static double downSpeed;
 
     public static void init(){
-        intakeMotor = new TalonFX(Constants.Intake.MOTOR_ID);
+        intakeMotor = new TalonFX(Constants.Intake.MOTORINTAKE_ID);
+        downMotor = new TalonFX(Constants.Intake.MOTORDOWN_ID);
         state = IntakeState.RESTING;
         IntakeVisualizer.init();
     }
 
-    
     public static void update(){
         switch (state) {
             case RESTING:
-                intakeMotor.set(0);
-                speed = 0;
-                break;
+                resting();
+            break;
+            
+            case DOWN:
+                down();
+            break;
         
             case INTAKING:
-                intakeMotor.set(Constants.Intake.SPEED);
-                speed = Constants.Intake.SPEED;
-                break;
+                intake();
+            break;
         }
-
         IntakeVisualizer.update();
+    }
+
+    public static void stopIntake() {
+        state = IntakeState.RESTING;
+    }
+
+    public static void startDown() {
+        state = IntakeState.DOWN;
     }
 
     public static void startIntaking() {
         state = IntakeState.INTAKING;
     }
-    
-    public static void stopIntaking() {
-        state = IntakeState.RESTING;
-    }
+     
     public static double getSpeed(){
         return speed;
+    }
+
+    public static double getDownSpeed(){
+        return downSpeed;
+    }
+
+    public static void resting(){
+        intakeMotor.set(Constants.Intake.MOTORRESTSPEED);
+        speed = 0;
+        downSpeed = 0;
+    }
+
+    public static void down(){
+        downMotor.set(Constants.Intake.MOTORRESTSPEED);
+        speed = 0;
+        downSpeed = Constants.Intake.MOTORRESTSPEED;
+    }
+
+    public static void intake(){
+        intakeMotor.set(Constants.Intake.MOTORINTAKESPEED);
+        speed = Constants.Intake.MOTORINTAKESPEED;
+        downSpeed = 0;
     }
 }
