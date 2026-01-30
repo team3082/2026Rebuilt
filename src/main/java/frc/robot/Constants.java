@@ -117,9 +117,42 @@ public class Constants {
     public static final double FIELD_WIDTH = 651.25; 
 
     public static final boolean REPLAY = false;
+    public static final double ROTATAIONAL_DEADBAND = 0;
     
     public static final class Intake{
         public static int MOTOR_ID;
         public static double SPEED = 0.7;
+    }
+
+    public static final class Shooter {
+        // Hardware IDs
+        public static final int TURRET_MOTOR_ID = 0;
+        public static final int HALL_EFFECT_SENSOR = 0;
+        
+        // Gear Ratios
+        public static final double TURRET_RATIO = 20.0 / 200.0; 
+        public static final double HOOD_RATIO = 10.0;
+
+        // Hood PID Constants
+        public static final double HOOD_KP = 0;
+        public static final double HOOD_KD = 0;
+        public static final double HOOD_KI = 0;
+
+        // FLywheel Constants
+        public static final int FLYWHEEL_MOTOR_ID = 0;
+        public static final int HOOD_MOTOR_ID = 0;
+        public static final double HOOD_ANGLE_TOLERANCE = 0;
+        public static final double VELOCITY_TOLERANCE = 0; 
+        
+        // Turret PID Constants
+        public static final double TURRET_KP = 0.0;
+        public static final double TURRET_KI = 0.0;
+        public static final double TURRET_KD = 0.0;
+        
+        // Turret Control
+        public static final double ZEROING_SPEED = 0.1;
+        public static final double TURRET_DEADBAND = 2.0;
+        public static final double ROTATIONS_PER_SECOND = 0;
+
     }
 }

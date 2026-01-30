@@ -1,6 +1,6 @@
 package frc.robot.subsystems.scoring.shooter;
 
-public enum FlywheelState{
+public enum ShooterState {
     IDLE,
     REVVING,
     SHOOTING
