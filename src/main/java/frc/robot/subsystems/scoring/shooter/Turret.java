@@ -10,7 +10,7 @@ public class Turret {
     private static DigitalInput hallEffectSensor;
     private static PIDController turretPID;
     
-    private static TurretState turretState = TurretState.ZEROING;
+    public static TurretState turretState = TurretState.ZEROING;
     private static double setAngle = 0.0;
     private static double currentAngle = 0.0;
     private static double pastAngle = 0.0;

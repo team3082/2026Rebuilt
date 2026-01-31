@@ -4,12 +4,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 
-public class HoodedFlywheel {
+public class Shooter {
     private static TalonFX flywheelMotor;
     private static TalonFX angleMotor;
     private static PIDController angleMotorPID;
     
-    private static FlywheelState flywheelState = FlywheelState.IDLE;
+    public static ShooterState shooterState = ShooterState.IDLE;
     private static double targetedSpeed = 0.0;
     private static double targetedAngle = 0.0;
     private static double currentAngle = 0.0;
@@ -35,17 +35,18 @@ public class HoodedFlywheel {
      * Updates the Hooded Flywheel 
      */
     public static void update() {
-        switch (flywheelState) {
+        switch (shooterState) {
             case IDLE:
                 updateAngleMotor();
                 flywheelMotor.set(0);
+                targetedAngle = 0;
                 break;
             case REVVING:
                 updateAngleMotor();
                 flywheelMotor.set(targetedSpeed);
                 
                 if (atAngle() && atRampedSpeed()) {
-                    flywheelState = FlywheelState.SHOOTING;
+                    shooterState = ShooterState.SHOOTING;
                 }
                 
                 break;
@@ -88,8 +89,8 @@ public class HoodedFlywheel {
      * Sets the flywheel state.
      * @param state Desired flywheel state
      */
-    public static void setState(FlywheelState state) {
-        flywheelState = state;
+    public static void setState(ShooterState state) {
+        shooterState = state;
     }
 
     /**
