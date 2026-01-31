@@ -24,16 +24,22 @@ public class LEDManager {
         m_led.setLength(m_ledBuffer.getLength());
     }
 
+    public static void update() {
+        currentPattern.applyTo(m_ledBuffer);
+        m_led.setData(m_ledBuffer);
+    }
+
     public enum Patterns{
         RED,
         GREEN,
-        BLUE
+        BLUE,
+        ORANGE_FLASH
     }
     
     /**
-     * Sets current pattern of the LEDs to a soild color, applies to the LED strip and the Mech2D
+     * Sets current pattern of the LEDs to a soild color, and applies to the LED strip
      */
-    public static void setColor(Patterns color){
+    public static void setPattern(Patterns color){
         switch (color) {
             case RED:
                 Color set_color = new Color(255, 0, 0);
@@ -41,7 +47,6 @@ public class LEDManager {
                 currentPattern.applyTo(m_ledBuffer);
                 m_led.setData(m_ledBuffer);
                 m_led.start();
-                LEDMech2D.mechLED(new Color8Bit(255, 0, 0));
                 break;
 
             case GREEN:
@@ -50,7 +55,6 @@ public class LEDManager {
                 currentPattern.applyTo(m_ledBuffer);
                 m_led.setData(m_ledBuffer);
                 m_led.start();
-                LEDMech2D.mechLED(new Color8Bit(0, 255, 0));
                 break;
 
             case BLUE:
@@ -59,7 +63,22 @@ public class LEDManager {
                 currentPattern.applyTo(m_ledBuffer);
                 m_led.setData(m_ledBuffer);
                 m_led.start();
-                LEDMech2D.mechLED(new Color8Bit(0, 0, 255));
+                break;
+            
+            case ORANGE_FLASH:
+                set_color = new Color(255, 0, 100);
+                // creates a continuous gradient with two sections of orange on it, seperated by black, then makes it scroll
+                currentPattern = LEDPattern.gradient(GradientType.kContinuous,
+                    set_color, 
+                    new Color(0,0,0), 
+                    new Color(0,0,0), 
+                    set_color, 
+                    new Color(0,0,0), 
+                    new Color(0,0,0)).scrollAtAbsoluteSpeed(Units.MetersPerSecond.of(1),kLedSpacing);
+                
+                currentPattern.applyTo(m_ledBuffer);
+                m_led.setData(m_ledBuffer);
+                m_led.start();
                 break;
 
             default:

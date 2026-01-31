@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.Auto;
 import frc.robot.subsystems.LEDs.LEDManager;
+import frc.robot.subsystems.LEDs.LEDMech2D;
 import frc.robot.subsystems.LEDs.LEDManager.Patterns;
 import frc.robot.subsystems.LEDs.LEDManager.Patterns;
 import frc.robot.subsystems.intake.Intake;
@@ -38,7 +39,7 @@ public class Robot extends LoggedRobot {
     RTime.init();
     Auto.init();
     LEDManager.init();
-
+    LEDMech2D.init();
     // Swerve
     Pigeon.init();
     SwerveManager.init();
@@ -78,15 +79,16 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    
     RTime.update();
     Telemetry.update();
     Pigeon.update();
     SwervePosition.update();
     SwerveManager.update();
     Intake.update();
-    LEDManager.setColor(Patterns.GREEN);
-      // Current colors are RED, GREEN and BLUE, see LED documantaion for more info
+    LEDManager.setPattern(Patterns.ORANGE_FLASH);
+      // Current patterns are RED, GREEN, BLUE, and ORANGE_FLASH, see LED documantaion for more info
+    LEDManager.update();
+    LEDMech2D.update();
   }
 
   @Override
