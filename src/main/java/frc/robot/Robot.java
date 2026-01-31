@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 // AUTO
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.auto.Auto;
+import frc.robot.subsystems.LEDs.LEDManager;
+import frc.robot.subsystems.LEDs.LEDManager.Patterns;
+import frc.robot.subsystems.LEDs.LEDManager.Patterns;
 import frc.robot.subsystems.intake.Intake;
 // SUBSYSTEMS
 import frc.robot.subsystems.sensors.Pigeon;
@@ -34,6 +37,7 @@ public class Robot extends LoggedRobot {
     }
     RTime.init();
     Auto.init();
+    LEDManager.init();
 
     // Swerve
     Pigeon.init();
@@ -81,7 +85,8 @@ public class Robot extends LoggedRobot {
     SwervePosition.update();
     SwerveManager.update();
     Intake.update();
-
+    LEDManager.setColor(Patterns.GREEN);
+      // Current colors are RED, GREEN and BLUE, see LED documantaion for more info
   }
 
   @Override
