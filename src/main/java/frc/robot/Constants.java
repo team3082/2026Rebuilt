@@ -120,8 +120,8 @@ public class Constants {
     public static final double ROTATAIONAL_DEADBAND = 0;
     
     public static final class Intake{
-        public static int MOTOR_ID;
-        public static double SPEED = 0.7;
+        public static final int MOTOR_ID = 0;
+        public static final double SPEED = 0.7;
     }
 
     public static final class Shooter {
@@ -142,6 +142,7 @@ public class Constants {
         public static final int FLYWHEEL_MOTOR_ID = 0;
         public static final int HOOD_MOTOR_ID = 0;
         public static final double HOOD_ANGLE_TOLERANCE = 0;
+        public static final double FLYWHEEL_DIAMETER = 4.0;
         public static final double VELOCITY_TOLERANCE = 0; 
         
         // Turret PID Constants
@@ -152,7 +153,6 @@ public class Constants {
         // Turret Control
         public static final double ZEROING_SPEED = 0.1;
         public static final double TURRET_DEADBAND = 2.0;
-        public static final double ROTATIONS_PER_SECOND = 0;
 
     }
 }
