@@ -122,4 +122,8 @@ public class Constants {
         public static int MOTOR_ID;
         public static double SPEED = 0.7;
     }
+
+    public static final class TrajectoryConstants{
+        public static int CURVE_RESOLUTION = 500;
+    }
 }

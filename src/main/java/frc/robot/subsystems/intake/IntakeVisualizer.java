@@ -23,7 +23,6 @@ public class IntakeVisualizer {
         lig2 = root.append(new LoggedMechanismLigament2d("lig2", 1, 0));
         lig3 = root.append(new LoggedMechanismLigament2d("lig3", 1, 0));
         lig4 = root.append(new LoggedMechanismLigament2d("lig4", 1, 0));
-
     }
 
     public static void update(){
