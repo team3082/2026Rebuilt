@@ -150,4 +150,12 @@ public class PurePursuit {
     public RobotPath getPath() {
         return path;
     }
+
+    /**
+     * Get the current t value along the path
+     * @return Current t value (0-1)
+     */
+    public double getCurrentT() {
+        return currentT;
+    }
 }

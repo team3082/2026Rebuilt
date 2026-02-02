@@ -4,16 +4,16 @@
   "anchorPoints": [
     {
       "position": {
-        "x": 391.94776240091824,
-        "y": 241.1387862879399
+        "x": 340.7497786311348,
+        "y": 220.02234855347234
       },
       "handleOutOffset": {
-        "x": 20,
-        "y": 0
+        "x": 55.04053983350161,
+        "y": 29.087144056761247
       },
       "handleInOffset": {
-        "x": -20,
-        "y": 0
+        "x": -17.682656991198904,
+        "y": -9.344711966219416
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -21,16 +21,33 @@
     },
     {
       "position": {
-        "x": 490.80268935902006,
-        "y": 196.870648085471
+        "x": 581.1567342257397,
+        "y": 216.86070246034615
       },
       "handleOutOffset": {
-        "x": 20,
-        "y": 0
+        "x": 45.777585511159145,
+        "y": -58.80661733214771
       },
       "handleInOffset": {
-        "x": -20,
-        "y": 0
+        "x": -42.35236132331645,
+        "y": 54.40651964586453
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 551.8412237490635,
+        "y": 19.413578734892667
+      },
+      "handleOutOffset": {
+        "x": 15.268176251017218,
+        "y": -12.918312349834014
+      },
+      "handleInOffset": {
+        "x": -52.54200818995753,
+        "y": 44.45547799071204
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -40,8 +57,20 @@
   "controlPoints": [
     {
       "id": 1761525063428,
-      "u": 0.5,
+      "u": 0.51,
       "color": "red",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": false
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1769994348456,
+      "u": 0.75,
+      "color": "blue",
       "attributes": [
         {
           "type": "stop",
@@ -49,8 +78,44 @@
         }
       ],
       "name": ""
+    },
+    {
+      "id": 1769995534540,
+      "u": 1.28,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 50
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1769995544537,
+      "u": 1.53,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 70
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1769995421728,
+      "u": 1.7,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": false
+        }
+      ],
+      "name": ""
     }
   ],
   "created": "2026-01-11T19:43:49.695Z",
-  "lastModified": "2026-01-11T19:44:00.580Z"
+  "lastModified": "2026-02-02T01:25:53.580Z"
 }

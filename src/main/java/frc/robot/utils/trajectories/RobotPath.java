@@ -11,6 +11,8 @@ import frc.robot.utils.Vector2;
  */
 public class RobotPath {
     private List<Vector2> points;
+    private List<Double> lengths;
+    private double totalLength;
     
     /**
      * Creates a new RobotPath from a list of points.
@@ -19,6 +21,24 @@ public class RobotPath {
      */
     public RobotPath(List<Vector2> points) {
         this.points = new ArrayList<>(points);
+        this.totalLength = calculateTotalLength();
+    }
+
+    /**
+     * Calculates the total length of the path as the sum of distances between consecutive points.
+     * @return Total length of the path
+     */
+    private double calculateTotalLength() {
+        double length = 0.0;
+        lengths = new ArrayList<>();
+        lengths.add(length);
+
+        for (int i = 1; i < points.size(); i++) {
+            length += points.get(i).dist(points.get(i-1));
+            lengths.add(length);
+        }
+
+        return length;
     }
     
     /**
@@ -47,6 +67,33 @@ public class RobotPath {
         Vector2 p2 = points.get(index + 1);
         
         return p1.add(p2.sub(p1).mul(fraction));
+    }
+
+    /**
+     * Gets the length along the path at parameter t in [0, 1].
+     * 
+     * @param t Fraction of the path (0 = start, 1 = end)
+     * @return Length along the path at parameter t
+     */
+    public double getLengthAt(double t) {
+        if (points.isEmpty()) {
+            throw new IllegalStateException("Path contains no points.");
+        }
+
+        t = Math.max(0, Math.min(1, t));
+
+        double indexDouble = t * (points.size() - 1);
+        int index = (int) indexDouble;
+
+        if (index >= points.size() - 1) {
+            return totalLength;
+        }
+
+        double fraction = indexDouble - index;
+        double lengthAtIndex = lengths.get(index);
+        double segmentLength = lengths.get(index + 1) - lengths.get(index);
+
+        return lengthAtIndex + segmentLength * fraction;
     }
     
     /**
@@ -93,7 +140,7 @@ public class RobotPath {
             if (t < 0 || t > 1) {
                 throw new IllegalArgumentException("t values must be in the range [0, 1]");
             }
-            
+
             if (t > lastT && t <= 1.0) {
                 paths.add(getSubPath(lastT, t));
                 lastT = t;
@@ -141,5 +188,14 @@ public class RobotPath {
      */
     public int getPointCount() {
         return points.size();
+    }
+
+    /**
+     * Returns the total length of the path.
+     * 
+     * @return Total length of the path
+     */
+    public double getTotalLength() {
+        return totalLength;
     }
 }

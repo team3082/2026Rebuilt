@@ -2,8 +2,11 @@ package frc.robot.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
+import frc.robot.utils.trajectories.FeatherFlow;
 /**
  * Manages autonomous routines for the robot.
  * Uses {@link RoutineManager} to automatically detect and handle routines
@@ -11,6 +14,18 @@ import frc.robot.auto.routineManager.RoutineManager;
  */
 public class Auto {
     public static RoutineManager routineManager;
+
+    @AutoRoutine()
+    public SequentialCommandGroup testPath(){
+        return FeatherFlow.buildFeatherAuto(
+            "BasicAuto", 
+            new InstantCommand(()->{System.out.println("Command Point 1");}),
+            new InstantCommand(()->{System.out.println("Command Point 2");}),
+            new InstantCommand(()->{System.out.println("Command Point 3");}),
+            new InstantCommand(()->{System.out.println("Command Point 4");}),
+            new InstantCommand(()->{System.out.println("Command Point 5");})
+        );
+    }
 
     /**
      * Gets the auto selector from {@link RoutineManager}
