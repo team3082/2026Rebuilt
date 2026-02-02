@@ -1,5 +1,6 @@
 package frc.robot.utils.trajectories;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utils.Vector2;
 
 /**
@@ -59,6 +60,9 @@ public class PurePursuit {
      */
     public Vector2 getDriveVector(Vector2 currentPos, double lookAheadDistance) {
         Vector2 targetPoint = getTargetPoint(currentPos, lookAheadDistance);
+        SmartDashboard.putNumber("X_error", targetPoint.sub(currentPos).x);
+        SmartDashboard.putNumber("Y_error", targetPoint.sub(currentPos).y);
+
         return targetPoint.sub(currentPos).norm();
     }
     
@@ -67,6 +71,10 @@ public class PurePursuit {
      */
     private double findClosestT(Vector2 currentPos) {
         int numSamples = path.getPointCount();
+        if (numSamples < 2) {
+            return currentT;
+        }
+        
         double closestT = currentT;
         double closestDist = Double.MAX_VALUE;
         
@@ -80,8 +88,6 @@ public class PurePursuit {
             if (dist < closestDist) {
                 closestDist = dist;
                 closestT = t;
-            } else {
-                break;
             }
         }
         

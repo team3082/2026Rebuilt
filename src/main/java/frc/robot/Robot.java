@@ -21,6 +21,7 @@ import frc.robot.swerve.SwervePID;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.trajectories.FeatherFlow;
 
 public class Robot extends LoggedRobot {
   @SuppressWarnings("resource")
@@ -33,6 +34,7 @@ public class Robot extends LoggedRobot {
       }
     }
     RTime.init();
+    FeatherFlow.init();
     Auto.init();
 
     // Swerve
@@ -92,8 +94,7 @@ public class Robot extends LoggedRobot {
   
   @Override
   public void autonomousPeriodic() {
-    // Auto.update();
-    SwerveManager.rotateAndDrive(0, new Vector2(1, 1));
+    Auto.update();
   }
 
   @Override

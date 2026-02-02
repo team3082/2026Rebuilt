@@ -10,7 +10,7 @@ import frc.robot.utils.Vector2;
  * Provides interpolation, subpath extraction, and splitting functionality.
  */
 public class RobotPath {
-    private List<Vector2> points;
+    public List<Vector2> points;
     private List<Double> lengths;
     private double totalLength;
     

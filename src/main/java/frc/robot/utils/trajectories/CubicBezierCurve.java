@@ -43,23 +43,18 @@ public class CubicBezierCurve extends Curve {
             );
         }
         
-        double oneMinusT = 1 - t;
-        double oneMinusT2 = oneMinusT * oneMinusT;
-        double oneMinusT3 = oneMinusT2 * oneMinusT;
-        double t2 = t * t;
-        double t3 = t2 * t;
+        double x = (Math.pow(1 - t,3) * p0.x) +
+        (3 * Math.pow(1 - t,2) * t * p1.x) +
+        (3 * (1 - t) * Math.pow(t,2) * p2.x) +
+        (Math.pow(t,3) * p3.x);
 
-        double x = oneMinusT3 * p0.x +
-                   3 * oneMinusT2 * t * p1.x +
-                   3 * oneMinusT * t2 * p2.x +
-                   t3 * p3.x;
+        double y = (Math.pow(1 - t,3) * p0.y) +
+        (3 * Math.pow(1 - t,2) * t * p1.y) +
+        (3 * (1 - t) * Math.pow(t,2) * p2.y) +
+        (Math.pow(t,3) * p3.y);
 
-        double y = oneMinusT3 * p0.y +
-                   3 * oneMinusT2 * t * p1.y +
-                   3 * oneMinusT * t2 * p2.y +
-                   t3 * p3.y;
-
-        return new Vector2(x, y);
+        Vector2 r = new Vector2(x, y);
+        return r;
     }
     
     /**

@@ -1,8 +1,19 @@
 package frc.robot.auto.commands;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.Tuning;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
+import frc.robot.utils.PIDController;
 import frc.robot.utils.TrapezoidalProfile;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.TrapezoidalProfile.TrapezoidalPreset;
@@ -21,10 +32,10 @@ import frc.robot.utils.trajectories.RobotPath;
  */
 public class FollowPath extends Command {
   private final PurePursuit follower;
-  private final TrapezoidalProfile profile;
+  private PIDController profile = new PIDController(0.7, 0, 0.1, 0.05, 0, 1);
   private final RobotPath path;
-  private final FeatherEvent[] events;
-  
+  private final FeatherEvent[] events;  
+
   private int eventIndex = 0;
   
   /**
@@ -38,9 +49,6 @@ public class FollowPath extends Command {
     this.path = path;
     this.follower = new PurePursuit(path);
     this.events = events;
-    this.profile = new TrapezoidalProfile(TrapezoidalPreset.MOVE_FAST);
-
-    profile.generateProfile(path.getTotalLength());
   }
 
   /**
@@ -50,6 +58,8 @@ public class FollowPath extends Command {
   @Override
   public void initialize() {
     follower.reset();
+    System.out.println("FollowPath: Starting path following.");
+    this.profile.setDest(1);
     eventIndex = 0;
   }
 
@@ -71,14 +81,18 @@ public class FollowPath extends Command {
     double t = follower.getCurrentT();
     double distance = path.getLengthAt(t);
 
-    double velocity = profile.getVelocity(distance);
-    double lookAheadDistance = 0.5; // TODO - make dynamic based on velocity
+    double velocity = profile.updateOutput(distance/path.getTotalLength());
+    double lookAheadDistance = Tuning.AUTO_PATH_LOOKAHEAD_MIN + 
+        (Tuning.AUTO_PATH_LOOKAHEAD_MAX - Tuning.AUTO_PATH_LOOKAHEAD_MIN) * velocity;
 
     Vector2 direction = follower.getDriveVector(robotPosition, lookAheadDistance);
     Vector2 driveVector = direction.mul(velocity);
 
     SwerveManager.rotateAndDrive(0, driveVector);
-
+    
+    if (events == null) {
+      return;
+    }
 
     if (eventIndex < events.length) {
       FeatherEvent currentEvent = events[eventIndex];
@@ -126,14 +140,6 @@ public class FollowPath extends Command {
    */
   @Override
   public boolean isFinished() {
-    boolean allCommandsFinished = true;
-    for (FeatherEvent event : events) {
-      if (!event.command.isFinished()) {
-        allCommandsFinished = false;
-        break;  
-      }
-    }
-
-    return allCommandsFinished && path.getEnd().dist(SwervePosition.getPosition()) < 0.1;
+    return follower.getCurrentT() >= 0.97;
   }
 }

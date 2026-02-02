@@ -113,8 +113,8 @@ public class Constants {
     }
     
     public static final double METERSTOINCHES = 39.3701;
-    public static final double FIELD_HEIGHT = 323.25;
-    public static final double FIELD_WIDTH = 651.25; 
+    public static final double FIELD_HEIGHT = 317.69;
+    public static final double FIELD_WIDTH = 651.22; 
 
     public static final boolean REPLAY = false;
     
@@ -124,6 +124,6 @@ public class Constants {
     }
 
     public static final class TrajectoryConstants{
-        public static int CURVE_RESOLUTION = 500;
+        public static int CURVE_RESOLUTION = 100;
     }
 }

@@ -12,10 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
+import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherPath.FeatherActionDescriptor;
 
@@ -61,17 +63,10 @@ public class FeatherFlow {
         for (int i = 0; i < anchorPoints.size() - 1; i++) {
             JsonNode current = anchorPoints.get(i);
             JsonNode next = anchorPoints.get(i + 1);
-            
-            // Start point (P0)
+
             Vector2 p0 = parsePosition(current.get("position"));
-            
-            // First control point (P1) = start position + outgoing handle
             Vector2 p1 = p0.add(parseOffset(current.get("handleOutOffset")));
-            
-            // End point (P3)
             Vector2 p3 = parsePosition(next.get("position"));
-            
-            // Second control point (P2) = end position + incoming handle
             Vector2 p2 = p3.add(parseOffset(next.get("handleInOffset")));
             
             beziers.add(new CubicBezierCurve(p0, p1, p2, p3));
@@ -188,9 +183,14 @@ public class FeatherFlow {
      * @return SequentialCommandGroup containing the path following commands
      */
     public static SequentialCommandGroup buildFeatherAuto(String pathName, Command... commands) {
+        System.out.println("[FeatherFlow] Building auto for path: " + pathName);
         FeatherPath featherPath = getPath(pathName);
         
         SequentialCommandGroup group = new SequentialCommandGroup();
+
+        group.addCommands(new InstantCommand(() -> {
+            SwervePosition.setPosition(featherPath.paths.get(0).getStart());
+        }));
         
         int commandIndex = 0;
         

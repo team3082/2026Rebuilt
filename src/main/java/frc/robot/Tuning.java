@@ -56,6 +56,8 @@ public final class Tuning {
     public static final double ROT_FAST_VEL = 1.0;
     public static final double ROT_FAST_ACC = 0.5;
     public static final double ROT_FAST_DEC = 0.5;
+    public static final double AUTO_PATH_LOOKAHEAD_MIN = 3;
+    public static final double AUTO_PATH_LOOKAHEAD_MAX = 5.0;
 
     public static final class OI {
         public static final double KDYAW = 0.00;

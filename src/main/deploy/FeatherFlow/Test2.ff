@@ -1,0 +1,155 @@
+{
+  "id": "1770011083444",
+  "name": "Test2",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "handleOutOffset": {
+        "x": 9.055268437225209,
+        "y": 88.36332264625395
+      },
+      "handleInOffset": {
+        "x": -2.0388757855834894,
+        "y": -19.895803214018805
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 197.50016237038005,
+        "y": 52.96494334519559
+      },
+      "handleOutOffset": {
+        "x": 43.84264693927844,
+        "y": 36.338888927417514
+      },
+      "handleInOffset": {
+        "x": -57.19943187167227,
+        "y": -47.409633008127244
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 39.334850948454346,
+        "y": 171.96841356414996
+      },
+      "handleOutOffset": {
+        "x": 35.63935276657016,
+        "y": 106.8638658805034
+      },
+      "handleInOffset": {
+        "x": -23.863315914734955,
+        "y": -71.5536617087038
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 403.99614727049794,
+        "y": 186.13007577733094
+      },
+      "handleOutOffset": {
+        "x": 50.06944566632394,
+        "y": -52.56248372719412
+      },
+      "handleInOffset": {
+        "x": -47.669388112629065,
+        "y": 50.04292345582357
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 651.5462389192489,
+        "y": 319.4440144951935
+      },
+      "handleOutOffset": {
+        "x": 19.176746528486277,
+        "y": -5.679118997009034
+      },
+      "handleInOffset": {
+        "x": -233.28216079414665,
+        "y": 69.08560579143926
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1770011120550,
+      "u": 0.38,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": false
+        }
+      ],
+      "name": "CommandOne"
+    },
+    {
+      "id": 1761525063428,
+      "u": 0.76,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 2
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1770011132807,
+      "u": 1.54,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": "CommandTwo"
+    },
+    {
+      "id": 1770011142412,
+      "u": 1.62,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": false
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1770011145698,
+      "u": 2.41,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": false
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-02-02T05:44:43.445Z",
+  "lastModified": "2026-02-02T05:55:29.240Z"
+}
