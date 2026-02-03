@@ -4,7 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.states.IntakeState;
-import frc.robot.subsystems.visualizer.IntakeVisualizer;
+// import frc.robot.subsystems.visualizer.IntakeVisualizer;
 
 public class Intake {
     private static TalonFX intakeMotor;
@@ -14,7 +14,7 @@ public class Intake {
     public static void init(){
         intakeMotor = new TalonFX(Constants.Intake.MOTOR_ID);
         state = IntakeState.RESTING;
-        IntakeVisualizer.init();
+        // IntakeVisualizer.init();
     }
 
     
@@ -31,7 +31,7 @@ public class Intake {
                 break;
         }
 
-        IntakeVisualizer.update();
+        // IntakeVisualizer.update();
     }
 
     public static void startIntaking() {
