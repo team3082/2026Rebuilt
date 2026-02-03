@@ -26,31 +26,6 @@ public class Auto {
     public static RoutineManager routineManager;
 
     @AutoRoutine()
-    public  SequentialCommandGroup testPath(){
-        System.out.println("Starting Test Path Auto Routine");
-
-        Vector2 p0 = parseFieldPosition(new Vector2(0, 0));
-        Vector2 p1 = parseFieldPosition(new Vector2(0, 0));
-        Vector2 p2 = parseFieldPosition(new Vector2(656.83, 291.83));
-        Vector2 p3 = parseFieldPosition(new Vector2(656.83, 291.83));
-        
-        SwervePosition.setPosition(p0);
-
-        return new SequentialCommandGroup(
-            new FollowPath(
-                new RobotPath(
-                    List.of(new CubicBezierCurve(p0, p1, p2, p3).getPointsOnCurve())
-                ), 
-                new FeatherEvent[]{
-                    new FeatherEvent(0.5, new InstantCommand(() -> {
-                        System.out.println("Reached halfway point of the path!");
-                    }))
-                }
-            )
-        );
-    }
-
-    @AutoRoutine()
     public  SequentialCommandGroup basicAuto(){
         System.out.println("Starting Test Path Auto Routine");
 
@@ -86,6 +61,27 @@ public class Auto {
 
         return FeatherFlow.buildFeatherAuto(
             "Test2", 
+            new InstantCommand(() -> {
+                System.out.println("Debug One");
+            }),
+            new InstantCommand(() -> {
+                System.out.println("Debug Two");
+            }),
+            new InstantCommand(() -> {
+                System.out.println("Debug Three");
+            }),
+            new InstantCommand(() -> {
+                System.out.println("Debug Four");
+            })
+        );
+    }
+
+    @AutoRoutine()
+    public  SequentialCommandGroup untitled3(){
+        System.out.println("Starting Test Two Auto Routine");
+
+        return FeatherFlow.buildFeatherAuto(
+            "Untitled 3", 
             new InstantCommand(() -> {
                 System.out.println("Debug One");
             }),

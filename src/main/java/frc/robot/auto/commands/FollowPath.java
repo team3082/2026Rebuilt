@@ -1,24 +1,15 @@
 package frc.robot.auto.commands;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.Tuning;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.PIDController;
-import frc.robot.utils.TrapezoidalProfile;
+import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
-import frc.robot.utils.TrapezoidalProfile.TrapezoidalPreset;
 import frc.robot.utils.trajectories.FeatherEvent;
-import frc.robot.utils.trajectories.PurePursuit;
+import frc.robot.utils.trajectories.ProfiledPath;
+import frc.robot.utils.trajectories.ProfiledPoint;
 import frc.robot.utils.trajectories.RobotPath;
 
 /**
@@ -31,10 +22,9 @@ import frc.robot.utils.trajectories.RobotPath;
  * commands that run continuously on the path.
  */
 public class FollowPath extends Command {
-  private final PurePursuit follower;
-  private PIDController profile = new PIDController(0.7, 0, 0.1, 0.05, 0, 1);
-  private final RobotPath path;
+  private final ProfiledPath path;
   private final FeatherEvent[] events;  
+  private double startTime;
 
   private int eventIndex = 0;
   
@@ -45,9 +35,8 @@ public class FollowPath extends Command {
    * @param events An array of {@link FeatherEvent}s to trigger along the path.
    *               Events must be ordered by their {@code t} values (progress along the path).
    */
-  public FollowPath(RobotPath path, FeatherEvent[] events) {
+  public FollowPath(ProfiledPath path, FeatherEvent[] events) {
     this.path = path;
-    this.follower = new PurePursuit(path);
     this.events = events;
   }
 
@@ -57,10 +46,7 @@ public class FollowPath extends Command {
    */
   @Override
   public void initialize() {
-    follower.reset();
-    System.out.println("FollowPath: Starting path following.");
-    this.profile.setDest(1);
-    eventIndex = 0;
+    startTime = RTime.now();
   }
 
   /**
@@ -75,34 +61,11 @@ public class FollowPath extends Command {
    */
   @Override
   public void execute() {
-    Vector2 robotPosition = SwervePosition.getPosition();
-    follower.update(robotPosition);
 
-    double t = follower.getCurrentT();
-    double distance = path.getLengthAt(t);
+    double elapsedTime = RTime.now() - startTime;
+    ProfiledPoint targetPoint = path.getPointAtTime(elapsedTime);
 
-    double velocity = profile.updateOutput(distance/path.getTotalLength());
-    double lookAheadDistance = Tuning.AUTO_PATH_LOOKAHEAD_MIN + 
-        (Tuning.AUTO_PATH_LOOKAHEAD_MAX - Tuning.AUTO_PATH_LOOKAHEAD_MIN) * velocity;
-
-    Vector2 direction = follower.getDriveVector(robotPosition, lookAheadDistance);
-    Vector2 driveVector = direction.mul(velocity);
-
-    SwerveManager.rotateAndDrive(0, driveVector);
-    
-    if (events == null) {
-      return;
-    }
-
-    if (eventIndex < events.length) {
-      FeatherEvent currentEvent = events[eventIndex];
-      if (follower.getCurrentT() >=  currentEvent.t) {
-        if (!currentEvent.command.isScheduled()) {
-          currentEvent.command.schedule();
-        }
-        eventIndex++;
-      }
-    }
+    SwervePosition.setPosition(targetPoint.getPosition());
   }
 
   /**
@@ -140,6 +103,6 @@ public class FollowPath extends Command {
    */
   @Override
   public boolean isFinished() {
-    return follower.getCurrentT() >= 0.97;
+    return path.getDuration() + startTime < RTime.now();
   }
 }
