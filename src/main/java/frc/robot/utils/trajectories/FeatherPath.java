@@ -7,10 +7,10 @@ import java.util.List;
  * Contains the split RobotPaths and a list of action descriptors parsed from the .ff file.
  */
 public class FeatherPath {
-    public final List<RobotPath> paths;
+    public final List<ProfiledPath> paths;
     public final List<FeatherActionDescriptor> actions;
 
-    public FeatherPath(List<RobotPath> paths, List<FeatherActionDescriptor> actions) {
+    public FeatherPath(List<ProfiledPath> paths, List<FeatherActionDescriptor> actions) {
         this.paths = paths;
         this.actions = actions;
     }
@@ -20,6 +20,6 @@ public class FeatherPath {
         public String type;       
         public double duration;    
         public double heading;     
-        public boolean stopping;   
+        public boolean stopping;    
     }
 }

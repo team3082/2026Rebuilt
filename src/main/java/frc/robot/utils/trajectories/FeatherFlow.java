@@ -73,12 +73,16 @@ public class FeatherFlow {
         }
         
         List<Vector2> allPoints = new ArrayList<>();
+        List<Double> allCurvatures = new ArrayList<>();
         
         for (CubicBezierCurve bezier : beziers) {
-           allPoints.addAll(List.of(bezier.getPointsOnCurve()));
+            allPoints.addAll(List.of(bezier.getPoints()));
+            for (double curvature : bezier.getCurvatures()) {
+                allCurvatures.add(curvature);
+            }
         }
         
-        RobotPath fullPath = new RobotPath(allPoints);
+        RobotPath fullPath = new RobotPath(allPoints, allCurvatures);
         
         JsonNode controlPoints = root.get("controlPoints");
         List<Double> splitValues = new ArrayList<>();
@@ -136,8 +140,18 @@ public class FeatherFlow {
         } else {
             paths = List.of(fullPath);
         }
+
+        List<ProfiledPath> profiledPaths = new ArrayList<>();
+        for (RobotPath path : paths) {
+            profiledPaths.add(ProfiledPath.generateProfiledPath(
+                path,
+                Constants.MAX_PATH_VELOCITY,
+                Constants.MAX_PATH_ACCELERATION,
+                79.0
+            ));
+        }
         
-        return new FeatherPath(paths, actions);
+        return new FeatherPath(profiledPaths, actions);
     }
     
     private static Vector2 parsePosition(JsonNode posNode) {
@@ -189,13 +203,13 @@ public class FeatherFlow {
         SequentialCommandGroup group = new SequentialCommandGroup();
 
         group.addCommands(new InstantCommand(() -> {
-            SwervePosition.setPosition(featherPath.paths.get(0).getStart());
+            SwervePosition.setPosition(featherPath.paths.get(0).getStartPoint());
         }));
         
         int commandIndex = 0;
         
         for (int pathIndex = 0; pathIndex < featherPath.paths.size(); pathIndex++) {
-            RobotPath currentPath = featherPath.paths.get(pathIndex);
+            ProfiledPath currentPath = featherPath.paths.get(pathIndex);
             
             double segmentStartT = pathIndex == 0 ? 0.0 : getPathSegmentStartT(featherPath, pathIndex);
             double segmentEndT = getPathSegmentEndT(featherPath, pathIndex);

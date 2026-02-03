@@ -10,8 +10,10 @@ import frc.robot.utils.Vector2;
  * Provides interpolation, subpath extraction, and splitting functionality.
  */
 public class RobotPath {
-    public List<Vector2> points;
+    private List<Vector2> points;
+    private List<Double> curvatures;
     private List<Double> lengths;
+    
     private double totalLength;
     
     /**
@@ -19,8 +21,10 @@ public class RobotPath {
      * 
      * @param points List of Vector2 points defining the path
      */
-    public RobotPath(List<Vector2> points) {
+    public RobotPath(List<Vector2> points, List<Double> curvatures) {
         this.points = new ArrayList<>(points);
+        this.curvatures = new ArrayList<>(curvatures);
+
         this.totalLength = calculateTotalLength();
     }
 
@@ -121,7 +125,8 @@ public class RobotPath {
         endIndex = Math.min(endIndex, points.size() - 1);
         
         List<Vector2> subPoints = new ArrayList<>(points.subList(startIndex, endIndex + 1));
-        return new RobotPath(subPoints);
+        List<Double> subCurvatures = new ArrayList<>(curvatures.subList(startIndex, endIndex + 1));
+        return new RobotPath(subPoints, subCurvatures);
     }
     
     /**
@@ -198,4 +203,13 @@ public class RobotPath {
     public double getTotalLength() {
         return totalLength;
     }
+
+    public List<Double> getCurvatures() {
+        return curvatures;
+    }
+
+    public List<Double> getLengths() {
+        return lengths;
+    }
+
 }
