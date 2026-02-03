@@ -91,6 +91,11 @@ public final class Tuning {
         public static final double TURRET_ZEROING_SPEED = -0.1;
     }
 
+    public static final class Indexer {
+        public static final double SPINDEXER_SPEED = 0.0;
+        public static final double HANDOFF_SPEED = 0.0;
+    }
+
     public static final class AutoPaths {
       
         public static Curve getAutoPath(Curve path) {

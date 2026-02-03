@@ -116,11 +116,6 @@ public class Constants {
 
     public static final boolean REPLAY = false;
     public static final double ROTATAIONAL_DEADBAND = 0;
-    
-    public static final class Intake{
-        public static final int MOTOR_ID = 0;
-        public static final double SPEED = 0.7;
-    }
 
     public static final class Shooter {
 
@@ -140,5 +135,15 @@ public class Constants {
 
         public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
 
+    }
+
+    public static final class Intake {
+        public static final int MOTOR_ID = 0;
+        public static final double SPEED = 0.7;
+    }
+
+    public static final class Indexer {
+        public static final int SPINDEXER_ID = 0;
+        public static final int HANDOFF_ID = 0;
     }
 }
