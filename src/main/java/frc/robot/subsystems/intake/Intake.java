@@ -6,19 +6,25 @@ import frc.robot.Constants;
 
 public class Intake {
     private static TalonFX intakeMotor;
-    private static TalonFX downMotor;
+    private static TalonFX intakeAngleMotor;
     private static IntakeState state;
-    private static double speed;
-    private static double downSpeed;
+    private static double intakeMotorSpeed;
+    private static double intakeAngleMotorSpeed;
+    /*
+     * add comments to your class, 
+     * make sure intakevisualzier does not look at state but simply angless. 
+     * to that end set like angle varables of set angle and target speed as wwelll
+     */
 
     public static void init(){
-        intakeMotor = new TalonFX(Constants.Intake.MOTORINTAKE_ID);
-        downMotor = new TalonFX(Constants.Intake.MOTORDOWN_ID);
+        intakeMotor = new TalonFX(Constants.Intake.INTAKE_MOTOR_ID);
+        intakeAngleMotor = new TalonFX(Constants.Intake.INTAKE_ANGLE_MOTOR_ID);
         state = IntakeState.RESTING;
         IntakeVisualizer.init();
     }
 
     public static void update(){
+        // Switch states
         switch (state) {
             case RESTING:
                 resting();
@@ -35,7 +41,7 @@ public class Intake {
         IntakeVisualizer.update();
     }
 
-    public static void stopIntake() {
+    public static void startRest() {
         state = IntakeState.RESTING;
     }
 
@@ -47,29 +53,30 @@ public class Intake {
         state = IntakeState.INTAKING;
     }
      
-    public static double getSpeed(){
-        return speed;
+    public static double getIntakeMotorSpeed(){
+        return intakeMotorSpeed;
     }
 
-    public static double getDownSpeed(){
-        return downSpeed;
+    public static double getIntakeAngleMotorSpeed(){
+        return intakeAngleMotorSpeed;
     }
 
     public static void resting(){
-        intakeMotor.set(Constants.Intake.MOTORRESTSPEED);
-        speed = 0;
-        downSpeed = 0;
+        intakeMotor.set(Constants.Intake.MOTOR_REST_SPEED);
+        intakeMotorSpeed = 0;
+        intakeAngleMotorSpeed = 0;
     }
 
     public static void down(){
-        downMotor.set(Constants.Intake.MOTORRESTSPEED);
-        speed = 0;
-        downSpeed = Constants.Intake.MOTORRESTSPEED;
+        intakeAngleMotor.set(Constants.Intake.MOTOR_REST_SPEED);
+        intakeMotorSpeed = 0;
+        intakeAngleMotorSpeed = Constants.Intake.MOTOR_REST_SPEED;
     }
 
     public static void intake(){
-        intakeMotor.set(Constants.Intake.MOTORINTAKESPEED);
-        speed = Constants.Intake.MOTORINTAKESPEED;
-        downSpeed = 0;
+        intakeMotor.set(Constants.Intake.MOTOR_INTAKE_SPEED);
+        intakeMotorSpeed = Constants.Intake.MOTOR_INTAKE_SPEED;
+        //
+        intakeAngleMotorSpeed = 0;
     }
 }

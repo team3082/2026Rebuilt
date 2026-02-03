@@ -119,13 +119,13 @@ public class Constants {
     public static final boolean REPLAY = false;
     
     public static final class Intake{
-        public static int MOTORINTAKE_ID;
-        public static int MOTORDOWN_ID;
-        public static double MOTORINTAKESPEED = 0.7;
-        public static double MOTORRESTSPEED = 0;
+        public static int INTAKE_MOTOR_ID;
+        public static int INTAKE_ANGLE_MOTOR_ID;
+        public static double MOTOR_INTAKE_SPEED = 0.7;
+        public static double MOTOR_REST_SPEED = 0;
 
         // angles in degrees
-        public static double INTAKERESTANGLE = 0;
-        public static double INTAKEDOWNANGLE = 90;
+        public static double INTAKE_REST_ANGLE = 0;
+        public static double INTAKE_DOWN_ANGLE = 90;
     }
 }

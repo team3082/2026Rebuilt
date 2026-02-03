@@ -36,10 +36,8 @@ public class IntakeVisualizer {
     public static void update(){
 
         Intake.startDown();
-
-        if(Arm.getAngle() < Intake.getDownSpeed()){
-            Arm.setAngle(Arm.getAngle()+0.01);
-        }
+        
+        Arm.setAngle(Arm.getAngle() + Intake.getIntakeAngleMotorSpeed());
         Motor.setAngle(Motor.getAngle()+10);
 
 
