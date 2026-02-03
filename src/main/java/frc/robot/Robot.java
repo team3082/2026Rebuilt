@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 // AUTO
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShooterManager;
 import frc.robot.auto.Auto;
-import frc.robot.subsystems.intake.Intake;
 // SUBSYSTEMS
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwerveManager;
@@ -43,6 +45,8 @@ public class Robot extends LoggedRobot {
     SwervePosition.setPosition(new Vector2());
 
     // Subsystems
+    ShooterManager.init();
+    Indexer.init();
     Intake.init();
 
     // Logging
@@ -80,6 +84,8 @@ public class Robot extends LoggedRobot {
     Pigeon.update();
     SwervePosition.update();
     SwerveManager.update();
+    ShooterManager.update();
+    Indexer.update();
     Intake.update();
 
   }

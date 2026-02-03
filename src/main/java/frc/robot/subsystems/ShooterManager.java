@@ -1,7 +1,9 @@
-package frc.robot.subsystems.scoring.shooter;
+package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.sensors.Pigeon;
+import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.Odometry;
 import frc.robot.utils.Vector2;
 

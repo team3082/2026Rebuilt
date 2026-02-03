@@ -1,4 +1,4 @@
-package frc.robot.subsystems.scoring;
+package frc.robot.subsystems.states;
 
 public enum ShooterState {
     IDLE,

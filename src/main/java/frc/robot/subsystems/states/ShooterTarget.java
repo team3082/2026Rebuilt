@@ -1,4 +1,4 @@
-package frc.robot.subsystems.scoring.shooter;
+package frc.robot.subsystems.states;
 
 import frc.robot.utils.Vector3;
 

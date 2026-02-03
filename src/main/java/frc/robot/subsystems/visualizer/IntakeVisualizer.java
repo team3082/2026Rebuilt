@@ -1,6 +1,6 @@
 
 
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.visualizer;
 
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Telemetry;
+import frc.robot.subsystems.Intake;
 
 /** Add your docs here. */
 public class IntakeVisualizer {

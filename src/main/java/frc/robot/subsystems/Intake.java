@@ -1,8 +1,10 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.states.IntakeState;
+import frc.robot.subsystems.visualizer.IntakeVisualizer;
 
 public class Intake {
     private static TalonFX intakeMotor;
