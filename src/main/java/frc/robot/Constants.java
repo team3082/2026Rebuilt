@@ -3,8 +3,6 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import frc.robot.utils.Vector2;
-
 public class Constants {
 
     public static final class Swerve {
@@ -125,34 +123,22 @@ public class Constants {
     }
 
     public static final class Shooter {
-        // Hardware IDs
+
         public static final int TURRET_MOTOR_ID = 0;
-        public static final int HALL_EFFECT_SENSOR = 0;
-        
-        // Gear Ratios
-        public static final double TURRET_RATIO = 20.0 / 200.0; 
-        public static final double HOOD_RATIO = 10.0;
-
-        // Hood PID Constants
-        public static final double HOOD_KP = 0;
-        public static final double HOOD_KD = 0;
-        public static final double HOOD_KI = 0;
-
-        // FLywheel Constants
         public static final int FLYWHEEL_MOTOR_ID = 0;
         public static final int HOOD_MOTOR_ID = 0;
-        public static final double HOOD_ANGLE_TOLERANCE = 0;
+        public static final int HALL_EFFECT_SENSOR_ID = 0;
+        
+        public static final double TURRET_GEAR_RATIO = 200.0 / 20.0; 
+        public static final double HOOD_GEAR_RATIO = 380.0 / 20.0 * 24.0 / 15.0 * 4.0;
+
         public static final double FLYWHEEL_DIAMETER = 4.0;
-        public static final double VELOCITY_TOLERANCE = 0; 
-        
-        // Turret PID Constants
-        public static final double TURRET_KP = 0.0;
-        public static final double TURRET_KI = 0.0;
-        public static final double TURRET_KD = 0.0;
-        
-        // Turret Control
-        public static final double ZEROING_SPEED = 0.1;
-        public static final double TURRET_DEADBAND = 2.0;
+
+        public static final double TURRET_ZERO_ANGLE = 0.0;
+        public static final double TURRET_MIN_ANGLE = 0.0;
+        public static final double TURRET_MAX_ANGLE = 0.0;
+
+        public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
 
     }
 }

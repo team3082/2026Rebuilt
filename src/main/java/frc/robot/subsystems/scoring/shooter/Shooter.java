@@ -1,104 +1,79 @@
 package frc.robot.subsystems.scoring.shooter;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.CoastOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
+import frc.robot.Tuning;
 
 public class Shooter {
-    private static TalonFX flywheelMotor;
-    private static TalonFX angleMotor;
-    private static PIDController angleMotorPID;
+    public static TalonFX flywheelMotor;
+    public static TalonFX hoodMotor;
     
-    public static ShooterState shooterState = ShooterState.IDLE;
-    private static double targetedSpeed = 0.0;
-    private static double targetedAngle = 0.0;
-    private static double currentAngle = 0.0;
-    private static double pastAngle = 0.0;
+    private static double targetFlywheelSpeed = 0.0; // rotations per second
+    private static double targetHoodAngle = 0.0; // radians
 
     /**
      * Initializes the flywheel motors and controllers.
      */
     public static void init() {
         flywheelMotor = new TalonFX(Constants.Shooter.FLYWHEEL_MOTOR_ID);
-        angleMotor = new TalonFX(Constants.Shooter.HOOD_MOTOR_ID);
+        hoodMotor = new TalonFX(Constants.Shooter.HOOD_MOTOR_ID);
         
-        angleMotorPID = new PIDController(
-            Constants.Shooter.HOOD_KP,
-            Constants.Shooter.HOOD_KI,
-            Constants.Shooter.HOOD_KD
-        );
+        flywheelMotor.getConfigurator().apply(new TalonFXConfiguration());
+        hoodMotor.getConfigurator().apply(new TalonFXConfiguration());
+
+        TalonFXConfiguration hoodConfiguration = new TalonFXConfiguration();
+        hoodConfiguration.Slot0.kP = Tuning.Shooter.HOOD_KP;
+        hoodConfiguration.Slot0.kI = Tuning.Shooter.HOOD_KI;
+        hoodConfiguration.Slot0.kD = Tuning.Shooter.HOOD_KD;
+
+        hoodMotor.getConfigurator().apply(hoodConfiguration);
+        hoodMotor.setPosition(0);
         
-        currentAngle = 0.0;
-        pastAngle = angleMotor.getPosition().getValueAsDouble();
     }
+
     /**
-     * Updates the Hooded Flywheel 
+     * Updates the shooter
      */
     public static void update() {
-        switch (shooterState) {
+        hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(targetHoodAngle)));
+
+        switch (ShooterManager.shooterState) {
             case IDLE:
-                updateAngleMotor();
-                flywheelMotor.set(0);
-                targetedAngle = 0;
+                flywheelMotor.setControl(new CoastOut());
                 break;
-            case REVVING:
-                updateAngleMotor();
-                flywheelMotor.set(targetedSpeed);
-                
-                if (atAngle() && atRampedSpeed()) {
-                    shooterState = ShooterState.SHOOTING;
-                }
-                
-                break;
-            case SHOOTING:
-                updateAngleMotor();
-                flywheelMotor.set(targetedSpeed);
-                break;
+            
             default:
+                flywheelMotor.setControl(new VelocityDutyCycle(targetFlywheelSpeed));
                 break;
         }
     }
 
     /**
-     * Updates the angle encoder and the motor output
-     */
-    private static void updateAngleMotor(){
-        updateAngle();
-
-        double anglePidOutput = angleMotorPID.calculate(currentAngle, targetedAngle);
-        angleMotor.set(anglePidOutput);
-    }
-
-    /**
      * Sets the target hood angle.
-     * @param angle Target angle in degrees
+     * @param angle Target angle in radians
      */
-    public static void setAngle(double angle) {
-        targetedAngle = angle;
+    public static void setTargetAngle(double angle) {
+        targetHoodAngle = angle;
     }
 
     /**
      * Sets the target flywheel speed.
-     * @param speed Target speed (0.0 to 1.0)
+     * @param speed Target speed in rotations per second
      */
-    public static void setSpeed(double speed) {
-        targetedSpeed = speed;
-    }
-
-    /**
-     * Sets the flywheel state.
-     * @param state Desired flywheel state
-     */
-    public static void setState(ShooterState state) {
-        shooterState = state;
+    public static void setTargetSpeed(double speed) {
+        targetFlywheelSpeed = speed;
     }
 
     /**
      * Gets the current hood angle.
-     * @return Current angle in degrees
+     * @return Current angle in radians
      */
     public static double getAngle() {
-        return currentAngle;
+        return rotToHoodAngle(hoodMotor.getPosition().getValueAsDouble());
     }
 
     /**
@@ -114,26 +89,23 @@ public class Shooter {
      * @return True if at target angle within tolerance
      */
     public static boolean atAngle() {
-        return Math.abs(currentAngle - targetedAngle) < Constants.Shooter.HOOD_ANGLE_TOLERANCE;
+        return Math.abs(getAngle() - targetHoodAngle) < Tuning.Shooter.HOOD_DEADBAND;
     }
 
     /**
      * Checks if the flywheel is at the target speed.
-     * @return True if at target speed within tolerance
+     * @return if it is at target speed
      */
     public static boolean atRampedSpeed() {
-        double currentVelocity = flywheelMotor.getVelocity().getValueAsDouble();
-
-        return Math.abs(targetedSpeed - currentVelocity) < Constants.Shooter.VELOCITY_TOLERANCE;
+        return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND;
     }
 
-    /**
-     * Updates the current hood angle based on motor encoder position.
-     */
-    private static void updateAngle() {
-        double currentPos = angleMotor.getPosition().getValueAsDouble();
-        double deltaPos = currentPos - pastAngle;
-        currentAngle += deltaPos * Constants.Shooter.HOOD_RATIO;
-        pastAngle = currentPos;
+    private static double hoodAngleToRot(double radians) {
+        return radians / 2.0 / Math.PI * Constants.Shooter.HOOD_GEAR_RATIO;
     }
+
+    private static double rotToHoodAngle(double rot) {
+        return rot * 2.0 * Math.PI / Constants.Shooter.HOOD_GEAR_RATIO;
+    }
+
 }

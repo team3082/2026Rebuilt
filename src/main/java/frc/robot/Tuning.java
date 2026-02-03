@@ -71,6 +71,26 @@ public final class Tuning {
         public static final double ROTSPEED = 0.3;
     }
 
+    public static final class Shooter {
+        // Hood PID Constants
+        public static final double HOOD_KP = 0;
+        public static final double HOOD_KD = 0;
+        public static final double HOOD_KI = 0;
+        public static final double HOOD_DEADBAND = 0;
+
+
+        public static final double FLYWHEEL_SPEED_DEADBAND = 0.0;
+        
+        // Turret PID Constants
+        public static final double TURRET_KP = 0.0;
+        public static final double TURRET_KI = 0.0;
+        public static final double TURRET_KD = 0.0;
+        public static final double TURRET_DEADBAND = 2.0;
+        
+        // Turret Control
+        public static final double TURRET_ZEROING_SPEED = -0.1;
+    }
+
     public static final class AutoPaths {
       
         public static Curve getAutoPath(Curve path) {

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.scoring.shooter;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.Odometry;
 import frc.robot.utils.Vector2;
 
@@ -20,12 +21,11 @@ public class ShooterManager {
 
         switch (shooterState) {
             case IDLE:
-                Shooter.shooterState = ShooterState.IDLE;
+                Shooter.setTargetAngle(0);
                 break;
 
             case REVVING:
-                Shooter.shooterState = ShooterState.REVVING;
-                if (Shooter.atAngle() && Shooter.atRampedSpeed()) {
+                if (Shooter.atAngle() && Shooter.atRampedSpeed() && Turret.atAngle()) {
                     shooterState = ShooterState.SHOOTING;
                 }
                 setShooterAngleSpeed();
@@ -33,21 +33,30 @@ public class ShooterManager {
                 break;
 
             case SHOOTING:
-                Shooter.shooterState = ShooterState.SHOOTING;
                 setShooterAngleSpeed();
 
                 break;
         }
 
         Vector2 deltaPos = (new Vector2(target.pos.x, target.pos.y)).sub(Odometry.getPosition());
-        Turret.setAngle(Math.atan2(deltaPos.y, deltaPos.x));   
+
+        double targetTurretAngle = Turret.getAngleInTurretZone(Math.atan2(deltaPos.y, deltaPos.x) + Pigeon.getRotationRad());
+
+        if (targetTurretAngle == -10) {
+            targetTurretAngle = Constants.Shooter.TURRET_MIN_ANGLE; // TODO make this rotate to a more real angle
+        }
+
+        Turret.setAngle(targetTurretAngle);
+
+        Turret.update();
+        Shooter.update();
 
     }
 
     public static void setShooterAngleSpeed() {
         Vector2 deltaPos = (new Vector2(target.pos.x, target.pos.y)).sub(Odometry.getPosition());
 
-        double maxHeight = 0.0;
+        double maxHeight;
 
         switch (target) {
             case HUB:
@@ -61,13 +70,17 @@ public class ShooterManager {
             case PASS_RIGHT:
                 maxHeight = 36.0 + 1.05 * deltaPos.mag();
                 break;
+            default:
+                maxHeight = 100.0;
+                break;
         }
 
-        double angle = Math.atan2(2 * maxHeight * (1 + Math.sqrt(1 - target.pos.z / maxHeight)), deltaPos.mag());
+        double angle = Math.atan(2 * maxHeight * (1 + Math.sqrt(1 - target.pos.z / maxHeight)) / deltaPos.mag()) - Math.toRadians(25.0); // subtracts 25 since zero position is at 25 degree angle
+        angle = Math.min(angle, Constants.Shooter.HOOD_MAX_ANGLE);
         double speed = Math.sqrt(2 * 9.8 * maxHeight) / Math.sin(angle);
 
-        Shooter.setAngle(angle);
-        Shooter.setSpeed(speed);
+        Shooter.setTargetSpeed(speed);
+        Shooter.setTargetAngle(angle);
 
     }
 
