@@ -5,6 +5,7 @@ import frc.robot.Constants;
 public enum IntakeState{
     RESTING,
     INTAKING, 
-    DOWN;
+    DOWN,
+    RETRACTING;
 
 }

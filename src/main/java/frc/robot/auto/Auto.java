@@ -2,8 +2,12 @@ package frc.robot.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
+import frc.robot.subsystems.intake.Intake;
 /**
  * Manages autonomous routines for the robot.
  * Uses {@link RoutineManager} to automatically detect and handle routines
@@ -11,6 +15,37 @@ import frc.robot.auto.routineManager.RoutineManager;
  */
 public class Auto {
     public static RoutineManager routineManager;
+
+    @AutoRoutine
+    public static SequentialCommandGroup autoTest(){
+        return new SequentialCommandGroup(
+            new InstantCommand(()->{
+                Intake.startRest();
+                System.out.println("startrest");
+            }),
+            new WaitCommand(3),
+            new InstantCommand(()->{
+                Intake.startDown();
+                System.out.println("startdownpls");
+            }),
+            new WaitCommand(5),
+            new InstantCommand(()->{
+                Intake.startIntaking();
+                System.out.println("startintakepls");
+            }),
+            new WaitCommand(5),
+            new InstantCommand(()->{
+                Intake.startRetract();
+                System.out.println("retratcpls");
+            }),
+            new WaitCommand(5),
+            new InstantCommand(()->{
+                Intake.startRest();
+                System.out.println("alldone!!! :D");
+            })
+            
+        );
+    }
 
     /**
      * Gets the auto selector from {@link RoutineManager}

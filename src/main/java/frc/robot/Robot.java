@@ -87,12 +87,11 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     Auto.startRoutine();
-    Intake.startIntaking();
   }
   
   @Override
   public void autonomousPeriodic() {
-    // Auto.update();
+    Auto.update();
     SwerveManager.rotateAndDrive(0, new Vector2(1, 1));
   }
 

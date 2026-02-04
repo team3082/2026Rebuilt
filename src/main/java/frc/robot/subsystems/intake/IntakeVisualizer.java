@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
 import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -20,7 +21,10 @@ public class IntakeVisualizer {
     private static double angle;
     private static Mechanism2d intakeSim;
 
+    public static boolean motorSpinning;
+
     public static void init(){
+        motorSpinning = false;
         intakeSim = new Mechanism2d(100, 100);
         root = intakeSim.getRoot("intakeRoot", 50, 50);
         Arm = root.append(new MechanismLigament2d("Arm", 25, 0));
@@ -34,13 +38,12 @@ public class IntakeVisualizer {
     }
 
     public static void update(){
-
-        Intake.startDown();
         
-        Arm.setAngle(Arm.getAngle() + Intake.getIntakeAngleMotorSpeed());
-        Motor.setAngle(Motor.getAngle()+10);
-
-
-
+        Arm.setAngle(Intake.currentAngle * (180 / Math.PI));
+        if(motorSpinning){
+            Motor.setAngle(Motor.getAngle()+10);
+        }
+       
+        
     }
 }
