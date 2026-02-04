@@ -17,31 +17,31 @@ public class Auto {
     public static RoutineManager routineManager;
 
     @AutoRoutine
-    public static SequentialCommandGroup autoTest(){
+    public static SequentialCommandGroup intakeAuto(){
         return new SequentialCommandGroup(
             new InstantCommand(()->{
                 Intake.startRest();
-                System.out.println("startrest");
+                System.out.println("resting");
             }),
-            new WaitCommand(3),
+            new WaitCommand(0.5),
             new InstantCommand(()->{
                 Intake.startDown();
-                System.out.println("startdownpls");
+                System.out.println("going down/extending");
             }),
-            new WaitCommand(5),
+            new WaitCommand(0.5),
             new InstantCommand(()->{
                 Intake.startIntaking();
-                System.out.println("startintakepls");
+                System.out.println("intaking");
             }),
-            new WaitCommand(5),
+            new WaitCommand(2),
             new InstantCommand(()->{
                 Intake.startRetract();
-                System.out.println("retratcpls");
+                System.out.println("retracting");
             }),
-            new WaitCommand(5),
+            new WaitCommand(0.5),
             new InstantCommand(()->{
                 Intake.startRest();
-                System.out.println("alldone!!! :D");
+                System.out.println("finished");
             })
             
         );

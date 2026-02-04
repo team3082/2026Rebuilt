@@ -17,13 +17,7 @@ public class Intake {
     public static double currentAngle;
 
     public static double rotSpeed;
-    
-    /*
-     * add comments to your class, 
-     * make sure intakevisualzier does not look at state but simply angless. 
-     * to that end set like angle varables of set angle and target speed as wwelll
-     */
-
+  
     public static void init(){
         intakeMotor = new TalonFX(Constants.Intake.INTAKE_MOTOR_ID);
         intakeAngleMotor = new TalonFX(Constants.Intake.INTAKE_ANGLE_MOTOR_ID);
@@ -33,30 +27,25 @@ public class Intake {
     }
 
     public static void update(){
-        // Switch states
+        // states of the intake
         switch (state) {
             case RESTING:
                resting();
-               System.out.println("rest");
             break;
             
             case DOWN:
                down();
-                System.out.println("down");
             break;
         
             case INTAKING:
                intake();
-               System.out.println("intaking");
             break;
 
             case RETRACTING:
                retract();
-               System.out.println("retracting");
             break;
         } 
-         IntakeVisualizer.update();
-        
+        IntakeVisualizer.update();
     }
 
     public static void startRest() {
@@ -65,13 +54,17 @@ public class Intake {
 
     public static void startDown() {
         state = IntakeState.DOWN;
+        // time in which sequence starts
         initialTime = Timer.getFPGATimestamp();
+        // starts retracted
         currentAngle = 0;
     }
 
     public static void startRetract() {
         state = IntakeState.RETRACTING;
+        // time in which sequence starts
         initialTime = Timer.getFPGATimestamp();
+        // starts already extended
         currentAngle = -(Math.PI / 4);
     }
 
@@ -88,64 +81,62 @@ public class Intake {
     }
 
     public static void resting(){
-      //  System.out.println("At rest");
+        // stop all motors, in neutral position
         intakeMotor.set(Constants.Intake.MOTOR_REST_SPEED);
         intakeMotorSpeed = 0;
+        intakeAngleMotor.set(Constants.Intake.MOTOR_REST_SPEED);
         intakeAngleMotorSpeed = 0;
-
-        intakeMotorSpeed = 0;
-
     }
 
     public static void down(){
-
-        intakeMotorSpeed = 0;
-
+        // not intaking
+        intakeMotorSpeed = Constants.Intake.MOTOR_REST_SPEED;
+        intakeMotor.set(Constants.Intake.MOTOR_REST_SPEED);
+        // angle to travel
         double armAngle = -(Math.PI / 4);
-
-        double timeTotal = 5;
+        // time to travel
+        double timeTotal = 0.3;
 
         rotSpeed = armAngle / timeTotal;
 
+        // if timeTotal seconds have passed
         if(Timer.getFPGATimestamp() >= initialTime + timeTotal){
-            System.out.println("Down stopped");
-                intakeAngleMotor.set(0);
-                intakeAngleMotorSpeed = 0;
+            intakeAngleMotor.set(Constants.Intake.MOTOR_REST_SPEED);
+            intakeAngleMotorSpeed = Constants.Intake.MOTOR_REST_SPEED;
         } else {
-            System.out.println("Going down");
             intakeAngleMotor.set(rotSpeed);
             intakeAngleMotorSpeed = rotSpeed;
+            // changes angle gradually based on time and speed, useful for sim
             currentAngle = rotSpeed * (Timer.getFPGATimestamp() - initialTime);
         }
-        
-
-
-
     }
 
     public static void intake(){
         IntakeVisualizer.motorSpinning = true;
-        System.out.println("Intaking");
         intakeMotor.set(Constants.Intake.MOTOR_INTAKE_SPEED);
         intakeMotorSpeed = Constants.Intake.MOTOR_INTAKE_SPEED;
+
+        // ensure arm is not moving
+        intakeAngleMotor.set(Constants.Intake.MOTOR_REST_SPEED);
+        intakeAngleMotorSpeed = Constants.Intake.MOTOR_REST_SPEED;
     }
 
     public static void retract(){
-        intakeMotorSpeed = 0;
+        // not intaking
+        intakeMotorSpeed = Constants.Intake.MOTOR_REST_SPEED;
+        intakeMotor.set(Constants.Intake.MOTOR_REST_SPEED);
         IntakeVisualizer.motorSpinning = false;
+        // time to travel
+        double timeTotal = 0.3;
 
-        double timeTotal = 5;
-
-        System.out.println(rotSpeed);
-
+        // if timeTotal seconds have passed
         if(Timer.getFPGATimestamp() >= initialTime + timeTotal){
-            System.out.println("Down stopped");
-                intakeAngleMotor.set(0);
-                intakeAngleMotorSpeed = 0;
+            intakeAngleMotor.set(Constants.Intake.MOTOR_REST_SPEED);
+            intakeAngleMotorSpeed = Constants.Intake.MOTOR_REST_SPEED;
         } else {
-            System.out.println("Going up");
             intakeAngleMotor.set(rotSpeed);
             intakeAngleMotorSpeed = rotSpeed;
+            // changes angle gradually to go in the direction to retract
             currentAngle = (rotSpeed * (initialTime - Timer.getFPGATimestamp())) - (Math.PI) / 4;
         }
     }

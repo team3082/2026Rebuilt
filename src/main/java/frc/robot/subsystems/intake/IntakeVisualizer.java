@@ -1,24 +1,13 @@
-
-
 package frc.robot.subsystems.intake;
 
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
-import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
-import frc.robot.Telemetry;
 
-/** Add your docs here. */
 public class IntakeVisualizer {
     private static MechanismRoot2d root;
-    private static MechanismLigament2d Arm, Motor;
-    private static double angle;
+    private static MechanismLigament2d arm, motor;
     private static Mechanism2d intakeSim;
 
     public static boolean motorSpinning;
@@ -27,23 +16,21 @@ public class IntakeVisualizer {
         motorSpinning = false;
         intakeSim = new Mechanism2d(100, 100);
         root = intakeSim.getRoot("intakeRoot", 50, 50);
-        Arm = root.append(new MechanismLigament2d("Arm", 25, 0));
-        Motor = Arm.append(new MechanismLigament2d("Motor", 7, 45));
+        arm = root.append(new MechanismLigament2d("Intake Arm", 25, 0));
+        motor = arm.append(new MechanismLigament2d("Intake Motor", 7, 45));
 
         SmartDashboard.putData("Intake Sim", intakeSim);
 
-        Arm.setAngle(0);
-        Motor.setAngle(0);
+        arm.setAngle(0);
+        motor.setAngle(0);
         
     }
 
+    // updates angles in sim 
     public static void update(){
-        
-        Arm.setAngle(Intake.currentAngle * (180 / Math.PI));
+        arm.setAngle(Intake.currentAngle * (180 / Math.PI));
         if(motorSpinning){
-            Motor.setAngle(Motor.getAngle()+10);
-        }
-       
-        
+            motor.setAngle(motor.getAngle()+30);
+        } 
     }
 }
