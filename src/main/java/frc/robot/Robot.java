@@ -18,6 +18,8 @@ import frc.robot.subsystems.ShooterManager;
 import frc.robot.auto.Auto;
 // SUBSYSTEMS
 import frc.robot.subsystems.sensors.Pigeon;
+import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePID;
 import frc.robot.swerve.SwervePosition;
@@ -52,6 +54,10 @@ public class Robot extends LoggedRobot {
     // Logging
     Telemetry.init();
     
+    
+    ShooterManager.shooterState = ShooterState.REVVING;
+    ShooterManager.target = ShooterTarget.PASS_RIGHT;
+    
     // Controls
     OI.init();
 
@@ -80,13 +86,15 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     
     RTime.update();
-    Telemetry.update();
     Pigeon.update();
     SwervePosition.update();
     SwerveManager.update();
     ShooterManager.update();
     Indexer.update();
     Intake.update();
+    Telemetry.update();
+
+  
 
   }
 

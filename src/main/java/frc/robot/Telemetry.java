@@ -34,8 +34,9 @@ public class Telemetry {
     private static ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
     // Views
     private static Field2d fieldView = new Field2d();
-    public static Mechanism2d subsystemView = new Mechanism2d(120/Constants.METERSTOINCHES, 240/Constants.METERSTOINCHES);
-    public static Mechanism2d subsytemView = new Mechanism2d(100, 100);
+    public static Mechanism2d subsystemViewSide = new Mechanism2d(10, 10);
+    public static Mechanism2d subsystemViewTop = new Mechanism2d(10, 10);
+
     public static Mechanism2d swerveView = new Mechanism2d(60, 60);
 
     // Logging
@@ -45,7 +46,6 @@ public class Telemetry {
     private static final GenericEntry SWERVE_MOD_1_TARGET_ANGLE = swerveTab.add("Swerve Module 1 Target Angle", SwerveManager.mods[0].targetAngle).getEntry();
     private static final GenericEntry SWERVE_MOD_1_TARGET_SPEED = swerveTab.add("Swerve Module 1 Target Speed", SwerveManager.mods[0].targetSpeed).getEntry();
     private static final GenericEntry SWERVE_MOD_1_INVERTED = swerveTab.add("Swerve Module 1 Inverted", SwerveManager.mods[0].inverted).getEntry();
-
     private static final GenericEntry SWERVE_MOD_2_ANGLE = swerveTab.add("Swerve Module 2 Angle", SwerveManager.mods[1].getSteerAngle()).getEntry();
     private static final GenericEntry SWERVE_MOD_2_SPEED = swerveTab.add("Swerve Module 2 Speed", SwerveManager.mods[1].getDriveVelocity()).getEntry();
     private static final GenericEntry SWERVE_MOD_2_TARGET_ANGLE = swerveTab.add("Swerve Module 2 Target Angle", SwerveManager.mods[1].targetAngle).getEntry();
@@ -66,7 +66,6 @@ public class Telemetry {
 
     public static void init() {
         robotTab.add("Field View", fieldView);
-        robotTab.add("Subsystem View", subsystemView);
         robotTab.add("Swerve View", swerveView);
 
         SwerveBaseVisualizer.init();
@@ -77,7 +76,8 @@ public class Telemetry {
 
         robotTab.add("Auto Selector", Auto.routineManager.autoSelector);
 
-        robotTab.add("Subsystem Mech", subsystemView);
+        robotTab.add("Subsystem View Side", subsystemViewSide);
+        robotTab.add("Subsystem View Top", subsystemViewTop);
     }
 
     public static void update() {

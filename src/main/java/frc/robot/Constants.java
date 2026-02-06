@@ -116,6 +116,7 @@ public class Constants {
 
     public static final boolean REPLAY = false;
     public static final double ROTATAIONAL_DEADBAND = 0;
+    public static final double RAD_TO_DEGREES = 180/Math.PI;
 
     public static final class Shooter {
 

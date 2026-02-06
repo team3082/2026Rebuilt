@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Tuning;
 
 public class Turret {
@@ -89,7 +90,11 @@ public class Turret {
      * @return Current angle in radians
      */
     public static double getAngle() {
-        return rotToAngle(turretMotor.getPosition().getValueAsDouble());
+        if (Robot.isReal()){
+            return rotToAngle(turretMotor.getPosition().getValueAsDouble());
+        } else {
+            return targetAngle;
+        }
     }
 
     /**

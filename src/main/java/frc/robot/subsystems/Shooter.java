@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Tuning;
 
 public class Shooter {
@@ -46,6 +47,10 @@ public class Shooter {
                 flywheelMotor.setControl(new CoastOut());
                 break;
             
+            case REVVING:
+                flywheelMotor.set(targetFlywheelSpeed);
+                hoodMotor.setPosition(targetHoodAngle);
+
             default:
                 flywheelMotor.setControl(new VelocityDutyCycle(targetFlywheelSpeed));
                 break;
@@ -73,7 +78,11 @@ public class Shooter {
      * @return Current angle in radians
      */
     public static double getAngle() {
-        return rotToHoodAngle(hoodMotor.getPosition().getValueAsDouble());
+        if (Robot.isReal()) {
+            return rotToHoodAngle(hoodMotor.getPosition().getValueAsDouble());
+        } else {
+            return targetHoodAngle;
+        }
     }
 
     /**
@@ -81,7 +90,11 @@ public class Shooter {
      * @return Current velocity in rotations per second
      */
     public static double getVelocity() {
-        return flywheelMotor.getVelocity().getValueAsDouble();
+        if (Robot.isReal()) {
+            return flywheelMotor.getVelocity().getValueAsDouble();
+        } else {
+            return targetFlywheelSpeed;
+        }
     }
 
     /**
