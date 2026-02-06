@@ -34,8 +34,8 @@ public class Telemetry {
     private static ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
     // Views
     private static Field2d fieldView = new Field2d();
-    public static Mechanism2d subsystemViewSide = new Mechanism2d(10, 10);
-    public static Mechanism2d subsystemViewTop = new Mechanism2d(10, 10);
+    public static Mechanism2d subsystemViewSide = new Mechanism2d(5, 5);
+    public static Mechanism2d subsystemViewTop = new Mechanism2d(5, 5);
 
     public static Mechanism2d swerveView = new Mechanism2d(60, 60);
 

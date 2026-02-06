@@ -61,9 +61,6 @@ public class Robot extends LoggedRobot {
     // Controls
     OI.init();
 
-
-
-
     Logger.recordMetadata("ProjectName", "2026Rebuilt"); // Set a metadata value
     if (isReal()) {
       Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
@@ -101,13 +98,11 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     Auto.startRoutine();
-    Intake.startIntaking();
   }
   
   @Override
   public void autonomousPeriodic() {
-    // Auto.update();
-    SwerveManager.rotateAndDrive(0, new Vector2(1, 1));
+    Auto.update();
   }
 
   @Override

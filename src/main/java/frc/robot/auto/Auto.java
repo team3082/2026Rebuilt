@@ -2,8 +2,12 @@ package frc.robot.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.auto.commands.RotateAndDriveTo;
+import frc.robot.auto.commands.ShootTest;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
+import frc.robot.utils.Vector2;
 /**
  * Manages autonomous routines for the robot.
  * Uses {@link RoutineManager} to automatically detect and handle routines
@@ -11,6 +15,16 @@ import frc.robot.auto.routineManager.RoutineManager;
  */
 public class Auto {
     public static RoutineManager routineManager;
+
+    @AutoRoutine
+    public static SequentialCommandGroup testAuto(){
+        return new SequentialCommandGroup(
+            new RotateAndDriveTo(90, new Vector2(20, 20)),
+            new ShootTest(),
+            new RotateAndDriveTo(0, new Vector2(200, 200)),
+            new ShootTest()
+        );
+    }
 
     /**
      * Gets the auto selector from {@link RoutineManager}

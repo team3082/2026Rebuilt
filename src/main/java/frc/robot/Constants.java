@@ -131,8 +131,8 @@ public class Constants {
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
         public static final double TURRET_ZERO_ANGLE = 0.0;
-        public static final double TURRET_MIN_ANGLE = 0.0;
-        public static final double TURRET_MAX_ANGLE = 0.0;
+        public static final double TURRET_MIN_ANGLE = 10.0;
+        public static final double TURRET_MAX_ANGLE = 170.0;
 
         public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
 
