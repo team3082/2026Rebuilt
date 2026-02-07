@@ -43,7 +43,7 @@ public class ShooterManager {
         // The delta the ball needs to go 
         Vector2 deltaPos = (new Vector2(target.pos.x, target.pos.y)).sub(Odometry.getPosition());
 
-        double targetTurretAngle = Turret.getAngleInTurretZone(Math.atan2(deltaPos.y, deltaPos.x) + Pigeon.getRotationRad());
+        double targetTurretAngle = Turret.clampAngle(Math.atan2(deltaPos.y, deltaPos.x) + Pigeon.getRotationRad());
 
         if (targetTurretAngle == -10) {
             targetTurretAngle = Constants.Shooter.TURRET_MIN_ANGLE;
@@ -56,7 +56,15 @@ public class ShooterManager {
 
     }
 
-    public static void setShooterAngleSpeed() {
+    public static void startShooting() {
+        shooterState = ShooterState.REVVING;
+    }
+
+    public static void stopShooting() {
+        shooterState = ShooterState.IDLE;
+    }
+
+    private static void setShooterAngleSpeed() {
         Vector2 deltaPos = (new Vector2(target.pos.x, target.pos.y)).sub(Odometry.getPosition());
 
         double maxHeight;

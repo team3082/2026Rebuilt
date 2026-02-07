@@ -45,10 +45,14 @@ public class Turret {
     public static void update() {
         switch (turretState) {
             case ZEROING:
-                turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
-                
-                if (atZeroPosition()) {
-                    turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
+                if (Robot.isReal()){
+                    turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
+                    
+                    if (atZeroPosition()) {
+                        turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
+                        turretState = TurretState.NORMAL;
+                    }
+                } else {
                     turretState = TurretState.NORMAL;
                 }
                 break;
@@ -64,7 +68,11 @@ public class Turret {
      * @param angle Target angle in radians
      */
     public static void setAngle(double angle) {
-        targetAngle = Math.max(getAngleInTurretZone(angle), Constants.Shooter.TURRET_MIN_ANGLE);
+        targetAngle = Math.max(clampAngle(angle), Constants.Shooter.TURRET_MIN_ANGLE);
+    }
+
+    public static double getTargetAngle() {
+        return targetAngle;
     }
 
     /**
@@ -72,7 +80,7 @@ public class Turret {
      * @param angle
      * @return clamped angle, returns -10 if outside of turret rotation zone
      */
-    public static double getAngleInTurretZone(double angle) {
+    public static double clampAngle(double angle) {
         while (angle > Constants.Shooter.TURRET_MAX_ANGLE) {
             angle -= 2.0 * Math.PI;
         }

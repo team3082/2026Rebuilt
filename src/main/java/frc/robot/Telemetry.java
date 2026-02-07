@@ -1,8 +1,6 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
-
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,9 +11,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import frc.robot.Constants.Intake;
 import frc.robot.auto.Auto;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterManager;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.sensors.Pigeon;
 // import frc.robot.subsystems.visualizer.IntakeVisualizer;
 import frc.robot.subsystems.visualizer.ShooterVisualizer;
@@ -32,6 +31,10 @@ import frc.robot.swerve.SwervePID;
 public class Telemetry {
     private static ShuffleboardTab robotTab = Shuffleboard.getTab("Robot Views");
     private static ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
+    private static ShuffleboardTab shooterManagerTab = Shuffleboard.getTab("Shooter Manager");
+    private static ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    private static ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
+
     // Views
     private static Field2d fieldView = new Field2d();
     public static Mechanism2d subsystemViewSide = new Mechanism2d(5, 5);
@@ -64,6 +67,21 @@ public class Telemetry {
     private static final GenericEntry SWERVE_MOD_4_TARGET_SPEED = swerveTab.add("Swerve Module 4 Target Speed", SwerveManager.mods[3].targetSpeed).getEntry();
     private static final GenericEntry SWERVE_MOD_4_INVERTED = swerveTab.add("Swerve Module 4 Inverted", SwerveManager.mods[3].inverted).getEntry();
 
+    // Shooter Manager
+    private static final GenericEntry SHOOTER_TARGET = shooterManagerTab.add("Shooter target", ShooterManager.target.name()).getEntry();
+    private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.shooterState.name()).getEntry();
+
+    // Shooter
+    private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", Shooter.getTargetAngle()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", Shooter.getAngle()).getEntry();
+    private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", Shooter.getTargetSpeed()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", Shooter.getVelocity()).getEntry();
+
+    // Turret
+    private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", Turret.turretState.name()).getEntry();
+    private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", Turret.getTargetAngle()).getEntry();
+    private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", Turret.getAngle()).getEntry();
+
     public static void init() {
         robotTab.add("Field View", fieldView);
         robotTab.add("Swerve View", swerveView);
@@ -84,7 +102,8 @@ public class Telemetry {
         updateField();
         updateSwerve();
         logValues();
-        ShooterVisualizer.update();
+        updateSubsystems();
+
     }
 
     private static void logValues(){
@@ -158,7 +177,20 @@ public class Telemetry {
         }
     }
 
-    
+    private static void updateSubsystems() {
+        SHOOTER_TARGET.setString(ShooterManager.target.name());
+        SHOOTER_STATE.setString(ShooterManager.shooterState.name());
 
+        SHOOTER_TARGET_HOOD_ANGLE.setDouble(Shooter.getTargetAngle());
+        SHOOTER_CURRENT_HOOD_ANGLE.setDouble(Shooter.getAngle());
+        SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(Shooter.getTargetSpeed());
+        SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(Shooter.getVelocity());
+
+        TURRET_STATE.setString(Turret.turretState.name());
+        TURRET_TARGET_ANGLE.setDouble(Turret.getTargetAngle());
+        TURRET_CURRENT_ANGLE.setDouble(Turret.getAngle());
+
+        ShooterVisualizer.update();
+    }
     
 }

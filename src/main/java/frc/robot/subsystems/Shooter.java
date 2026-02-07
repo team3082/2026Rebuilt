@@ -65,12 +65,20 @@ public class Shooter {
         targetHoodAngle = angle;
     }
 
+    public static double getTargetAngle() {
+        return targetHoodAngle;
+    }
+
     /**
      * Sets the target flywheel speed.
      * @param speed Target speed in rotations per second
      */
     public static void setTargetSpeed(double speed) {
         targetFlywheelSpeed = speed;
+    }
+
+    public static double getTargetSpeed() {
+        return targetFlywheelSpeed;
     }
 
     /**

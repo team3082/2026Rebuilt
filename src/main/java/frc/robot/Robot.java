@@ -55,9 +55,6 @@ public class Robot extends LoggedRobot {
     Telemetry.init();
     
     
-    ShooterManager.shooterState = ShooterState.REVVING;
-    ShooterManager.target = ShooterTarget.PASS_RIGHT;
-    
     // Controls
     OI.init();
 
