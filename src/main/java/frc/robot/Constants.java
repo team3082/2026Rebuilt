@@ -113,19 +113,13 @@ public class Constants {
     }
     
     public static final double METERSTOINCHES = 39.3701;
-    public static final double FIELD_HEIGHT = 317.69;
-    public static final double FIELD_WIDTH = 651.22; 
+    public static final double FIELD_HEIGHT = 323.25;
+    public static final double FIELD_WIDTH = 651.25; 
 
     public static final boolean REPLAY = false;
-    public static final double MAX_PATH_VELOCITY = 207.614173;
-    public static final double MAX_PATH_ACCELERATION =  207.614173;
     
     public static final class Intake{
         public static int MOTOR_ID;
         public static double SPEED = 0.7;
-    }
-
-    public static final class TrajectoryConstants{
-        public static int CURVE_RESOLUTION = 2000;
     }
 }
