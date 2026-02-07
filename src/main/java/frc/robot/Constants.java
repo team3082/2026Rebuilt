@@ -117,8 +117,8 @@ public class Constants {
     public static final double FIELD_WIDTH = 651.22; 
 
     public static final boolean REPLAY = false;
-    public static final double MAX_PATH_VELOCITY = 207.614173;
-    public static final double MAX_PATH_ACCELERATION =  207.614173;
+    public static final double MAX_PATH_VELOCITY = 180;
+    public static final double MAX_PATH_ACCELERATION =  180;
     
     public static final class Intake{
         public static int MOTOR_ID;

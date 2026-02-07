@@ -1,0 +1,75 @@
+{
+  "id": "1770480228872",
+  "name": "Confused Path",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 7.654880791617458,
+        "y": 5.67178994779789
+      },
+      "handleOutOffset": {
+        "x": 34.821148079540805,
+        "y": 20.428140514605957
+      },
+      "handleInOffset": {
+        "x": -17.250555706975373,
+        "y": -10.120194059430846
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1770480273055"
+    },
+    {
+      "position": {
+        "x": 645.9947744664319,
+        "y": 314.4934182375662
+      },
+      "handleOutOffset": {
+        "x": 4.216467938279038,
+        "y": -5.732909463565818
+      },
+      "handleInOffset": {
+        "x": -5.038822242817953,
+        "y": 6.851021315453742
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 7.654880791617458,
+        "y": 5.67178994779789
+      },
+      "handleOutOffset": {
+        "x": -17.735876314574618,
+        "y": -9.243305218054397
+      },
+      "handleInOffset": {
+        "x": 19.406818179364663,
+        "y": 10.114140432730949
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1770480273055"
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1761525063428,
+      "u": 0.48,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 1
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-02-07T16:03:48.872Z",
+  "lastModified": "2026-02-07T16:48:35.948Z"
+}

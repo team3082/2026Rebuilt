@@ -40,6 +40,21 @@ public class Auto {
         );
     }
 
+    @AutoRoutine
+    public SequentialCommandGroup LongLine(){
+        System.out.println("Starting Long Line");
+
+        return FeatherFlow.buildFeatherAuto(
+            "Long Line", 
+            new InstantCommand(() -> {
+                System.out.println("Debug One");
+            }),
+            new InstantCommand(() -> {
+                System.out.println("Debug Two");
+            })
+        );
+    }
+
     @AutoRoutine()
     public  SequentialCommandGroup exampleAuto(){
         System.out.println("Starting Test Path Auto Routine");
