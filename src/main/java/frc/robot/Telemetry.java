@@ -68,8 +68,8 @@ public class Telemetry {
     private static final GenericEntry SWERVE_MOD_4_INVERTED = swerveTab.add("Swerve Module 4 Inverted", SwerveManager.mods[3].inverted).getEntry();
 
     // Shooter Manager
-    private static final GenericEntry SHOOTER_TARGET = shooterManagerTab.add("Shooter target", ShooterManager.target.name()).getEntry();
-    private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.shooterState.name()).getEntry();
+    private static final GenericEntry SHOOTER_TARGET = shooterManagerTab.add("Shooter target", ShooterManager.getTarget().name()).getEntry();
+    private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.getShooterState().name()).getEntry();
 
     // Shooter
     private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", Shooter.getTargetAngle()).getEntry();
@@ -78,7 +78,7 @@ public class Telemetry {
     private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", Shooter.getVelocity()).getEntry();
 
     // Turret
-    private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", Turret.turretState.name()).getEntry();
+    private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", Turret.getTurretState().name()).getEntry();
     private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", Turret.getTargetAngle()).getEntry();
     private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", Turret.getAngle()).getEntry();
 
@@ -164,8 +164,8 @@ public class Telemetry {
         // System.out.println("Alliance Pos Multiplier: " + alliancePosMultiplier + " Alliance Rot Offset: " + allianceRotOffset);
         
         Pose2d currentPose = new Pose2d(
-            alliancePosMultiplier * SwervePosition.getPosition().x /Constants.METERSTOINCHES + 8.78,
-            alliancePosMultiplier * SwervePosition.getPosition().y/Constants.METERSTOINCHES + 4.01,
+            alliancePosMultiplier * SwervePosition.getPosition().x /Constants.METERSTOINCHES + (Constants.FIELD_WIDTH / 2 / Constants.METERSTOINCHES),
+            alliancePosMultiplier * SwervePosition.getPosition().y / Constants.METERSTOINCHES + (Constants.FIELD_HEIGHT / 2 / Constants.METERSTOINCHES),
             Rotation2d.fromRadians(Pigeon.getRotationRad() + Math.PI / 2.0 + allianceRotOffset)
         );
         fieldView.setRobotPose(currentPose);
@@ -178,15 +178,15 @@ public class Telemetry {
     }
 
     private static void updateSubsystems() {
-        SHOOTER_TARGET.setString(ShooterManager.target.name());
-        SHOOTER_STATE.setString(ShooterManager.shooterState.name());
+        SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
+        SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
 
         SHOOTER_TARGET_HOOD_ANGLE.setDouble(Shooter.getTargetAngle());
         SHOOTER_CURRENT_HOOD_ANGLE.setDouble(Shooter.getAngle());
         SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(Shooter.getTargetSpeed());
         SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(Shooter.getVelocity());
 
-        TURRET_STATE.setString(Turret.turretState.name());
+        TURRET_STATE.setString(Turret.getTurretState().name());
         TURRET_TARGET_ANGLE.setDouble(Turret.getTargetAngle());
         TURRET_CURRENT_ANGLE.setDouble(Turret.getAngle());
 

@@ -18,8 +18,6 @@ import frc.robot.subsystems.ShooterManager;
 import frc.robot.auto.Auto;
 // SUBSYSTEMS
 import frc.robot.subsystems.sensors.Pigeon;
-import frc.robot.subsystems.states.ShooterState;
-import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePID;
 import frc.robot.swerve.SwervePosition;
@@ -87,8 +85,6 @@ public class Robot extends LoggedRobot {
     Indexer.update();
     Intake.update();
     Telemetry.update();
-
-  
 
   }
 

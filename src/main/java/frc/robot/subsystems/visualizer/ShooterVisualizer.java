@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.Constants;
 import frc.robot.Telemetry;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterManager;
@@ -66,11 +65,11 @@ public class ShooterVisualizer {
         hoodAngle = Shooter.getAngle();
         flywheelSpeed = Shooter.getVelocity();
     
-        hoodLig.setAngle(hoodAngle * 180 / Math.PI);
+        hoodLig.setAngle(Math.toDegrees(hoodAngle));
         mech.update(flywheelSpeed * 0.01);
 
         double turretAngle = Turret.getAngle();
-        double turretRotation = turretAngle * Constants.RAD_TO_DEGREES;
+        double turretRotation = -Math.toDegrees(turretAngle);
         
         double turretCos = Math.cos(Math.toRadians(turretRotation));
         double turretWidth = Math.abs(turretCos);
@@ -86,7 +85,7 @@ public class ShooterVisualizer {
             turretBackLig.setAngle(0);
         }
 
-        spindleAngle +=  ShooterManager.shooterState == ShooterState.SHOOTING ? 0.05 : 0;
+        spindleAngle += ShooterManager.getShooterState() == ShooterState.SHOOTING ? 0.05 : 0;
         
         double spindleCos = Math.cos(spindleAngle);
         double spindleWidth = Math.abs(spindleCos);

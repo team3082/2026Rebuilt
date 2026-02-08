@@ -3,6 +3,8 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import frc.robot.subsystems.ShooterTableValue;
+
 public class Constants {
 
     public static final class Swerve {
@@ -111,12 +113,11 @@ public class Constants {
     }
     
     public static final double METERSTOINCHES = 39.3701;
-    public static final double FIELD_HEIGHT = 323.25;
-    public static final double FIELD_WIDTH = 651.25; 
+    public static final double FIELD_HEIGHT = 317.7;
+    public static final double FIELD_WIDTH = 651.2; 
 
     public static final boolean REPLAY = false;
     public static final double ROTATAIONAL_DEADBAND = 0;
-    public static final double RAD_TO_DEGREES = 180/Math.PI;
 
     public static final class Shooter {
 
@@ -131,10 +132,22 @@ public class Constants {
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
         public static final double TURRET_ZERO_ANGLE = 0.0;
-        public static final double TURRET_MIN_ANGLE = Math.toRadians(10.0);
-        public static final double TURRET_MAX_ANGLE = Math.toRadians(170.0);
+        public static final double TURRET_MIN_ANGLE = Math.toRadians(0.0);
+        public static final double TURRET_MAX_ANGLE = Math.toRadians(340.0);
 
         public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
+        public static final double HOOD_ANGLE_OFFSET = Math.toRadians(25.0);
+
+        public static final ShooterTableValue[] SHOOTER_TABLE = { //TODO tune
+            new ShooterTableValue(48.0, Math.toRadians(25.0), 2800),
+            new ShooterTableValue(60.0, Math.toRadians(30.0), 3000),
+            new ShooterTableValue(72.0, Math.toRadians(35.0), 3200),
+            new ShooterTableValue(84.0, Math.toRadians(38.0), 3500),
+            new ShooterTableValue(96.0, Math.toRadians(40.0), 3700),
+            new ShooterTableValue(108.0, Math.toRadians(42.0), 3900),
+            new ShooterTableValue(120.0, Math.toRadians(43.0), 4000),
+            new ShooterTableValue(132.0, Math.toRadians(45.0), 4300)
+        };
 
     }
 

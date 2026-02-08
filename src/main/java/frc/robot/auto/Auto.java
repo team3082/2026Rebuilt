@@ -19,7 +19,6 @@ public class Auto {
     @AutoRoutine
     public static SequentialCommandGroup testAuto(){
         return new SequentialCommandGroup(
-            new RotateAndDriveTo(90, new Vector2(20, 20)),
             new ShootTest(),
             new RotateAndDriveTo(0, new Vector2(200, 200)),
             new ShootTest()

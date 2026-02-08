@@ -10,10 +10,10 @@ import frc.robot.Robot;
 import frc.robot.Tuning;
 
 public class Shooter {
-    public static TalonFX flywheelMotor;
-    public static TalonFX hoodMotor;
+    private static TalonFX flywheelMotor;
+    private static TalonFX hoodMotor;
     
-    private static double targetFlywheelSpeed = 0.0; // rotations per second
+    private static double targetFlywheelSpeed = 0.0; // rotations per minute
     private static double targetHoodAngle = 0.0; // radians
 
     /**
@@ -42,14 +42,10 @@ public class Shooter {
     public static void update() {
         hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(targetHoodAngle)));
 
-        switch (ShooterManager.shooterState) {
+        switch (ShooterManager.getShooterState()) {
             case IDLE:
                 flywheelMotor.setControl(new CoastOut());
                 break;
-            
-            case REVVING:
-                flywheelMotor.set(targetFlywheelSpeed);
-                hoodMotor.setPosition(targetHoodAngle);
 
             default:
                 flywheelMotor.setControl(new VelocityDutyCycle(targetFlywheelSpeed));
@@ -71,14 +67,18 @@ public class Shooter {
 
     /**
      * Sets the target flywheel speed.
-     * @param speed Target speed in rotations per second
+     * @param speed Target speed in rotations per minute
      */
     public static void setTargetSpeed(double speed) {
-        targetFlywheelSpeed = speed;
+        targetFlywheelSpeed = speed / 60.0;
     }
 
+    /**
+     * Returns target flywheel speed
+     * @return target flywheel speed in rotations per minute
+     */
     public static double getTargetSpeed() {
-        return targetFlywheelSpeed;
+        return targetFlywheelSpeed * 60.0;
     }
 
     /**
@@ -95,13 +95,13 @@ public class Shooter {
 
     /**
      * Gets the current flywheel velocity.
-     * @return Current velocity in rotations per second
+     * @return Current velocity in rotations per minute
      */
     public static double getVelocity() {
         if (Robot.isReal()) {
-            return flywheelMotor.getVelocity().getValueAsDouble();
+            return flywheelMotor.getVelocity().getValueAsDouble() * 60.0;
         } else {
-            return targetFlywheelSpeed;
+            return targetFlywheelSpeed * 60.0;
         }
     }
 

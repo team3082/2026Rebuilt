@@ -3,9 +3,9 @@ package frc.robot.subsystems.states;
 import frc.robot.utils.Vector3;
 
 public enum ShooterTarget {
-    HUB(new Vector3(145, 0, 72)),
-    PASS_LEFT(new Vector3(-230, -100, 0)),
-    PASS_RIGHT(new Vector3(230, -100, 0));
+    HUB(new Vector3(143.5, 0, 72)),
+    PASS_LEFT(new Vector3(230, -100, 0)),
+    PASS_RIGHT(new Vector3(230, 100, 0));
     
     public final Vector3 pos;
 

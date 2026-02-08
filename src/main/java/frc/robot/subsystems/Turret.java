@@ -18,7 +18,7 @@ public class Turret {
     private static TalonFX turretMotor;
     private static DigitalInput hallEffectSensor;
     
-    public static TurretState turretState = TurretState.ZEROING;
+    private static TurretState turretState = TurretState.ZEROING;
     private static double targetAngle = 0.0;
 
     /**
@@ -111,6 +111,10 @@ public class Turret {
      */
     public static boolean atAngle() {
         return Math.abs(getAngle() - targetAngle) < Tuning.Shooter.TURRET_DEADBAND && turretState == TurretState.NORMAL;
+    }
+
+    public static TurretState getTurretState() {
+        return turretState;
     }
 
     /**

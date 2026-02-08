@@ -20,7 +20,7 @@ public class Indexer {
     }
 
     public static void update() {
-        switch (ShooterManager.shooterState) {
+        switch (ShooterManager.getShooterState()) {
             case SHOOTING:
                 spindexerMotor.set(Tuning.Indexer.SPINDEXER_SPEED);
                 handoffMotor.set(Tuning.Indexer.HANDOFF_SPEED);
