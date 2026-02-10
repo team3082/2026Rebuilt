@@ -7,7 +7,7 @@ public class ShooterTableValue {
 
     /**
      * This class contains values for angle and speed at different distances from the hub to interpolate between
-     * @param distance Distance of center of robot from center of hub in inches
+     * @param distance Distance of center of turret from center of hub in inches
      * @param angle Angle of hood in radians
      * @param speed Speed of flywheel in RPM
      */

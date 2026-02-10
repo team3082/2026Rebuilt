@@ -10,16 +10,16 @@ import frc.robot.Robot;
 import frc.robot.Tuning;
 
 public class Shooter {
-    private static TalonFX flywheelMotor;
-    private static TalonFX hoodMotor;
+    private TalonFX flywheelMotor;
+    private TalonFX hoodMotor;
     
-    private static double targetFlywheelSpeed = 0.0; // rotations per minute
-    private static double targetHoodAngle = 0.0; // radians
+    private double targetFlywheelSpeed = 0.0; // rotations per minute
+    private double targetHoodAngle = 0.0; // radians
 
     /**
      * Initializes the flywheel motors and controllers.
      */
-    public static void init() {
+    public Shooter() {
         flywheelMotor = new TalonFX(Constants.Shooter.FLYWHEEL_MOTOR_ID);
         hoodMotor = new TalonFX(Constants.Shooter.HOOD_MOTOR_ID);
         
@@ -39,7 +39,7 @@ public class Shooter {
     /**
      * Updates the shooter
      */
-    public static void update() {
+    public void update() {
         hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(targetHoodAngle)));
 
         switch (ShooterManager.getShooterState()) {
@@ -57,11 +57,11 @@ public class Shooter {
      * Sets the target hood angle.
      * @param angle Target angle in radians
      */
-    public static void setTargetAngle(double angle) {
+    public void setTargetAngle(double angle) {
         targetHoodAngle = angle;
     }
 
-    public static double getTargetAngle() {
+    public double getTargetAngle() {
         return targetHoodAngle;
     }
 
@@ -69,7 +69,7 @@ public class Shooter {
      * Sets the target flywheel speed.
      * @param speed Target speed in rotations per minute
      */
-    public static void setTargetSpeed(double speed) {
+    public void setTargetSpeed(double speed) {
         targetFlywheelSpeed = speed / 60.0;
     }
 
@@ -77,7 +77,7 @@ public class Shooter {
      * Returns target flywheel speed
      * @return target flywheel speed in rotations per minute
      */
-    public static double getTargetSpeed() {
+    public double getTargetSpeed() {
         return targetFlywheelSpeed * 60.0;
     }
 
@@ -85,7 +85,7 @@ public class Shooter {
      * Gets the current hood angle.
      * @return Current angle in radians
      */
-    public static double getAngle() {
+    public double getAngle() {
         if (Robot.isReal()) {
             return rotToHoodAngle(hoodMotor.getPosition().getValueAsDouble());
         } else {
@@ -97,7 +97,7 @@ public class Shooter {
      * Gets the current flywheel velocity.
      * @return Current velocity in rotations per minute
      */
-    public static double getVelocity() {
+    public double getVelocity() {
         if (Robot.isReal()) {
             return flywheelMotor.getVelocity().getValueAsDouble() * 60.0;
         } else {
@@ -109,7 +109,7 @@ public class Shooter {
      * Checks if the hood is at the target angle.
      * @return True if at target angle within tolerance
      */
-    public static boolean atAngle() {
+    public boolean atAngle() {
         return Math.abs(getAngle() - targetHoodAngle) < Tuning.Shooter.HOOD_DEADBAND;
     }
 
@@ -117,15 +117,15 @@ public class Shooter {
      * Checks if the flywheel is at the target speed.
      * @return if it is at target speed
      */
-    public static boolean atRampedSpeed() {
+    public boolean atRampedSpeed() {
         return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND;
     }
 
-    private static double hoodAngleToRot(double radians) {
+    private double hoodAngleToRot(double radians) {
         return radians / 2.0 / Math.PI * Constants.Shooter.HOOD_GEAR_RATIO;
     }
 
-    private static double rotToHoodAngle(double rot) {
+    private double rotToHoodAngle(double rot) {
         return rot * 2.0 * Math.PI / Constants.Shooter.HOOD_GEAR_RATIO;
     }
 

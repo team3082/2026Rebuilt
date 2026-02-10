@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.auto.Auto;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterManager;
-import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.sensors.Pigeon;
 // import frc.robot.subsystems.visualizer.IntakeVisualizer;
 import frc.robot.subsystems.visualizer.ShooterVisualizer;
@@ -72,15 +70,15 @@ public class Telemetry {
     private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.getShooterState().name()).getEntry();
 
     // Shooter
-    private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", Shooter.getTargetAngle()).getEntry();
-    private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", Shooter.getAngle()).getEntry();
-    private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", Shooter.getTargetSpeed()).getEntry();
-    private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", Shooter.getVelocity()).getEntry();
+    private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", ShooterManager.getShooter().getTargetAngle()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", ShooterManager.getShooter().getAngle()).getEntry();
+    private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", ShooterManager.getShooter().getTargetSpeed()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", ShooterManager.getShooter().getVelocity()).getEntry();
 
     // Turret
-    private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", Turret.getTurretState().name()).getEntry();
-    private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", Turret.getTargetAngle()).getEntry();
-    private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", Turret.getAngle()).getEntry();
+    private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", ShooterManager.getTurret().getTurretState().name()).getEntry();
+    private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", ShooterManager.getTurret().getTargetAngle()).getEntry();
+    private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", ShooterManager.getTurret().getAngle()).getEntry();
 
     public static void init() {
         robotTab.add("Field View", fieldView);
@@ -181,14 +179,14 @@ public class Telemetry {
         SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
         SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
 
-        SHOOTER_TARGET_HOOD_ANGLE.setDouble(Shooter.getTargetAngle());
-        SHOOTER_CURRENT_HOOD_ANGLE.setDouble(Shooter.getAngle());
-        SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(Shooter.getTargetSpeed());
-        SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(Shooter.getVelocity());
+        SHOOTER_TARGET_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getTargetAngle());
+        SHOOTER_CURRENT_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getAngle());
+        SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getTargetSpeed());
+        SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getVelocity());
 
-        TURRET_STATE.setString(Turret.getTurretState().name());
-        TURRET_TARGET_ANGLE.setDouble(Turret.getTargetAngle());
-        TURRET_CURRENT_ANGLE.setDouble(Turret.getAngle());
+        TURRET_STATE.setString(ShooterManager.getTurret().getTurretState().name());
+        TURRET_TARGET_ANGLE.setDouble(ShooterManager.getTurret().getTargetAngle());
+        TURRET_CURRENT_ANGLE.setDouble(ShooterManager.getTurret().getAngle());
 
         ShooterVisualizer.update();
     }

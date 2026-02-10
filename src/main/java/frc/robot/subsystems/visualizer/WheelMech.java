@@ -13,15 +13,11 @@ public class WheelMech {
     private final MechanismLigament2d[] rimSegments;
     private final double spokeAngleSpacing;
     private final double rimAngleSpacing;
-    private final double width;
-    private final double radius;
 
     public WheelMech(String name, MechanismObject2d base, int numSpokes, double radius, double width, Color8Bit color) {
         this.numSpokes = numSpokes;
-        this.radius = radius;
         this.spokes = new MechanismLigament2d[numSpokes];
         this.spokeAngleSpacing = 360.0 / numSpokes;
-        this.width = width;
 
         this.numRimSegments = 12;
         this.rimRadials = new MechanismLigament2d[numRimSegments];

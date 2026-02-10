@@ -79,12 +79,12 @@ public class Robot extends LoggedRobot {
     
     RTime.update();
     Pigeon.update();
-    SwervePosition.update();
-    SwerveManager.update();
     ShooterManager.update();
     Indexer.update();
     Intake.update();
     Telemetry.update();
+    SwervePosition.update();
+    SwerveManager.update();
 
   }
 

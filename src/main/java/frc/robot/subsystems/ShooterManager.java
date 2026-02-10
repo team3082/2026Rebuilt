@@ -1,20 +1,24 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterState;
 import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.Odometry;
+import frc.robot.swerve.SwerveManager;
 import frc.robot.utils.Vector2;
 
 public class ShooterManager {
 
     private static ShooterState shooterState;
     private static ShooterTarget target;
+    private static Shooter shooter;
+    private static Turret turret;
     
     public static void init() {
-        Turret.init();
-        Shooter.init();
+        turret = new Turret();
+        shooter = new Shooter();
         shooterState = ShooterState.IDLE;
         target = ShooterTarget.HUB;
     }
@@ -25,11 +29,11 @@ public class ShooterManager {
 
         switch (shooterState) {
             case IDLE:
-                Shooter.setTargetAngle(0);
+                shooter.setTargetAngle(0);
                 break;
 
             case REVVING:
-                if (Shooter.atAngle() && Shooter.atRampedSpeed() && Turret.atAngle()) {
+                if (shooter.atAngle() && shooter.atRampedSpeed() && turret.atAngle()) {
                     shooterState = ShooterState.SHOOTING;
                 }
                 setShooterAngleAndSpeed();
@@ -42,8 +46,8 @@ public class ShooterManager {
                 break;
         }
 
-        Turret.update();
-        Shooter.update();
+        turret.update();
+        shooter.update();
 
     }
 
@@ -67,6 +71,14 @@ public class ShooterManager {
         return target;
     }
 
+    public static Shooter getShooter() {
+        return shooter;
+    }
+
+    public static Turret getTurret() {
+        return turret;
+    }
+
     public static void startShooting() {
         shooterState = ShooterState.REVVING;
     }
@@ -78,13 +90,16 @@ public class ShooterManager {
     private static void aimTurret() { 
         Vector2 deltaPos = (new Vector2(target.pos.x, target.pos.y)).sub(Odometry.getPosition());
 
-        double targetTurretAngle = Turret.clampAngle(Math.atan2(deltaPos.x, deltaPos.y) + Pigeon.getRotationRad());
+        double targetTurretAngle = turret.clampAngle(Math.atan2(deltaPos.x, deltaPos.y) + Pigeon.getRotationRad());
 
         if (targetTurretAngle == -10) {
-            targetTurretAngle = Constants.Shooter.TURRET_MIN_ANGLE; // TODO account for dead zone
+            targetTurretAngle = Constants.Shooter.TURRET_MIN_ANGLE;
+            if (SwerveManager.rotationSpeed == 0) {
+                SwerveManager.rotateAndDrive(0.4, SwerveManager.movement);
+            }
         }
 
-        Turret.setAngle(targetTurretAngle);
+        turret.setAngle(targetTurretAngle);
     }
 
     private static void setShooterAngleAndSpeed() {
@@ -101,26 +116,30 @@ public class ShooterManager {
     }
 
     private static void aimAtHub() {
-        double distance = new Vector2(target.pos.x, target.pos.y).sub(Odometry.getPosition()).mag();
-        for (int i = 0; i < Constants.Shooter.SHOOTER_TABLE.length - 1; i++) {
-            if (Constants.Shooter.SHOOTER_TABLE[i].getDist() < distance && distance < Constants.Shooter.SHOOTER_TABLE[i+1].getDist()) {
+
+        Vector2 turretPos = Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()));
+
+        double distance = new Vector2(target.pos.x, target.pos.y).sub(turretPos).mag();
+
+        for (int i = 0; i < Tuning.Shooter.SHOOTER_TABLE.length - 1; i++) {
+            if (Tuning.Shooter.SHOOTER_TABLE[i].getDist() < distance && distance < Tuning.Shooter.SHOOTER_TABLE[i+1].getDist()) {
 
                 // amount that distance is from first to second distance
-                double t = (distance - Constants.Shooter.SHOOTER_TABLE[i].getDist()) / (Constants.Shooter.SHOOTER_TABLE[i+1].getDist() - Constants.Shooter.SHOOTER_TABLE[i].getDist());
+                double t = (distance - Tuning.Shooter.SHOOTER_TABLE[i].getDist()) / (Tuning.Shooter.SHOOTER_TABLE[i+1].getDist() - Tuning.Shooter.SHOOTER_TABLE[i].getDist());
                 
-                double baseFlywheelSpeed = Constants.Shooter.SHOOTER_TABLE[i].getSpeed();
-                double speed = baseFlywheelSpeed + (Constants.Shooter.SHOOTER_TABLE[i+1].getSpeed() - Constants.Shooter.SHOOTER_TABLE[i].getSpeed()) * t;
-                double baseAngle = Constants.Shooter.SHOOTER_TABLE[i].getAngle();
-                double angle = baseAngle + (Constants.Shooter.SHOOTER_TABLE[i+1].getAngle() - Constants.Shooter.SHOOTER_TABLE[i].getAngle()) * t;
+                double baseFlywheelSpeed = Tuning.Shooter.SHOOTER_TABLE[i].getSpeed();
+                double speed = baseFlywheelSpeed + (Tuning.Shooter.SHOOTER_TABLE[i+1].getSpeed() - Tuning.Shooter.SHOOTER_TABLE[i].getSpeed()) * t;
+                double baseAngle = Tuning.Shooter.SHOOTER_TABLE[i].getAngle();
+                double angle = baseAngle + (Tuning.Shooter.SHOOTER_TABLE[i+1].getAngle() - Tuning.Shooter.SHOOTER_TABLE[i].getAngle()) * t;
                 
-                Shooter.setTargetSpeed(speed);
-                Shooter.setTargetAngle(angle - Constants.Shooter.HOOD_ANGLE_OFFSET);
+                shooter.setTargetSpeed(speed);
+                shooter.setTargetAngle(angle - Constants.Shooter.HOOD_ANGLE_OFFSET);
                 return;
             }
         }
 
-        Shooter.setTargetAngle(0);
-        Shooter.setTargetSpeed(1000);
+        shooter.setTargetAngle(0);
+        shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
     }
 

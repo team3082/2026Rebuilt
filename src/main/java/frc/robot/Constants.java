@@ -3,7 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import frc.robot.subsystems.ShooterTableValue;
+import frc.robot.utils.Vector2;
 
 public class Constants {
 
@@ -133,21 +133,12 @@ public class Constants {
 
         public static final double TURRET_ZERO_ANGLE = 0.0;
         public static final double TURRET_MIN_ANGLE = Math.toRadians(0.0);
-        public static final double TURRET_MAX_ANGLE = Math.toRadians(340.0);
+        public static final double TURRET_MAX_ANGLE = Math.toRadians(300.0);
 
         public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
         public static final double HOOD_ANGLE_OFFSET = Math.toRadians(25.0);
 
-        public static final ShooterTableValue[] SHOOTER_TABLE = { //TODO tune
-            new ShooterTableValue(48.0, Math.toRadians(25.0), 2800),
-            new ShooterTableValue(60.0, Math.toRadians(30.0), 3000),
-            new ShooterTableValue(72.0, Math.toRadians(35.0), 3200),
-            new ShooterTableValue(84.0, Math.toRadians(38.0), 3500),
-            new ShooterTableValue(96.0, Math.toRadians(40.0), 3700),
-            new ShooterTableValue(108.0, Math.toRadians(42.0), 3900),
-            new ShooterTableValue(120.0, Math.toRadians(43.0), 4000),
-            new ShooterTableValue(132.0, Math.toRadians(45.0), 4300)
-        };
+        public static final Vector2 TURRET_POS_OFFSET = new Vector2(3.75, 4.25);
 
     }
 

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Tuning;
+import frc.robot.utils.RMath;
 
 public class Turret {
 
@@ -15,16 +16,16 @@ public class Turret {
         NORMAL
     }
 
-    private static TalonFX turretMotor;
-    private static DigitalInput hallEffectSensor;
+    private TalonFX turretMotor;
+    private DigitalInput hallEffectSensor;
     
-    private static TurretState turretState = TurretState.ZEROING;
-    private static double targetAngle = 0.0;
+    private TurretState turretState = TurretState.ZEROING;
+    private double targetAngle = 0.0;
 
     /**
      * Initializion the turret
      */
-    public static void init() {
+    public Turret() {
         hallEffectSensor = new DigitalInput(Constants.Shooter.HALL_EFFECT_SENSOR_ID);
 
         turretMotor = new TalonFX(Constants.Shooter.TURRET_MOTOR_ID);
@@ -42,7 +43,7 @@ public class Turret {
     /**
      * Updates the turret
      */
-    public static void update() {
+    public void update() {
         switch (turretState) {
             case ZEROING:
                 if (Robot.isReal()){
@@ -67,11 +68,11 @@ public class Turret {
      * Sets the target angle for the turret.
      * @param angle Target angle in radians
      */
-    public static void setAngle(double angle) {
+    public void setAngle(double angle) {
         targetAngle = Math.max(clampAngle(angle), Constants.Shooter.TURRET_MIN_ANGLE);
     }
 
-    public static double getTargetAngle() {
+    public double getTargetAngle() {
         return targetAngle;
     }
 
@@ -80,7 +81,7 @@ public class Turret {
      * @param angle
      * @return clamped angle, returns -10 if outside of turret rotation zone
      */
-    public static double clampAngle(double angle) {
+    public double clampAngle(double angle) {
         while (angle > Constants.Shooter.TURRET_MAX_ANGLE) {
             angle -= 2.0 * Math.PI;
         }
@@ -97,7 +98,7 @@ public class Turret {
      * Gets the current angle of the turret.
      * @return Current angle in radians
      */
-    public static double getAngle() {
+    public double getAngle() {
         if (Robot.isReal()){
             return rotToAngle(turretMotor.getPosition().getValueAsDouble());
         } else {
@@ -109,22 +110,22 @@ public class Turret {
      * Checks if the turret is at the target angle.
      * @return True if at target angle within deadband
      */
-    public static boolean atAngle() {
+    public boolean atAngle() {
         return Math.abs(getAngle() - targetAngle) < Tuning.Shooter.TURRET_DEADBAND && turretState == TurretState.NORMAL;
     }
 
-    public static TurretState getTurretState() {
+    public TurretState getTurretState() {
         return turretState;
     }
 
     /**
      * Switches the turret to zeroing for reseting the encoder
      */
-    public static void zero(){
+    public void zero(){
         turretState = TurretState.ZEROING;
     }
 
-    public static boolean atZeroPosition() {
+    public boolean atZeroPosition() {
         return !hallEffectSensor.get();
     }
 
@@ -133,7 +134,7 @@ public class Turret {
      * @param radians turret angle in radians
      * @return
      */
-    private static double angleToRot(double radians) {
+    private double angleToRot(double radians) {
         return radians / 2.0 / Math.PI * Constants.Shooter.TURRET_GEAR_RATIO;
     }
 
@@ -142,7 +143,7 @@ public class Turret {
      * @param rot
      * @return angle in radians
      */
-    private static double rotToAngle(double rot) {
+    private double rotToAngle(double rot) {
         return rot * 2.0 * Math.PI / Constants.Shooter.TURRET_GEAR_RATIO;
     }
 
