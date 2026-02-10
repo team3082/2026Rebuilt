@@ -121,6 +121,15 @@ public final class Tuning {
         public static final double HANDOFF_SPEED = 0.0;
     }
 
+    public static final class Intake {
+        public static final double SPEED = 0.7;
+        public static final double REVERSE_SPEED = -0.5;
+        
+        public static final double PIVOT_P = 0.0;
+        public static final double PIVOT_I = 0.0;
+        public static final double PIVOT_D = 0.0;
+    }
+
     public static final class AutoPaths {
       
         public static Curve getAutoPath(Curve path) {

@@ -143,8 +143,10 @@ public class Constants {
     }
 
     public static final class Intake {
-        public static final int MOTOR_ID = 0;
-        public static final double SPEED = 0.7;
+        public static final int PIVOT_MOTOR_ID = 0;
+        public static final int ROLLER_MOTOR_ID = 0;
+
+        public static final double INTAKE_DOWN_ANGLE = 0.0;
     }
 
     public static final class Indexer {
