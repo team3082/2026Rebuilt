@@ -77,10 +77,10 @@ public final class Tuning {
         public static final double HOOD_KP = 0;
         public static final double HOOD_KD = 0;
         public static final double HOOD_KI = 0;
-        public static final double HOOD_DEADBAND = 0;
+        public static final double HOOD_DEADBAND = 0.1;
 
 
-        public static final double FLYWHEEL_SPEED_DEADBAND = 0.0;
+        public static final double FLYWHEEL_SPEED_DEADBAND = 0.1;
         
         // Turret PID Constants
         public static final double TURRET_KP = 0.0;

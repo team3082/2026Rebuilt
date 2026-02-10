@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
@@ -88,9 +89,12 @@ public class ShooterManager {
     }
 
     private static void aimTurret() { 
+        // Change position for the fuel
         Vector2 deltaPos = (new Vector2(target.pos.x, target.pos.y)).sub(Odometry.getPosition());
 
+        
         double targetTurretAngle = turret.clampAngle(Math.atan2(deltaPos.x, deltaPos.y) + Pigeon.getRotationRad());
+        SmartDashboard.putNumber("AngleToShoot", Math.toDegrees(Math.atan2(deltaPos.x, deltaPos.y)));
 
         if (targetTurretAngle == -10) {
             targetTurretAngle = Constants.Shooter.TURRET_MIN_ANGLE;

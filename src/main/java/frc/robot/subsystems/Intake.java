@@ -5,7 +5,6 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
-// import frc.robot.subsystems.visualizer.IntakeVisualizer;
 import frc.robot.Tuning;
 
 public class Intake {
@@ -39,7 +38,6 @@ public class Intake {
 
     
     public static void update(){
-
         switch (rollerState) {
             case RESTING:
                 pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_DOWN_ANGLE));
@@ -56,8 +54,6 @@ public class Intake {
                 rollerMotor.set(Tuning.Intake.REVERSE_SPEED);
                 break;
         }
-
-        // IntakeVisualizer.update();
     }
 
     public static IntakeState getIntakeState() {

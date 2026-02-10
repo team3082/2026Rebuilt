@@ -35,8 +35,8 @@ public class Telemetry {
 
     // Views
     private static Field2d fieldView = new Field2d();
-    public static Mechanism2d subsystemViewSide = new Mechanism2d(5, 5);
-    public static Mechanism2d subsystemViewTop = new Mechanism2d(5, 5);
+    public static Mechanism2d subsystemViewSide = new Mechanism2d(8.25, 5);
+    public static Mechanism2d subsystemViewTop = new Mechanism2d(4, 4);
 
     public static Mechanism2d swerveView = new Mechanism2d(60, 60);
 
