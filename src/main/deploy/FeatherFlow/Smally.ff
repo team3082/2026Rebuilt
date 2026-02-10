@@ -1,0 +1,94 @@
+{
+  "id": "1770495038779",
+  "name": "Smally",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 325.55664440897147,
+        "y": 156.35145430342385
+      },
+      "handleOutOffset": {
+        "x": -20.21046587406134,
+        "y": 61.442341947536804
+      },
+      "handleInOffset": {
+        "x": 4.925769221787789,
+        "y": -14.974954004804403
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 358.7905041675856,
+        "y": 147.7772796357589
+      },
+      "handleOutOffset": {
+        "x": 11.645474499251138,
+        "y": 4.096619193735641
+      },
+      "handleInOffset": {
+        "x": -11.622521712383104,
+        "y": -4.0885449132725
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 380.99887941384696,
+        "y": 204.14279104926575
+      },
+      "handleInOffset": {
+        "x": -12.799102437733154,
+        "y": -31.16498783243665
+      },
+      "handleOutOffset": {
+        "x": 7.7157879835087515,
+        "y": 18.78744543170477
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 437.1114361295535,
+        "y": 147.91756858605297
+      },
+      "handleOutOffset": {
+        "x": 19.984325710086328,
+        "y": -0.7916602258434202
+      },
+      "handleInOffset": {
+        "x": -46.038110543952484,
+        "y": 1.8237563538225743
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 526.1760644952722,
+        "y": 153.27558787457207
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    }
+  ],
+  "controlPoints": [],
+  "created": "2026-02-07T20:10:38.779Z",
+  "lastModified": "2026-02-07T20:26:47.009Z"
+}

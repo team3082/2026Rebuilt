@@ -41,11 +41,11 @@ public class Auto {
     }
 
     @AutoRoutine
-    public SequentialCommandGroup LongLine(){
+    public SequentialCommandGroup Smally(){
         System.out.println("Starting Long Line");
 
         return FeatherFlow.buildFeatherAuto(
-            "Long Line", 
+            "Smally", 
             new InstantCommand(() -> {
                 System.out.println("Debug One");
             }),

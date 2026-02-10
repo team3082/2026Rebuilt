@@ -56,8 +56,8 @@ public class HolonomicDriveController {
         Vector2 desiredPos = desiredPoint.getPosition();
         Vector2 desiredVel = desiredPoint.getVelocity().rotate(-Math.PI/2);
 
-        double xFF = desiredVel.x/(Constants.MAX_PATH_VELOCITY*1.1);
-        double yFF = desiredVel.y/(Constants.MAX_PATH_VELOCITY*1.1);
+        double xFF = desiredVel.x/(Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
+        double yFF = desiredVel.y/(Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
         
         // Get current robot pose
         Vector2 currentPos = SwervePosition.getPosition();
@@ -67,13 +67,14 @@ public class HolonomicDriveController {
         double yFeedback = yPositionPID.calculate(currentPos.y, desiredPos.y);
         Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI/2);
 
+
         SmartDashboard.putNumber("Error Magnitude", desiredPos.sub(currentPos).mag());
         SmartDashboard.putNumber("xFF", xFF);
         SmartDashboard.putNumber("yFF", yFF);
         SmartDashboard.putNumber("xFeedback", xFeedback);
         SmartDashboard.putNumber("yFeedback", yFeedback);
         
-        return new Vector2(xFF + feedbackVector.x, yFF + feedbackVector.y);
+        return new Vector2(xFF, yFF  );
     }
     
   

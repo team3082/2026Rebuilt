@@ -11,27 +11,27 @@ public class Constants {
         public static final double PERCENT_OUT_TO_MOVE_VEL = 16 * 12;
         public static final double PERCENT_OUT_TO_ROTATE_VEL = 1; 
 
-        public static final int DRIVEID0 = 5;
-        public static final int DRIVEID1 = 7;
-        public static final int DRIVEID2 = 1;
-        public static final int DRIVEID3 = 3;
+        public static final int DRIVEID0 = 6;
+        public static final int DRIVEID1 = 8;
+        public static final int DRIVEID2 = 2;
+        public static final int DRIVEID3 = 4;
 
-        public static final int STEERID0 = 6;
-        public static final int STEERID1 = 8;
-        public static final int STEERID2 = 2;
-        public static final int STEERID3 = 4;
+        public static final int STEERID0 = 5;
+        public static final int STEERID1 = 7;
+        public static final int STEERID2 = 1;
+        public static final int STEERID3 = 3;
 
-        public static final double MODOFFSET0 = 0.971191;
-        public static final double MODOFFSET1 = 0.049072;
-        public static final double MODOFFSET2 = 0.865234;
-        public static final double MODOFFSET3 = 0.375488;
+        public static final double MODOFFSET0 = 0.801514;
+        public static final double MODOFFSET1 = 0.221191;
+        public static final double MODOFFSET2 = 0.127197;
+        public static final double MODOFFSET3 = 0.115479;
 
         public static final double DRIVE_RATIO = 6.12;
         public static final double STEER_RATIO = 150.0 /  7.0;
 
 
-        public static final double WIDTH = 35.0;
-        public static final double LENGTH = 35.0;
+        public static final double WIDTH = 27.5;
+        public static final double LENGTH = 27.5;
         public static final double MODULEOFFSET = 2.625;
 
         public static final double SWERVEMODX0 = Math.abs((WIDTH / 2.0) - MODULEOFFSET);
@@ -47,7 +47,7 @@ public class Constants {
         public static final double driveTrackwidth = 0.0;
         public static final double driveWheelbase = 0.0;
 
-        public static final double shootWhileMoveSpeed = 0.24;
+        public static final double shootWhileMoveSpeed = 0.24; // ESSENTIAL DO NOT DELETE
     
         // The unadjusted maximum velocity of the robot, in inches per second.
         public static final double maxChassisVelocity = 6380.0 / 60.0 * 6.12 * (4.0 * Math.PI);
@@ -113,12 +113,13 @@ public class Constants {
     }
     
     public static final double METERSTOINCHES = 39.3701;
-    public static final double FIELD_HEIGHT = 317.69;
-    public static final double FIELD_WIDTH = 651.22; 
+    public static final double FIELD_HEIGHT = 323.25;
+    public static final double FIELD_WIDTH = 651.25; 
+    
+    public static final double MAX_PATH_VELOCITY = Swerve.PERCENT_OUT_TO_MOVE_VEL;
+    public static final double MAX_PATH_ACCELERATION = Swerve.PERCENT_OUT_TO_MOVE_VEL;
 
     public static final boolean REPLAY = false;
-    public static final double MAX_PATH_VELOCITY = 180;
-    public static final double MAX_PATH_ACCELERATION =  180;
     
     public static final class Intake{
         public static int MOTOR_ID;
