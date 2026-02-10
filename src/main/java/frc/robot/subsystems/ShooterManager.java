@@ -109,10 +109,29 @@ public class ShooterManager {
                 aimAtHub();
                 break;
         
-            default: // TODO add aiming at other positions
+            default:
+                aimPass();
                 break;
         }
 
+    }
+
+    private static void aimPass() {
+        Vector2 turretPos = Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()));
+
+        double distance = new Vector2(target.pos.x, target.pos.y).sub(turretPos).mag();
+
+        for (int i = Tuning.Shooter.SHOOTER_TABLE_PASSING.length - 1; i >= 0; i--) {
+            if (Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getDist() < distance) {
+                shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getSpeed());
+                shooter.setTargetAngle(Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getAngle() - Constants.Shooter.HOOD_ANGLE_OFFSET);
+                return;
+            }
+        }
+
+        shooter.setTargetAngle(0);
+        shooter.setTargetSpeed(1000);
+        System.out.println("Can't shoot from here");
     }
 
     private static void aimAtHub() {
@@ -121,16 +140,16 @@ public class ShooterManager {
 
         double distance = new Vector2(target.pos.x, target.pos.y).sub(turretPos).mag();
 
-        for (int i = 0; i < Tuning.Shooter.SHOOTER_TABLE.length - 1; i++) {
-            if (Tuning.Shooter.SHOOTER_TABLE[i].getDist() < distance && distance < Tuning.Shooter.SHOOTER_TABLE[i+1].getDist()) {
+        for (int i = 0; i < Tuning.Shooter.SHOOTER_TABLE_HUB.length - 1; i++) {
+            if (Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist() < distance && distance < Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getDist()) {
 
                 // amount that distance is from first to second distance
-                double t = (distance - Tuning.Shooter.SHOOTER_TABLE[i].getDist()) / (Tuning.Shooter.SHOOTER_TABLE[i+1].getDist() - Tuning.Shooter.SHOOTER_TABLE[i].getDist());
+                double t = (distance - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist()) / (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getDist() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist());
                 
-                double baseFlywheelSpeed = Tuning.Shooter.SHOOTER_TABLE[i].getSpeed();
-                double speed = baseFlywheelSpeed + (Tuning.Shooter.SHOOTER_TABLE[i+1].getSpeed() - Tuning.Shooter.SHOOTER_TABLE[i].getSpeed()) * t;
-                double baseAngle = Tuning.Shooter.SHOOTER_TABLE[i].getAngle();
-                double angle = baseAngle + (Tuning.Shooter.SHOOTER_TABLE[i+1].getAngle() - Tuning.Shooter.SHOOTER_TABLE[i].getAngle()) * t;
+                double baseFlywheelSpeed = Tuning.Shooter.SHOOTER_TABLE_HUB[i].getSpeed();
+                double speed = baseFlywheelSpeed + (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getSpeed() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getSpeed()) * t;
+                double baseAngle = Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle();
+                double angle = baseAngle + (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getAngle() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle()) * t;
                 
                 shooter.setTargetSpeed(speed);
                 shooter.setTargetAngle(angle - Constants.Shooter.HOOD_ANGLE_OFFSET);

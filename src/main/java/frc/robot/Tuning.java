@@ -91,7 +91,7 @@ public final class Tuning {
         // Turret Control
         public static final double TURRET_ZEROING_SPEED = -0.1;
 
-        public static final ShooterTableValue[] SHOOTER_TABLE = { //TODO tune
+        public static final ShooterTableValue[] SHOOTER_TABLE_HUB = { //TODO tune
             new ShooterTableValue(48.0, Math.toRadians(25.0), 2800),
             new ShooterTableValue(60.0, Math.toRadians(30.0), 3000),
             new ShooterTableValue(72.0, Math.toRadians(35.0), 3200),
@@ -100,6 +100,19 @@ public final class Tuning {
             new ShooterTableValue(108.0, Math.toRadians(42.0), 3900),
             new ShooterTableValue(120.0, Math.toRadians(43.0), 4000),
             new ShooterTableValue(132.0, Math.toRadians(45.0), 4300)
+        };
+
+        public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = { //TODO tune
+            new ShooterTableValue(0.0, Math.toRadians(60.0), 1000),
+            new ShooterTableValue(60.0, Math.toRadians(60.0), 2800),
+            new ShooterTableValue(120.0, Math.toRadians(60.0), 3000),
+            new ShooterTableValue(180.0, Math.toRadians(60.0), 3200),
+            new ShooterTableValue(240.0, Math.toRadians(60.0), 3500),
+            new ShooterTableValue(300.0, Math.toRadians(60.0), 3700),
+            new ShooterTableValue(360.0, Math.toRadians(60.0), 3900),
+            new ShooterTableValue(420.0, Math.toRadians(60.0), 4000),
+            new ShooterTableValue(480.0, Math.toRadians(60.0), 4300),
+            new ShooterTableValue(540.0, Math.toRadians(60.0), 4600)
         };
     }
 
