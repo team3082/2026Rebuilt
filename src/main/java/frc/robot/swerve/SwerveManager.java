@@ -12,6 +12,7 @@ public final class SwerveManager {
     
     public static SwerveModule[] mods;
     public static Vector2 movement = new Vector2();
+    public static double rotationSpeed;
 
     public static void init() {
         mods = new SwerveModule[] {
@@ -40,6 +41,7 @@ public final class SwerveManager {
 
     public static void rotateAndDrive(double rotSpeed, Vector2 move) {
         movement = move;
+        rotationSpeed = rotSpeed;
         double heading = Pigeon.getRotationRad();
         
         // Array containing the unclamped movement vectors of each module

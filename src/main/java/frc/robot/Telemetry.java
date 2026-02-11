@@ -1,8 +1,6 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
-
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,9 +11,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import frc.robot.auto.Auto;
+import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
+// import frc.robot.subsystems.visualizer.IntakeVisualizer;
+import frc.robot.subsystems.visualizer.ShooterVisualizer;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.swerve.visualizer.SwerveBaseVisualizer;
@@ -29,10 +29,15 @@ import frc.robot.swerve.SwervePID;
 public class Telemetry {
     private static ShuffleboardTab robotTab = Shuffleboard.getTab("Robot Views");
     private static ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
+    private static ShuffleboardTab shooterManagerTab = Shuffleboard.getTab("Shooter Manager");
+    private static ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    private static ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
+
     // Views
     private static Field2d fieldView = new Field2d();
-    public static LoggedMechanism2d subsystemView = new LoggedMechanism2d(65/Constants.METERSTOINCHES, 120/Constants.METERSTOINCHES);
-    public static Mechanism2d subsytemView = new Mechanism2d(10, 10);
+    public static Mechanism2d subsystemViewSide = new Mechanism2d(8.25, 5);
+    public static Mechanism2d subsystemViewTop = new Mechanism2d(4, 4);
+
     public static Mechanism2d swerveView = new Mechanism2d(60, 60);
 
     // Logging
@@ -42,7 +47,6 @@ public class Telemetry {
     private static final GenericEntry SWERVE_MOD_1_TARGET_ANGLE = swerveTab.add("Swerve Module 1 Target Angle", SwerveManager.mods[0].targetAngle).getEntry();
     private static final GenericEntry SWERVE_MOD_1_TARGET_SPEED = swerveTab.add("Swerve Module 1 Target Speed", SwerveManager.mods[0].targetSpeed).getEntry();
     private static final GenericEntry SWERVE_MOD_1_INVERTED = swerveTab.add("Swerve Module 1 Inverted", SwerveManager.mods[0].inverted).getEntry();
-
     private static final GenericEntry SWERVE_MOD_2_ANGLE = swerveTab.add("Swerve Module 2 Angle", SwerveManager.mods[1].getSteerAngle()).getEntry();
     private static final GenericEntry SWERVE_MOD_2_SPEED = swerveTab.add("Swerve Module 2 Speed", SwerveManager.mods[1].getDriveVelocity()).getEntry();
     private static final GenericEntry SWERVE_MOD_2_TARGET_ANGLE = swerveTab.add("Swerve Module 2 Target Angle", SwerveManager.mods[1].targetAngle).getEntry();
@@ -61,25 +65,43 @@ public class Telemetry {
     private static final GenericEntry SWERVE_MOD_4_TARGET_SPEED = swerveTab.add("Swerve Module 4 Target Speed", SwerveManager.mods[3].targetSpeed).getEntry();
     private static final GenericEntry SWERVE_MOD_4_INVERTED = swerveTab.add("Swerve Module 4 Inverted", SwerveManager.mods[3].inverted).getEntry();
 
+    // Shooter Manager
+    private static final GenericEntry SHOOTER_TARGET = shooterManagerTab.add("Shooter target", ShooterManager.getTarget().name()).getEntry();
+    private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.getShooterState().name()).getEntry();
+
+    // Shooter
+    private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", ShooterManager.getShooter().getTargetAngle()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", ShooterManager.getShooter().getAngle()).getEntry();
+    private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", ShooterManager.getShooter().getTargetSpeed()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", ShooterManager.getShooter().getVelocity()).getEntry();
+
+    // Turret
+    private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", ShooterManager.getTurret().getTurretState().name()).getEntry();
+    private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", ShooterManager.getTurret().getTargetAngle()).getEntry();
+    private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", ShooterManager.getTurret().getAngle()).getEntry();
+
     public static void init() {
         robotTab.add("Field View", fieldView);
-        robotTab.add("Subsystem View", subsystemView);
         robotTab.add("Swerve View", swerveView);
 
         SwerveBaseVisualizer.init();
+        ShooterVisualizer.init();
         robotTab.addString("Position", () -> SwervePosition.getPosition().toString());
         robotTab.addString("PID Dest Position", () -> SwervePID.getDest().toString());
         
 
         robotTab.add("Auto Selector", Auto.routineManager.autoSelector);
 
-        robotTab.add("Subsystem Mech", subsystemView);
+        robotTab.add("Subsystem View Side", subsystemViewSide);
+        robotTab.add("Subsystem View Top", subsystemViewTop);
     }
 
     public static void update() {
         updateField();
         updateSwerve();
         logValues();
+        updateSubsystems();
+
     }
 
     private static void logValues(){
@@ -140,8 +162,8 @@ public class Telemetry {
         // System.out.println("Alliance Pos Multiplier: " + alliancePosMultiplier + " Alliance Rot Offset: " + allianceRotOffset);
         
         Pose2d currentPose = new Pose2d(
-            alliancePosMultiplier * SwervePosition.getPosition().x /Constants.METERSTOINCHES + 8.78,
-            alliancePosMultiplier * SwervePosition.getPosition().y/Constants.METERSTOINCHES + 4.01,
+            alliancePosMultiplier * SwervePosition.getPosition().x /Constants.METERSTOINCHES + (Constants.FIELD_WIDTH / 2 / Constants.METERSTOINCHES),
+            alliancePosMultiplier * SwervePosition.getPosition().y / Constants.METERSTOINCHES + (Constants.FIELD_HEIGHT / 2 / Constants.METERSTOINCHES),
             Rotation2d.fromRadians(Pigeon.getRotationRad() + Math.PI / 2.0 + allianceRotOffset)
         );
         fieldView.setRobotPose(currentPose);
@@ -153,7 +175,20 @@ public class Telemetry {
         }
     }
 
-    
+    private static void updateSubsystems() {
+        SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
+        SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
 
+        SHOOTER_TARGET_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getTargetAngle());
+        SHOOTER_CURRENT_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getAngle());
+        SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getTargetSpeed());
+        SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getVelocity());
+
+        TURRET_STATE.setString(ShooterManager.getTurret().getTurretState().name());
+        TURRET_TARGET_ANGLE.setDouble(ShooterManager.getTurret().getTargetAngle());
+        TURRET_CURRENT_ANGLE.setDouble(ShooterManager.getTurret().getAngle());
+
+        ShooterVisualizer.update();
+    }
     
 }

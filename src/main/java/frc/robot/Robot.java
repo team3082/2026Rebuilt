@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 // AUTO
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShooterManager;
 import frc.robot.auto.Auto;
-import frc.robot.subsystems.intake.Intake;
+    
 // SUBSYSTEMS
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwerveManager;
@@ -43,16 +46,16 @@ public class Robot extends LoggedRobot {
     SwervePosition.setPosition(new Vector2());
 
     // Subsystems
+    ShooterManager.init();
+    Indexer.init();
     Intake.init();
 
     // Logging
     Telemetry.init();
     
+    
     // Controls
     OI.init();
-
-
-
 
     Logger.recordMetadata("ProjectName", "2026Rebuilt"); // Set a metadata value
     if (isReal()) {
@@ -76,24 +79,24 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     
     RTime.update();
-    Telemetry.update();
     Pigeon.update();
+    ShooterManager.update();
+    Indexer.update();
+    Intake.update();
+    Telemetry.update();
     SwervePosition.update();
     SwerveManager.update();
-    Intake.update();
 
   }
 
   @Override
   public void autonomousInit() {
     Auto.startRoutine();
-    Intake.startIntaking();
   }
   
   @Override
   public void autonomousPeriodic() {
-    // Auto.update();
-    SwerveManager.rotateAndDrive(0, new Vector2(1, 1));
+    Auto.update();
   }
 
   @Override

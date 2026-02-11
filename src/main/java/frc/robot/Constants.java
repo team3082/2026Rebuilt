@@ -113,13 +113,44 @@ public class Constants {
     }
     
     public static final double METERSTOINCHES = 39.3701;
-    public static final double FIELD_HEIGHT = 323.25;
-    public static final double FIELD_WIDTH = 651.25; 
+    public static final double FIELD_HEIGHT = 317.7;
+    public static final double FIELD_WIDTH = 651.2; 
 
     public static final boolean REPLAY = false;
-    
-    public static final class Intake{
-        public static int MOTOR_ID;
-        public static double SPEED = 0.7;
+    public static final double ROTATAIONAL_DEADBAND = 0;
+
+    public static final class Shooter {
+
+        public static final int TURRET_MOTOR_ID = 0;
+        public static final int FLYWHEEL_MOTOR_ID = 0;
+        public static final int HOOD_MOTOR_ID = 0;
+        public static final int HALL_EFFECT_SENSOR_ID = 0;
+        
+        public static final double TURRET_GEAR_RATIO = 200.0 / 20.0; 
+        public static final double HOOD_GEAR_RATIO = 380.0 / 20.0 * 24.0 / 15.0 * 4.0;
+
+        public static final double FLYWHEEL_DIAMETER = 4.0;
+
+        public static final double TURRET_ZERO_ANGLE = 0.0;
+        public static final double TURRET_MIN_ANGLE = Math.toRadians(0.0);
+        public static final double TURRET_MAX_ANGLE = Math.toRadians(300.0);
+
+        public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
+        public static final double HOOD_ANGLE_OFFSET = Math.toRadians(25.0);
+
+        public static final Vector2 TURRET_POS_OFFSET = new Vector2(3.75, 4.25);
+
+    }
+
+    public static final class Intake {
+        public static final int PIVOT_MOTOR_ID = 0;
+        public static final int ROLLER_MOTOR_ID = 0;
+
+        public static final double INTAKE_DOWN_ANGLE = 0.0;
+    }
+
+    public static final class Indexer {
+        public static final int SPINDEXER_ID = 0;
+        public static final int HANDOFF_ID = 0;
     }
 }
