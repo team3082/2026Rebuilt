@@ -121,10 +121,20 @@ public class Shooter {
         return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND;
     }
 
+    /**
+     * Converts hood angle to motor rotations
+     * @param radians angle that hood that rotated
+     * @return motor rotations for hood to be at given angle
+     */
     private double hoodAngleToRot(double radians) {
         return radians / 2.0 / Math.PI * Constants.Shooter.HOOD_GEAR_RATIO;
     }
 
+    /**
+     * Converts motor rotations to hood angle
+     * @param rot motor rotations
+     * @return hood angle that will be at given motor rotations
+     */
     private double rotToHoodAngle(double rot) {
         return rot * 2.0 * Math.PI / Constants.Shooter.HOOD_GEAR_RATIO;
     }

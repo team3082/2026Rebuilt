@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Tuning;
-import frc.robot.utils.RMath;
 
 public class Turret {
 
@@ -79,7 +78,7 @@ public class Turret {
     /**
      * Clamps the angle to the range that turret can rotate to
      * @param angle
-     * @return clamped angle, returns -10 if outside of turret rotation zone
+     * @return clamped angle within min and max turret angle, returns -10 if outside of turret rotation zone
      */
     public double clampAngle(double angle) {
         while (angle > Constants.Shooter.TURRET_MAX_ANGLE) {

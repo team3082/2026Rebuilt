@@ -1,15 +1,15 @@
 package frc.robot.subsystems.states;
 
-import frc.robot.utils.Vector3;
+import frc.robot.utils.Vector2;
 
 public enum ShooterTarget {
-    HUB(new Vector3(143.5, 0, 72)),
-    PASS_LEFT(new Vector3(230, -100, 0)),
-    PASS_RIGHT(new Vector3(230, 100, 0));
+    HUB(new Vector2(143.5, 0)),
+    PASS_LEFT(new Vector2(230, -100)),
+    PASS_RIGHT(new Vector2(230, 100));
     
-    public final Vector3 pos;
+    public final Vector2 pos;
 
-    private ShooterTarget(Vector3 pos) {
+    private ShooterTarget(Vector2 pos) {
         this.pos = pos;
     }
 }
