@@ -44,6 +44,14 @@ public final class Tuning {
      public static final double CURVE_DEADBAND = 0.5; // bro this is inches who had it at 0.001
      public static final double ROT_DEADBAND = 0.03; // radians
     
+    // Holonomic Drive Controller
+    public static final double holonomic_pos_kp = 0.5;
+    public static final double holonomic_pos_ki = 0.0;
+    public static final double holonomic_pos_kd = 0.0;
+
+    public static final double holonomic_vel_kp = 0.05;
+    public static final double holonomic_vel_ki = 0.0;
+    public static final double holonomic_vel_kd = 0.0;
 
     // Trapezoidal Tuning
     public static final double MOVE_PRECISE_VEL = 16 * 12;

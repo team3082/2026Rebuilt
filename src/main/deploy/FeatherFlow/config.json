@@ -21,6 +21,17 @@
       "enabled": true,
       "locked": true,
       "id": "snap-1768161719888"
+    },
+    {
+      "position": {
+        "x": 7.654880791617458,
+        "y": 5.67178994779789
+      },
+      "name": "Snap Point 3",
+      "color": "blue",
+      "enabled": true,
+      "locked": false,
+      "id": "snap-1770480273055"
     }
   ],
   "snapSettings": {

@@ -9,8 +9,22 @@ import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 
 public class RobotPath {
-    public List<Vector2> points;
-    public double targetRot;
+    private List<Vector2> points;
+    private List<Double> curvatures;
+    private List<Double> lengths;
+    private List<Double> globalTs; 
+    
+    private double totalLength;
+    
+    /**
+     * Creates a new RobotPath from a list of points.
+     * 
+     * @param points List of Vector2 points defining the path
+     */
+    public RobotPath(List<Vector2> points, List<Double> curvatures, List<Double> globalTs) {
+        this.points = new ArrayList<>(points);
+        this.curvatures = new ArrayList<>(curvatures);
+        this.globalTs = new ArrayList<>(globalTs);
 
     public double currentPosT = 0;
 
@@ -87,8 +101,23 @@ public class RobotPath {
         return driveVector;
     }
 
-    public double getTargetRot() {
-        return targetRot;
+        if(startT > 1 || endT < 0 || startT < 0 || endT > 1) {
+            throw new IllegalArgumentException("startT and endT must be in the range [0, 1]");
+        }
+
+        startT = Math.max(0, Math.min(1, startT));
+        endT = Math.max(0, Math.min(1, endT));
+        
+        int startIndex = (int) (startT * (points.size() - 1));
+        int endIndex = (int) Math.ceil(endT * (points.size() - 1));
+        
+        endIndex = Math.min(endIndex, points.size() - 1);
+        
+        List<Vector2> subPoints = new ArrayList<>(points.subList(startIndex, endIndex + 1));
+        List<Double> subCurvatures = new ArrayList<>(curvatures.subList(startIndex, endIndex + 1));
+        List<Double> subGlobalTs = new ArrayList<>(globalTs.subList(startIndex, endIndex + 1));
+
+        return new RobotPath(subPoints, subCurvatures, subGlobalTs);
     }
 
     public void addCurvePoints(List<Vector2> curvePoints) {
@@ -130,4 +159,17 @@ public class RobotPath {
     public Vector2 getLastPos() {
         return points.get(points.size() - 1);
     }
+
+    public List<Double> getCurvatures() {
+        return curvatures;
+    }
+
+    public List<Double> getLengths() {
+        return lengths;
+    }
+
+    public List<Double> getTValues() {
+        return globalTs;
+    }
+
 }
