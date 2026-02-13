@@ -73,8 +73,9 @@ public class HolonomicDriveController {
         SmartDashboard.putNumber("yFF", yFF);
         SmartDashboard.putNumber("xFeedback", xFeedback);
         SmartDashboard.putNumber("yFeedback", yFeedback);
+        SmartDashboard.putNumber("t_global", desiredPoint.getTValue());
         
-        return new Vector2(xFF, yFF  );
+        return new Vector2(xFF, yFF);
     }
     
   

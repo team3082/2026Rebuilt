@@ -74,15 +74,27 @@ public class FeatherFlow {
         
         List<Vector2> allPoints = new ArrayList<>();
         List<Double> allCurvatures = new ArrayList<>();
-        
+        List<Double> allTs = new ArrayList<>();
+
+        int curveIndexBezier = 0;
         for (CubicBezierCurve bezier : beziers) {
             allPoints.addAll(List.of(bezier.getPoints()));
             for (double curvature : bezier.getCurvatures()) {
                 allCurvatures.add(curvature);
             }
+
+            for (double tValue : bezier.getTValues()) {
+                curveIndexBezier = Math.max(0, Math.min(curveIndexBezier, beziers.size() - 1));
+                double globalT = (curveIndexBezier + tValue) / beziers.size();
+                globalT = Math.max(0.0, Math.min(1.0, globalT));
+
+                allTs.add(globalT);
+            }
+
+            curveIndexBezier += 1;
         }
         
-        RobotPath fullPath = new RobotPath(allPoints, allCurvatures);
+        RobotPath fullPath = new RobotPath(allPoints, allCurvatures, allTs);
         
         JsonNode controlPoints = root.get("controlPoints");
         List<Double> splitValues = new ArrayList<>();
@@ -147,7 +159,7 @@ public class FeatherFlow {
                 path,
                 Constants.MAX_PATH_VELOCITY,
                 Constants.MAX_PATH_ACCELERATION,
-                79.0
+                Constants.MAX_PATH_VELOCITY
             ));
         }
         

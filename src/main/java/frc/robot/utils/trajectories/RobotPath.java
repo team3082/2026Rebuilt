@@ -13,6 +13,7 @@ public class RobotPath {
     private List<Vector2> points;
     private List<Double> curvatures;
     private List<Double> lengths;
+    private List<Double> globalTs; 
     
     private double totalLength;
     
@@ -21,9 +22,10 @@ public class RobotPath {
      * 
      * @param points List of Vector2 points defining the path
      */
-    public RobotPath(List<Vector2> points, List<Double> curvatures) {
+    public RobotPath(List<Vector2> points, List<Double> curvatures, List<Double> globalTs) {
         this.points = new ArrayList<>(points);
         this.curvatures = new ArrayList<>(curvatures);
+        this.globalTs = new ArrayList<>(globalTs);
 
         this.totalLength = calculateTotalLength();
     }
@@ -126,7 +128,9 @@ public class RobotPath {
         
         List<Vector2> subPoints = new ArrayList<>(points.subList(startIndex, endIndex + 1));
         List<Double> subCurvatures = new ArrayList<>(curvatures.subList(startIndex, endIndex + 1));
-        return new RobotPath(subPoints, subCurvatures);
+        List<Double> subGlobalTs = new ArrayList<>(globalTs.subList(startIndex, endIndex + 1));
+
+        return new RobotPath(subPoints, subCurvatures, subGlobalTs);
     }
     
     /**
@@ -210,6 +214,10 @@ public class RobotPath {
 
     public List<Double> getLengths() {
         return lengths;
+    }
+
+    public List<Double> getTValues() {
+        return globalTs;
     }
 
 }
