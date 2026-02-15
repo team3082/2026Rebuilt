@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.auto.Auto;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
-// import frc.robot.subsystems.visualizer.IntakeVisualizer;
 import frc.robot.subsystems.visualizer.ShooterVisualizer;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
@@ -32,6 +32,7 @@ public class Telemetry {
     private static ShuffleboardTab shooterManagerTab = Shuffleboard.getTab("Shooter Manager");
     private static ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
     private static ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
+    private static ShuffleboardTab intakeTab = Shuffleboard.getTab("Intake");
 
     // Views
     private static Field2d fieldView = new Field2d();
@@ -79,6 +80,9 @@ public class Telemetry {
     private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", ShooterManager.getTurret().getTurretState().name()).getEntry();
     private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", ShooterManager.getTurret().getTargetAngle()).getEntry();
     private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", ShooterManager.getTurret().getAngle()).getEntry();
+
+    // Intake
+    private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
 
     public static void init() {
         robotTab.add("Field View", fieldView);
@@ -187,6 +191,8 @@ public class Telemetry {
         TURRET_STATE.setString(ShooterManager.getTurret().getTurretState().name());
         TURRET_TARGET_ANGLE.setDouble(ShooterManager.getTurret().getTargetAngle());
         TURRET_CURRENT_ANGLE.setDouble(ShooterManager.getTurret().getAngle());
+
+        INTAKE_STATE.setString(Intake.getIntakeState().name());
 
         ShooterVisualizer.update();
     }

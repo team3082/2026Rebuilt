@@ -80,10 +80,6 @@ public class ShooterManager {
         return turret;
     }
 
-    public static void startShooting() {
-        shooterState = ShooterState.REVVING;
-    }
-
     public static void stopShooting() {
         shooterState = ShooterState.IDLE;
     }
