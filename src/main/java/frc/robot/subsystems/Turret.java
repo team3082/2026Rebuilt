@@ -35,6 +35,9 @@ public class Turret {
         turretMotorConfig.Slot0.kI = Tuning.Shooter.TURRET_KI;
         turretMotorConfig.Slot0.kD = Tuning.Shooter.TURRET_KD;
 
+        turretMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+        turretMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
         turretMotor.getConfigurator().apply(turretMotorConfig);
         
     }

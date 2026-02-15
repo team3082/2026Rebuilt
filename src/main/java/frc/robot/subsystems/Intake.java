@@ -26,12 +26,21 @@ public class Intake {
         pivotMotor = new TalonFX(Constants.Intake.PIVOT_MOTOR_ID);
 
         rollerMotor.getConfigurator().apply(new TalonFXConfiguration());
+        TalonFXConfiguration rollerMotorConfig = new TalonFXConfiguration();
+        rollerMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+        rollerMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        rollerMotor.getConfigurator().apply(rollerMotorConfig);
+        
         pivotMotor.getConfigurator().apply(new TalonFXConfiguration());
-
         TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+
         pivotConfig.Slot0.kP = Tuning.Intake.PIVOT_P;
         pivotConfig.Slot0.kI = Tuning.Intake.PIVOT_I;
         pivotConfig.Slot0.kD = Tuning.Intake.PIVOT_D;
+        
+        pivotConfig.CurrentLimits.StatorCurrentLimit = 100;
+        pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
         pivotMotor.getConfigurator().apply(pivotConfig);
 
     }

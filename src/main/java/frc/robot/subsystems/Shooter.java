@@ -24,12 +24,20 @@ public class Shooter {
         hoodMotor = new TalonFX(Constants.Shooter.HOOD_MOTOR_ID);
         
         flywheelMotor.getConfigurator().apply(new TalonFXConfiguration());
+        TalonFXConfiguration flywheelConfiguration = new TalonFXConfiguration();
+        flywheelConfiguration.CurrentLimits.StatorCurrentLimit = 120;
+        flywheelConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+        flywheelMotor.getConfigurator().apply(flywheelConfiguration);
+
         hoodMotor.getConfigurator().apply(new TalonFXConfiguration());
 
         TalonFXConfiguration hoodConfiguration = new TalonFXConfiguration();
         hoodConfiguration.Slot0.kP = Tuning.Shooter.HOOD_KP;
         hoodConfiguration.Slot0.kI = Tuning.Shooter.HOOD_KI;
         hoodConfiguration.Slot0.kD = Tuning.Shooter.HOOD_KD;
+
+        hoodConfiguration.CurrentLimits.StatorCurrentLimit = 120;
+        hoodConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
 
         hoodMotor.getConfigurator().apply(hoodConfiguration);
         hoodMotor.setPosition(0);
