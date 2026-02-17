@@ -7,11 +7,13 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Tuning;
+import frc.robot.utils.RTime;
 
 public class Turret {
 
     public enum TurretState {
         ZEROING,
+        ZEROING_REVERSE, // if we hit the hardstop, assumes we started on wrong side of sensor and reverses direction
         NORMAL
     }
 
@@ -20,6 +22,7 @@ public class Turret {
     
     private TurretState turretState = TurretState.ZEROING;
     private double targetAngle = 0.0;
+    private double zeroStartTime = RTime.now(); // makes sure that current detection for hitting hardstop doesn't activate due to starting acceleration of turret
 
     /**
      * Initializion the turret
@@ -53,6 +56,30 @@ public class Turret {
                     
                     if (atZeroPosition()) {
                         turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
+                        turretState = TurretState.NORMAL;
+                    }
+
+                    if (atHardstop()) {
+                        turretState = TurretState.ZEROING_REVERSE;
+                        zeroStartTime = RTime.now();
+                    }
+
+                } else {
+                    turretState = TurretState.NORMAL;
+                }
+                break;
+
+            case ZEROING_REVERSE:
+                if (Robot.isReal()){
+                    turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
+                    
+                    if (atZeroPosition()) {
+                        turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
+                        turretState = TurretState.NORMAL;
+                    }
+
+                    if (atHardstop()) {
+                        turretMotor.setPosition(Constants.Shooter.TURRET_HARDSTOP_ZERO_ANGLE);
                         turretState = TurretState.NORMAL;
                     }
                 } else {
@@ -125,6 +152,15 @@ public class Turret {
      */
     public void zero(){
         turretState = TurretState.ZEROING;
+        zeroStartTime = RTime.now();
+    }
+
+    /**
+     * Checks if turret is against hardstop by sensing current draw
+     * @return if turrent base is hitting hardstop
+     */
+    public boolean atHardstop() {
+        return turretMotor.getStatorCurrent().getValueAsDouble() > 100.0 && turretMotor.getVelocity().getValueAsDouble() < 0.05 && RTime.now() - 0.15 > zeroStartTime;
     }
 
     public boolean atZeroPosition() {
