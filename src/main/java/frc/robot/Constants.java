@@ -2,7 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
+import frc.robot.vision.AprilTag;
 import frc.robot.utils.Vector2;
 
 public class Constants {
@@ -153,4 +153,43 @@ public class Constants {
         public static final int SPINDEXER_ID = 0;
         public static final int HANDOFF_ID = 0;
     }
+    public static final AprilTag[] APRIL_TAGS = {
+        null,
+        // Red Alliance
+                 // id 1
+        new AprilTag(1, 467.64, 292.31, 35.00, Math.toRadians(180)),
+        new AprilTag(2, 469.11, 182.60, 44.25, Math.toRadians(90)),
+        new AprilTag(3, 445.35, 172.84, 44.25, Math.toRadians(180)),
+        new AprilTag(4, 445.35, 158.84, 44.25, Math.toRadians(180)),
+        new AprilTag(5, 469.11, 135.09, 44.25, Math.toRadians(270)),
+        new AprilTag(6, 467.64, 25.37, 35.00, Math.toRadians(180)),
+        new AprilTag(7, 470.59, 25.37, 35.00, Math.toRadians(0)),
+        new AprilTag(8, 483.11, 135.09, 44.25, Math.toRadians(270)),
+        new AprilTag(9, 492.88, 144.84, 44.25, Math.toRadians(0)),
+        new AprilTag(10, 492.88, 158.84, 44.25, Math.toRadians(0)),
+        new AprilTag(11, 483.11, 182.60, 44.25, Math.toRadians(90)),
+        new AprilTag(12, 470.59, 292.31, 35.00, Math.toRadians(0)),
+        new AprilTag(13, 650.92, 291.47, 21.75, Math.toRadians(180)),
+        new AprilTag(14, 650.92, 274.47, 21.75, Math.toRadians(180)),
+        new AprilTag(15, 650.90, 170.22, 21.75, Math.toRadians(180)),
+        new AprilTag(16, 650.90, 153.22, 21.75, Math.toRadians(180)),
+        // Blue Team
+        new AprilTag(17, 183.59, 25.37, 35.00, Math.toRadians(0)),
+        new AprilTag(18, 182.11, 135.09, 44.25, Math.toRadians(270)),
+        new AprilTag(19, 205.87, 144.84, 44.25, Math.toRadians(0)),
+        new AprilTag(20, 205.87, 158.84, 44.25, Math.toRadians(0)),
+        new AprilTag(21, 182.11, 182.60, 44.25, Math.toRadians(90)),
+        new AprilTag(22, 183.59, 292.31, 35.00, Math.toRadians(0)),
+        new AprilTag(23, 180.64, 292.31, 35.00, Math.toRadians(180)),
+        new AprilTag(24, 168.11, 182.60, 44.25, Math.toRadians(90)),
+        new AprilTag(25, 158.34, 172.84, 44.25, Math.toRadians(180)),
+        new AprilTag(26, 158.34, 158.84, 44.25, Math.toRadians(180)),
+        new AprilTag(27, 168.11, 135.09, 44.25, Math.toRadians(270)),
+        new AprilTag(28, 180.64, 25.37, 35.00, Math.toRadians(180)),
+        new AprilTag(29, 0.30, 26.22, 21.75, Math.toRadians(0)),
+        new AprilTag(30, 0.30, 43.22, 21.75, Math.toRadians(0)),
+        new AprilTag(31, 0.32, 147.47, 21.75, Math.toRadians(0)),
+        new AprilTag(32, 0.32, 164.47, 21.75, Math.toRadians(0)),
+        
+    };
 }
