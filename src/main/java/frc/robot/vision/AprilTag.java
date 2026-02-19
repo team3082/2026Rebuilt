@@ -22,7 +22,7 @@ public class AprilTag {
     public AprilTag(int id, double x, double y, double z, double rot) {
 
         this.id = id;
-        this.pos = new Vector3(x - (Constants.FIELD_HEIGHT / 2), y - (Constants.FIELD_WIDTH / 2), z);
+        this.pos = new Vector3(x - (Constants.FIELD_WIDTH / 2), -(Constants.FIELD_HEIGHT / 2) + y, z);
         this.rot = rot;
     }
 
