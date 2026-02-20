@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Tuning;
 
 public class Intake {
@@ -79,5 +80,31 @@ public class Intake {
     
     public static void stopIntaking() {
         rollerState = IntakeState.RESTING;
+    }
+
+    public static double getAngle() {
+        if (Robot.isReal()) {
+            return pivotMotor.getPosition().getValueAsDouble();
+        } else {
+            return Constants.Intake.INTAKE_DOWN_ANGLE;
+        }
+    }
+
+    public static double getSpeed() {
+        if (Robot.isReal()) {
+            return rollerMotor.get();
+        } else {
+            switch (rollerState) {
+                case RESTING:
+                    return 0;
+            
+                case INTAKING:
+                    return Tuning.Intake.SPEED;
+
+                case REVERSE:
+                    return Tuning.Intake.REVERSE_SPEED;
+            }
+        }
+        return 0;
     }
 }

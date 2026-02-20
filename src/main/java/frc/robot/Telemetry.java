@@ -12,10 +12,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.auto.Auto;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
-import frc.robot.subsystems.visualizer.ShooterVisualizer;
+import frc.robot.subsystems.visualizer.SubsystemVisualizer;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.swerve.visualizer.SwerveBaseVisualizer;
@@ -33,6 +34,7 @@ public class Telemetry {
     private static ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
     private static ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
     private static ShuffleboardTab intakeTab = Shuffleboard.getTab("Intake");
+    private static ShuffleboardTab indexerTab = Shuffleboard.getTab("Handoff");
 
     // Views
     private static Field2d fieldView = new Field2d();
@@ -83,13 +85,19 @@ public class Telemetry {
 
     // Intake
     private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
+    private static final GenericEntry INTAKE_ANGLE = intakeTab.add("Intake angle", Intake.getAngle()).getEntry();
+    private static final GenericEntry INTAKE_SPEED = intakeTab.add("Intake speed", Intake.getSpeed()).getEntry();
+
+    // Spindexer and Handoff
+    private static final GenericEntry SPINDEXER_SPEED = indexerTab.add("Spindexer speed", Indexer.getSpindexerSpeed()).getEntry();
+    private static final GenericEntry HANDOFF_SPEED = indexerTab.add("Handoff speed", Indexer.getHandoffSpeed()).getEntry();
 
     public static void init() {
         robotTab.add("Field View", fieldView);
         robotTab.add("Swerve View", swerveView);
 
         SwerveBaseVisualizer.init();
-        ShooterVisualizer.init();
+        SubsystemVisualizer.init();
         robotTab.addString("Position", () -> SwervePosition.getPosition().toString());
         robotTab.addString("PID Dest Position", () -> SwervePID.getDest().toString());
         
@@ -193,8 +201,13 @@ public class Telemetry {
         TURRET_CURRENT_ANGLE.setDouble(ShooterManager.getTurret().getAngle());
 
         INTAKE_STATE.setString(Intake.getIntakeState().name());
+        INTAKE_ANGLE.setDouble(Intake.getAngle());
+        INTAKE_SPEED.setDouble(Intake.getSpeed());
 
-        ShooterVisualizer.update();
+        SPINDEXER_SPEED.setDouble(Indexer.getSpindexerSpeed());
+        HANDOFF_SPEED.setDouble(Indexer.getHandoffSpeed());
+
+        SubsystemVisualizer.update();
     }
     
 }

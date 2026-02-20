@@ -40,4 +40,12 @@ public class Indexer {
                 break;
         }
     }
+
+    public static double getSpindexerSpeed() {
+        return spindexerMotor.get();
+    }
+
+    public static double getHandoffSpeed() {
+        return handoffMotor.get();
+    }
 }
