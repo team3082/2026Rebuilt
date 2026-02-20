@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Tuning;
 
 public class Intake {
@@ -26,12 +27,21 @@ public class Intake {
         pivotMotor = new TalonFX(Constants.Intake.PIVOT_MOTOR_ID);
 
         rollerMotor.getConfigurator().apply(new TalonFXConfiguration());
+        TalonFXConfiguration rollerMotorConfig = new TalonFXConfiguration();
+        rollerMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+        rollerMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        rollerMotor.getConfigurator().apply(rollerMotorConfig);
+        
         pivotMotor.getConfigurator().apply(new TalonFXConfiguration());
-
         TalonFXConfiguration pivotConfig = new TalonFXConfiguration();
+
         pivotConfig.Slot0.kP = Tuning.Intake.PIVOT_P;
         pivotConfig.Slot0.kI = Tuning.Intake.PIVOT_I;
         pivotConfig.Slot0.kD = Tuning.Intake.PIVOT_D;
+        
+        pivotConfig.CurrentLimits.StatorCurrentLimit = 100;
+        pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
         pivotMotor.getConfigurator().apply(pivotConfig);
 
     }
@@ -70,5 +80,31 @@ public class Intake {
     
     public static void stopIntaking() {
         rollerState = IntakeState.RESTING;
+    }
+
+    public static double getAngle() {
+        if (Robot.isReal()) {
+            return pivotMotor.getPosition().getValueAsDouble();
+        } else {
+            return Constants.Intake.INTAKE_DOWN_ANGLE;
+        }
+    }
+
+    public static double getSpeed() {
+        if (Robot.isReal()) {
+            return rollerMotor.get();
+        } else {
+            switch (rollerState) {
+                case RESTING:
+                    return 0;
+            
+                case INTAKING:
+                    return Tuning.Intake.SPEED;
+
+                case REVERSE:
+                    return Tuning.Intake.REVERSE_SPEED;
+            }
+        }
+        return 0;
     }
 }

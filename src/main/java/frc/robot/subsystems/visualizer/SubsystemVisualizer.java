@@ -1,18 +1,18 @@
 package frc.robot.subsystems.visualizer;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.Constants;
 import frc.robot.Telemetry;
-import frc.robot.Tuning;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterState;
 
-public class ShooterVisualizer {
+public class SubsystemVisualizer {
     // Hood and flywheel (side view)
     private static MechanismRoot2d hoodRoot;
     private static MechanismLigament2d hoodLig;
@@ -81,8 +81,8 @@ public class ShooterVisualizer {
         flywheel.update(flywheelSpeed * 0.01);
 
         //Intake 
-        double intakeAngle = Constants.Intake.INTAKE_DOWN_ANGLE + 200;
-        double intakeWheelSpeed = Intake.getIntakeState() == Intake.IntakeState.INTAKING ? Tuning.Intake.SPEED : 0;
+        double intakeAngle = Intake.getAngle() + 200;
+        double intakeWheelSpeed = Intake.getSpeed() * 7;
 
         intakeLig.setAngle(intakeAngle);
         intakeWheel.update(intakeWheelSpeed);
@@ -90,8 +90,8 @@ public class ShooterVisualizer {
         double turretAngle = ShooterManager.getTurret().getAngle();
         double turretRotation = -Math.toDegrees(turretAngle - Pigeon.getRotationRad());
 
-        turretLig.setAngle(turretRotation+90);
-        turretBack.setAngle(turretRotation+90-180);
+        turretLig.setAngle(turretRotation + 90 * (!DriverStation.getAlliance().isEmpty() && DriverStation.getAlliance().get() == Alliance.Red ? 1 : -1));
+        turretBack.setAngle(turretRotation + 90 * (!DriverStation.getAlliance().isEmpty() && DriverStation.getAlliance().get() == Alliance.Red ? 1 : -1) - 180);
         
         double turretCos = Math.cos(Math.toRadians(turretRotation));
         double turretWidth = Math.abs(turretCos);

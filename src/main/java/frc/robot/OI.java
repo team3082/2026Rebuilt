@@ -1,29 +1,36 @@
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.controllermaps.LogitechF310;
+import frc.robot.subsystems.AutoTarget;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwerveManager;
-import frc.robot.swerve.SwervePID;
-import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
-import frc.robot.utils.RMath;
-import frc.robot.utils.RTime;
 
 public class OI {
-    public static Joystick driverStick;
+    private static Joystick driverStick;
 
     // ------------------ Driver Controls ------------------ //
 
     // Movement
-    public static final int moveX  = LogitechF310.AXIS_LEFT_X;
-    public static final int moveY = LogitechF310.AXIS_LEFT_Y;
-    public static final int rotateX  = LogitechF310.AXIS_RIGHT_X;
+    private static final int moveX  = LogitechF310.AXIS_LEFT_X;
+    private static final int moveY = LogitechF310.AXIS_LEFT_Y;
+    private static final int rotateX  = LogitechF310.AXIS_RIGHT_X;
  
     // zero is for Pigeon 
-    static final int zero = LogitechF310.BUTTON_Y;
- 
+    private static final int zero = LogitechF310.BUTTON_Y;
+
+    private static final int toggleIntake = LogitechF310.BUTTON_LEFT_BUMPER;
+    private static boolean intakeToggled = false;
+    private static final int reverseIntake = LogitechF310.AXIS_LEFT_TRIGGER;
+
+    private static final int toggleShooter = LogitechF310.BUTTON_RIGHT_BUMPER;
+    private static boolean shooterToggled = false;
+    private static final int activateShooter = LogitechF310.AXIS_RIGHT_TRIGGER;
+
+    private static final int zeroTurret = LogitechF310.BUTTON_X;
 
     /**
      * Initialize OI with preset joystick ports.
@@ -34,6 +41,7 @@ public class OI {
 
     public static void userInput() {
         driverInput();
+        operatorInput();
     }
 
     /**
@@ -42,7 +50,7 @@ public class OI {
      * Because we used TimedRobot, this runs 50 times a second,
      * so this lives in the teleopPeriodic() function.
      */
-    public static void driverInput() {
+    private static void driverInput() {
         // INPUT
 
         // Reset pigeon
@@ -63,8 +71,50 @@ public class OI {
         
         SwerveManager.rotateAndDrive(rotate, drive);
 
+        // SCORING
+
+        // intake
+        if (driverStick.getRawButtonPressed(toggleIntake)) {
+            intakeToggled = !intakeToggled; // intake toggles from on to off when button pressed
+        }
+
+        if (driverStick.getRawAxis(reverseIntake) > 0.25) {
+            Intake.reverse();
+            intakeToggled = false; // toggle goes off so it stops when reverse button is released
+        } else if (intakeToggled) {
+            Intake.startIntaking();
+        } else {
+            Intake.stopIntaking();
+        }
+
+        // shooter
+        ShooterManager.setTarget(AutoTarget.getTarget());
+        
+        if (AutoTarget.nearTrench()) { // prevents us from decapitation under the trench
+            ShooterManager.stopShooting();
+        } else {
+            if (driverStick.getRawButtonPressed(toggleShooter)) { // toggles shooting on and off when this button pressed
+                shooterToggled = !shooterToggled;
+            }
+
+            if (driverStick.getRawAxis(activateShooter) > 0.25) { // shoots while this button is pressed for option that is not a toggle, may remove later because it is redundant
+                ShooterManager.shoot();
+                shooterToggled = false; // toggles shooter off if we shoot with this button
+            } else {
+                if (shooterToggled) {
+                    ShooterManager.shoot();
+                } else {
+                    ShooterManager.stopShooting();
+                }
+            }
+        }
+
+        if (driverStick.getRawButton(zeroTurret)) {
+            ShooterManager.getTurret().zero();
+        }
+
     }
 
-    public static void operatorInput() {}
+    private static void operatorInput() {}
 
 }
