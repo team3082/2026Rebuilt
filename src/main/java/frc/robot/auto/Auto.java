@@ -1,13 +1,22 @@
 package frc.robot.auto;
 
+import java.util.List;
+import java.util.Vector;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.auto.commands.RotateAndDriveTo;
-import frc.robot.auto.commands.ShootTest;
+import frc.robot.Constants;
+import frc.robot.auto.commands.FollowPath;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
+import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.trajectories.CubicBezierCurve;
+import frc.robot.utils.trajectories.FeatherEvent;
+import frc.robot.utils.trajectories.FeatherFlow;
+import frc.robot.utils.trajectories.RobotPath;
 /**
  * Manages autonomous routines for the robot.
  * Uses {@link RoutineManager} to automatically detect and handle routines

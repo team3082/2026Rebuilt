@@ -24,6 +24,7 @@ import frc.robot.swerve.SwervePID;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.trajectories.FeatherFlow;
 
 public class Robot extends LoggedRobot {
   @SuppressWarnings("resource")
@@ -37,6 +38,7 @@ public class Robot extends LoggedRobot {
     }
     RTime.init();
     Auto.init();
+    FeatherFlow.init();
 
     // Swerve
     Pigeon.init();

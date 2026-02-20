@@ -15,7 +15,6 @@ public class CubicBezierCurve {
 
     private final Vector2[] points;
     private final double[] curvatures;
-    private final double[] tValues;
 
     /**
      * Creates a cubic Bezier curve defined by four control points.
@@ -36,13 +35,11 @@ public class CubicBezierCurve {
 
         this.points = new Vector2[Constants.TrajectoryConstants.CURVE_RESOLUTION]; 
         this.curvatures = new double[Constants.TrajectoryConstants.CURVE_RESOLUTION]; 
-        this.tValues = new double[Constants.TrajectoryConstants.CURVE_RESOLUTION];
 
         for (int i = 0; i < Constants.TrajectoryConstants.CURVE_RESOLUTION; i++) {
             double t = (double)i / (Constants.TrajectoryConstants.CURVE_RESOLUTION - 1);
             points[i] = getPoint(t);
             curvatures[i] = getCurvatureAt(t);
-            tValues[i] = t;
         }
 
     }
@@ -142,11 +139,4 @@ public class CubicBezierCurve {
      */
     public Vector2 getP3() { return p3; }
 
-    /**
-     * 
-     * @return
-     */
-    public double[] getTValues() {
-        return tValues;
-    }
 }

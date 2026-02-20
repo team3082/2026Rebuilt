@@ -2,10 +2,6 @@ package frc.robot;
 
 import frc.robot.subsystems.ShooterTableValue;
 import frc.robot.utils.Vector2;
-import frc.robot.utils.trajectories.QuadraticBezier;
-import frc.robot.utils.trajectories.CubicBezier;
-import frc.robot.utils.trajectories.Curve;
-import frc.robot.utils.trajectories.LinearBezier;
 
 public final class Tuning {
     //Swerve
@@ -140,8 +136,5 @@ public final class Tuning {
 
     public static final class AutoPaths {
       
-        public static Curve getAutoPath(Curve path) {
-            return path;
-        }
     }
 }

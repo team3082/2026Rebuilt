@@ -1,18 +1,18 @@
 package frc.robot.utils.trajectories;
 
-import static frc.robot.Tuning.CURVE_RESOLUTION;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 
+/**
+ * Represents a path for a robot to follow, defined by a sequence of points.
+ * Provides interpolation, subpath extraction, and splitting functionality.
+ */
 public class RobotPath {
     private List<Vector2> points;
     private List<Double> curvatures;
     private List<Double> lengths;
-    private List<Double> globalTs; 
     
     private double totalLength;
     
@@ -21,85 +21,96 @@ public class RobotPath {
      * 
      * @param points List of Vector2 points defining the path
      */
-    public RobotPath(List<Vector2> points, List<Double> curvatures, List<Double> globalTs) {
+    public RobotPath(List<Vector2> points, List<Double> curvatures) {
         this.points = new ArrayList<>(points);
         this.curvatures = new ArrayList<>(curvatures);
-        this.globalTs = new ArrayList<>(globalTs);
 
-    public double currentPosT = 0;
-
-    public RobotPath(List<Vector2> points, double targetRot) {
-        this.points = points;
-        this.targetRot = targetRot;
+        this.totalLength = calculateTotalLength();
     }
 
-    // update the closest point on the path from the robot's current position
-    public void updatePosition(Vector2 robotPos) {
-        double closestDist = -1.0;
-        double closestT = 0;
-        for (int i = (int) (currentPosT * (double) CURVE_RESOLUTION); i < points.size(); i++) {
-            Vector2 point = points.get(i);
-            if (point.sub(robotPos).mag() < closestDist) {
-                closestDist = point.sub(robotPos).mag();
-                closestT = (double) i / (double) CURVE_RESOLUTION;
-            } else if (closestDist < 0) {
-                closestDist = point.sub(robotPos).mag();
-                closestT = (double) i / (double) CURVE_RESOLUTION;
-            }
+    /**
+     * Calculates the total length of the path as the sum of distances between consecutive points.
+     * @return Total length of the path
+     */
+    private double calculateTotalLength() {
+        double length = 0.0;
+        lengths = new ArrayList<>();
+        lengths.add(length);
+
+        for (int i = 1; i < points.size(); i++) {
+            length += points.get(i).dist(points.get(i-1));
+            lengths.add(length);
         }
 
-        currentPosT = closestT;
-
-        // System.out.println("currentPosT: " + currentPosT);
-    }
-
-    // return already calculated closest point
-    public double getClosestT() {
-        return currentPosT;
-    }
-
-    // get total length of path
-    public double getPathLength() {
-        Vector2 lastPoint = points.get(0);
-        double length = 0;
-        for (Vector2 point : points) {
-            length += point.sub(lastPoint).mag();
-            lastPoint = point;
-        }
-
-        // System.out.println("path length: " + length);
         return length;
     }
-
-    // get lentgh of path from current position to end of path
-    public double getRemainingPathLength() {
-        double length = 0;
-        Vector2 lastPoint = null;
-        for (int i = (int) (currentPosT * (double) CURVE_RESOLUTION); i < points.size(); i++) {
-            Vector2 point = points.get(i);
-            if (lastPoint != null) {
-                length += point.sub(lastPoint).mag();
-            }
-            lastPoint = point;
+    
+    /**
+     * Gets a point along the path corresponding to a parameter t in [0, 1].
+     * Performs linear interpolation between adjacent points.
+     * 
+     * @param t Fraction of the path (0 = start, 1 = end)
+     * @return Interpolated Vector2 point along the path, or null if path is empty
+     */
+    public Vector2 getPointAt(double t) {
+        if (points.isEmpty()) {
+            throw new IllegalStateException("Path contains no points.");
         }
         
-        length += points.get((int) (currentPosT * (double) CURVE_RESOLUTION)).sub(SwervePosition.getPosition()).mag();
+        t = Math.max(0, Math.min(1, t));
         
-        return length;
+        double indexDouble = t * (points.size() - 1);
+        int index = (int) indexDouble;
+        
+        if (index >= points.size() - 1) {
+            return points.get(points.size() - 1);
+        }
+        
+        double fraction = indexDouble - index;
+        Vector2 p1 = points.get(index);
+        Vector2 p2 = points.get(index + 1);
+        
+        return p1.add(p2.sub(p1).mul(fraction));
     }
 
-    // pure pursuit algorithm
-    public Vector2 getDriveVector() {
-        // get a vector of magnitude 1 that points in the direction of the next closest point from the robot's current position
-        Vector2 targetPoint;
-        try {
-            targetPoint = points.get((int) (getClosestT() * CURVE_RESOLUTION) + 10);
-        } catch (IndexOutOfBoundsException e) {
-            targetPoint = points.get(points.size() - 1);
+    /**
+     * Gets the length along the path at parameter t in [0, 1].
+     * 
+     * @param t Fraction of the path (0 = start, 1 = end)
+     * @return Length along the path at parameter t
+     */
+    public double getLengthAt(double t) {
+        if (points.isEmpty()) {
+            throw new IllegalStateException("Path contains no points.");
         }
-        Vector2 driveVector = targetPoint.sub(SwervePosition.getPosition()).norm();
-        return driveVector;
+
+        t = Math.max(0, Math.min(1, t));
+
+        double indexDouble = t * (points.size() - 1);
+        int index = (int) indexDouble;
+
+        if (index >= points.size() - 1) {
+            return totalLength;
+        }
+
+        double fraction = indexDouble - index;
+        double lengthAtIndex = lengths.get(index);
+        double segmentLength = lengths.get(index + 1) - lengths.get(index);
+
+        return lengthAtIndex + segmentLength * fraction;
     }
+    
+    /**
+     * Extracts a subpath from this path between two t values.
+     * 
+     * @param startT Start fraction of the path (0 = start)
+     * @param endT End fraction of the path (1 = end)
+     * @return A new RobotPath representing the subpath
+     */
+    public RobotPath getSubPath(double startT, double endT) {
+        if (startT > endT) {
+            throw new IllegalArgumentException("startT must be less than or equal to endT");
+        }
 
         if(startT > 1 || endT < 0 || startT < 0 || endT > 1) {
             throw new IllegalArgumentException("startT and endT must be in the range [0, 1]");
@@ -115,49 +126,82 @@ public class RobotPath {
         
         List<Vector2> subPoints = new ArrayList<>(points.subList(startIndex, endIndex + 1));
         List<Double> subCurvatures = new ArrayList<>(curvatures.subList(startIndex, endIndex + 1));
-        List<Double> subGlobalTs = new ArrayList<>(globalTs.subList(startIndex, endIndex + 1));
-
-        return new RobotPath(subPoints, subCurvatures, subGlobalTs);
+        return new RobotPath(subPoints, subCurvatures);
     }
-
-    public void addCurvePoints(List<Vector2> curvePoints) {
-        points.addAll(curvePoints);
-    }
-
-    public List<Vector2> getCurvePoints(double startT, double endT) {
-        int startTIndex = (int) (startT * (double) CURVE_RESOLUTION);
-        int endTIndex = (int) (endT * (double) CURVE_RESOLUTION);
-
-        return points.subList(startTIndex, endTIndex);
-    }
-
-
-    public List<RobotPath> separatePaths(List<Double> stopPointsList) {
+    
+    /**
+     * Splits this path into multiple subpaths at the specified t values.
+     * 
+     * @param tValues List of t values in [0, 1] where the path should be split
+     * @return A list of RobotPath objects representing the split segments
+     */
+    public List<RobotPath> split(List<Double> tValues) {
         List<RobotPath> paths = new ArrayList<>();
 
-        // gets all paths between each stop point
-        double lastStopPoint = 0;
-        for (double stopPoint : stopPointsList) {
-            List<Vector2> curvePoints = getCurvePoints(lastStopPoint, stopPoint);
-            paths.add(new RobotPath(curvePoints, targetRot));
-            lastStopPoint = stopPoint;
-        }
+        tValues.sort(Double::compareTo);
+        
+        double lastT = 0;
+        for (double t : tValues) {
+            if (t < 0 || t > 1) {
+                throw new IllegalArgumentException("t values must be in the range [0, 1]");
+            }
 
-        // gets the very last path after the final specified stop point
-        if (lastStopPoint < ((double) points.size() / (double) CURVE_RESOLUTION)) {
-            List<Vector2> curvePoints = getCurvePoints(lastStopPoint, ((double) points.size() / (double) CURVE_RESOLUTION));
-            paths.add(new RobotPath(curvePoints, targetRot));
+            if (t > lastT && t <= 1.0) {
+                paths.add(getSubPath(lastT, t));
+                lastT = t;
+            }
         }
-
+        
+        if (lastT < 1.0) {
+            paths.add(getSubPath(lastT, 1.0));
+        }
+        
         return paths;
     }
-
-    public Vector2 getStartPos() {
-        return points.get(0);
+    
+    /**
+     * Returns a copy of all points in this path.
+     * 
+     * @return List of Vector2 points defining the path
+     */
+    public List<Vector2> getPoints() {
+        return new ArrayList<>(points);
+    }
+    
+    /**
+     * Gets the starting point of the path.
+     * 
+     * @return The first Vector2 point in the path, or null if empty
+     */
+    public Vector2 getStart() {
+        return points.isEmpty() ? null : points.get(0);
+    }
+    
+    /**
+     * Gets the ending point of the path.
+     * 
+     * @return The last Vector2 point in the path, or null if empty
+     */
+    public Vector2 getEnd() {
+        return points.isEmpty() ? null : points.get(points.size() - 1);
+    }
+    
+    /**
+     * Returns the number of points in the path.
+     * 
+     * @return The size of the points list
+     */
+    public int getPointCount() {
+        return points.size();
     }
 
-    public Vector2 getLastPos() {
-        return points.get(points.size() - 1);
+    /**
+     * Returns the total length of the path.
+     * 
+     * @return Total length of the path
+     */
+    public double getTotalLength() {
+        return totalLength;
     }
 
     public List<Double> getCurvatures() {
@@ -166,10 +210,6 @@ public class RobotPath {
 
     public List<Double> getLengths() {
         return lengths;
-    }
-
-    public List<Double> getTValues() {
-        return globalTs;
     }
 
 }

@@ -9,7 +9,6 @@ public class ProfiledPoint {
     private double acceleration;
     private double time;
     private double distance;
-    private double t_value;
 
     public ProfiledPoint() {
         this.position = new Vector2(0, 0);
@@ -20,14 +19,13 @@ public class ProfiledPoint {
         this.distance = 0;
     }
 
-    public ProfiledPoint(Vector2 position, Vector2 velocity, double curvature, double acceleration, double time, double distance, double t_value) {
+    public ProfiledPoint(Vector2 position, Vector2 velocity, double curvature, double acceleration, double time, double distance) {
         this.position = position;
         this.velocity = velocity;
         this.curvature = curvature;
         this.acceleration = acceleration;
         this.time = time;
         this.distance = distance;
-        this.t_value = t_value;
     }
 
     public Vector2 getPosition() {
@@ -76,13 +74,5 @@ public class ProfiledPoint {
 
     public void setDistance(double distance) {
         this.distance = distance;
-    }
-
-    public void setTValue(double tValue){
-        this.t_value = tValue;
-    }
-
-    public double getTValue() {
-        return t_value;
     }
 }

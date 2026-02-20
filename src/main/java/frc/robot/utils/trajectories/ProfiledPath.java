@@ -41,10 +41,9 @@ public class ProfiledPath {
         Vector2 velocity = p0.getVelocity().mul(1 - ratio).add(p1.getVelocity().mul(ratio));
         double curvature = p0.getCurvature() * (1 - ratio) + p1.getCurvature() * ratio;
         double acceleration = p0.getAcceleration() * (1 - ratio) + p1.getAcceleration() * ratio;
-        double distance = p0.getDistance() * (1 - ratio) + p1.getDistance() * ratio;  
-        double t_value = p0.getTValue()  * (1 - ratio) + p1.getTValue() * ratio;
+        double distance = p0.getDistance() * (1 - ratio) + p1.getDistance() * ratio;    
 
-        return new ProfiledPoint(position, velocity, curvature, acceleration, t, distance, t_value);
+        return new ProfiledPoint(position, velocity, curvature, acceleration, t, distance);
     }
 
     public static ProfiledPath generateProfiledPath(RobotPath path, double maxVelocity, double maxAcceleration, double maxLateralAcceleration) {
@@ -137,7 +136,6 @@ public class ProfiledPath {
         ArrayList<ProfiledPoint> profiledPoints = new ArrayList<>();
         ArrayList<Vector2> points = new ArrayList<>(path.getPoints());
         ArrayList<Double> curvatures = new ArrayList<>(path.getCurvatures());
-        ArrayList<Double> tValues = new ArrayList<>(path.getTValues());
 
         if (points.isEmpty()) {
             return profiledPoints;
@@ -154,12 +152,10 @@ public class ProfiledPath {
             ProfiledPoint p = new ProfiledPoint();
             p.setPosition(points.get(i));
             p.setCurvature(curvatures.get(i));
-            p.setTValue(tValues.get(i));
             
             double segmentDistance = points.get(i-1).dist(points.get(i));
             double previousDistance = profiledPoints.get(i-1).getDistance();
             p.setDistance(previousDistance + segmentDistance);
-
 
             profiledPoints.add(p);
         }

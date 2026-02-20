@@ -193,4 +193,10 @@ public class Constants {
         new AprilTag(32, 0.32, 164.47, 21.75, Math.toRadians(0)),
         
     };
+    public static final double MAX_PATH_VELOCITY = 181;
+    public static final double MAX_PATH_ACCELERATION = 181;
+
+    public static class TrajectoryConstants{
+        public static final int CURVE_RESOLUTION = 2000;
+    }
 }

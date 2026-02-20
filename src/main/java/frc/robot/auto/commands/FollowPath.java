@@ -1,7 +1,6 @@
 package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.Tuning;
 import frc.robot.swerve.SwerveManager;
@@ -53,10 +52,6 @@ public class FollowPath extends Command {
     );
 
     this.holonomicDriveController = new HolonomicDriveController(path);
-
-    for(FeatherEvent event : events){
-      event.isTriggered = false;
-    }
   }
 
   /**
@@ -86,17 +81,11 @@ public class FollowPath extends Command {
     Vector2 driveVector = holonomicDriveController.calculate();
     SwerveManager.rotateAndDrive(0, driveVector);
 
-    double currentTime = RTime.now() - startTime;
-    ProfiledPoint desiredPoint = path.getPointAtTime(currentTime);
+    // double elapsedTime = RTime.now() - startTime;
+    // ProfiledPoint targetPoint = path.getPointAtTime(elapsedTime);
 
-    for(FeatherEvent event : events){
-      if(desiredPoint.getTValue() > event.t && !event.isTriggered){
-        CommandScheduler.getInstance().schedule(event.command);
-        event.isTriggered = true;
-      }
-    }
+    // Event handling would go here, but is not the focus of this change.
   }
-
 
   /**
    * Ends the command, stopping the robot if interrupted.
@@ -133,18 +122,6 @@ public class FollowPath extends Command {
    */
   @Override
   public boolean isFinished() {
-    boolean finished_time = path.getDuration() + startTime <= RTime.now();
-    
-    if(!finished_time){
-      return false;
-    }
-
-    for(FeatherEvent event : events){
-      if(!event.command.isFinished()){
-        return false;
-      }
-    }
-
-    return true;
+    return path.getDuration() + startTime <= RTime.now();
   }
 }
