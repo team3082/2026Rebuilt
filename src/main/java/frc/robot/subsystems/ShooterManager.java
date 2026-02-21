@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.Tuning;
+import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.LEDs.LEDManager;
 import frc.robot.subsystems.LEDs.LEDManager.Colors;
 import frc.robot.subsystems.sensors.Pigeon;
@@ -13,43 +14,44 @@ import frc.robot.utils.Vector2;
 
 public class ShooterManager {
 
-    private static ShooterState shooterState;
+    public static ShooterState shooterState;
     private static ShooterTarget target;
     private static Shooter shooter;
     private static Turret turret;
+    public static boolean inRange = true; // for LEDs, to track and display if we are in range to shoot at the Hub
     
     public static void init() {
         turret = new Turret();
         shooter = new Shooter();
-        shooterState = ShooterState.IDLE;
+        shooterState = ShooterState.SHOOTING;
         target = ShooterTarget.HUB;
     }
 
     public static void update() { 
 
         aimTurret();
-
+        
         switch (shooterState) {
             case IDLE:
                 // When idle, hood goes down to fit under trench
                 shooter.setTargetAngle(0);
+                
                 break;
 
             case REVVING:
                 if (shooter.atAngle() && shooter.atRampedSpeed() && turret.atAngle()) {
                     shooterState = ShooterState.SHOOTING;
                 }
+                
                 setShooterAngleAndSpeed();
 
                 break;
 
             case SHOOTING:
                 setShooterAngleAndSpeed();
-                LEDManager.setColor(Colors.YELLOW);
 
                 break;
         }
-
         turret.update();
         shooter.update();
 
@@ -144,6 +146,8 @@ public class ShooterManager {
         shooter.setTargetAngle(0);
         shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
+        inRange = false; // see variable creation before impulse deleting
+
     }
 
     private static void aimAtHub() {
@@ -177,6 +181,8 @@ public class ShooterManager {
         shooter.setTargetAngle(0);
         shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
+        inRange = false;
     }
-
 }
+        
+        

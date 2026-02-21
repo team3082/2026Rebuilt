@@ -4,13 +4,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.controllermaps.LogitechF310;
 import frc.robot.subsystems.sensors.Pigeon;
+import frc.robot.subsystems.states.ShooterState;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePID;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.RMath;
 import frc.robot.utils.RTime;
-
+import frc.robot.subsystems.ShooterManager;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakeState;
 public class OI {
     public static Joystick driverStick;
 
@@ -62,9 +65,17 @@ public class OI {
         }
         
         SwerveManager.rotateAndDrive(rotate, drive);
-
+        if (driverStick.getRawButton(1)){
+            ShooterManager.shooterState = ShooterState.SHOOTING; 
+        } else {
+            ShooterManager.shooterState = ShooterState.IDLE;
+        }
+        if (driverStick.getRawButton(2)){
+            Intake.rollerState = IntakeState.INTAKING;
+        } else {
+            Intake.rollerState = IntakeState.RESTING;
+        }
     }
-
     public static void operatorInput() {}
 
 }

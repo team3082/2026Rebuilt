@@ -19,10 +19,10 @@ public class Intake {
 
     private static TalonFX pivotMotor;
     private static TalonFX rollerMotor;
-    private static IntakeState rollerState;
+    public static IntakeState rollerState;
 
     public static void init(){
-        rollerState = IntakeState.RESTING;
+        rollerState = IntakeState.INTAKING;
 
         rollerMotor = new TalonFX(Constants.Intake.ROLLER_MOTOR_ID);
         pivotMotor = new TalonFX(Constants.Intake.PIVOT_MOTOR_ID);
@@ -49,7 +49,6 @@ public class Intake {
             case INTAKING:
                 pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(Tuning.Intake.SPEED);
-                LEDManager.setColor(Colors.BLUE);
                 break;
 
             case REVERSE:

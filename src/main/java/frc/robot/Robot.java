@@ -16,6 +16,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.LEDs.LEDManager;
+import frc.robot.subsystems.LEDs.LEDMech2D;
 import frc.robot.auto.Auto;
     
 // SUBSYSTEMS
@@ -56,7 +57,7 @@ public class Robot extends LoggedRobot {
 
     //LEDs
     LEDManager.init();
-    
+    LEDMech2D.init();
     
     // Controls
     OI.init();
@@ -81,7 +82,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    
+    LEDMech2D.update();
     RTime.update();
     Pigeon.update();
     ShooterManager.update();
@@ -90,6 +91,7 @@ public class Robot extends LoggedRobot {
     Telemetry.update();
     SwervePosition.update();
     SwerveManager.update();
+    LEDManager.update();
     
 
   }

@@ -6,7 +6,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.robot.utils.Vector2;
 
 public class Constants {
-
+    
     public static final class Swerve {
         public static final double PERCENT_OUT_TO_MOVE_VEL = 16 * 12;
         public static final double PERCENT_OUT_TO_ROTATE_VEL = 1; 
