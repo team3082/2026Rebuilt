@@ -6,6 +6,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
 import frc.robot.Tuning;
+import frc.robot.subsystems.LEDs.LEDManager;
+import frc.robot.subsystems.LEDs.LEDManager.Colors;
 
 public class Intake {
 
@@ -47,6 +49,7 @@ public class Intake {
             case INTAKING:
                 pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(Tuning.Intake.SPEED);
+                LEDManager.setColor(Colors.BLUE);
                 break;
 
             case REVERSE:

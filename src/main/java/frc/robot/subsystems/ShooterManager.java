@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.Tuning;
+import frc.robot.subsystems.LEDs.LEDManager;
+import frc.robot.subsystems.LEDs.LEDManager.Colors;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterState;
 import frc.robot.subsystems.states.ShooterTarget;
@@ -43,6 +45,7 @@ public class ShooterManager {
 
             case SHOOTING:
                 setShooterAngleAndSpeed();
+                LEDManager.setColor(Colors.YELLOW);
 
                 break;
         }

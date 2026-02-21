@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
+import frc.robot.subsystems.LEDs.LEDManager;
 import frc.robot.auto.Auto;
     
 // SUBSYSTEMS
@@ -52,6 +53,9 @@ public class Robot extends LoggedRobot {
 
     // Logging
     Telemetry.init();
+
+    //LEDs
+    LEDManager.init();
     
     
     // Controls
@@ -86,6 +90,7 @@ public class Robot extends LoggedRobot {
     Telemetry.update();
     SwervePosition.update();
     SwerveManager.update();
+    
 
   }
 
