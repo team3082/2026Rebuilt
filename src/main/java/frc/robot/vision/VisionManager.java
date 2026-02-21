@@ -22,8 +22,7 @@ public class VisionManager {
 
         if (Robot.isReal()) {
             cameras = new Camera[] {
-                new Camera(new PhotonCamera("ApriltagCamera4"), new Vector2(-9.3, 8.9), 0.0, Math.toRadians(-15)), // test these later
-                new Camera(new PhotonCamera("ApriltagCamera2"), new Vector2(9.3, 8.9), 0, Math.toRadians(15))
+                new Camera(new PhotonCamera("ApriltagCamera3"), new Vector2(11.0, 8.5), Math.toRadians(-15.0), -Math.PI/2)
             };
         }
 
@@ -33,17 +32,15 @@ public class VisionManager {
 
         List<Vector2> positions = new ArrayList<>();
 
+
         for (Camera camera : cameras) {
             if(camera.isDisabled()) continue;
-            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();
-            
-            System.out.println();
-            
+            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();  
             
             
             if (target != null) if (camera.isLatestTarget(target)) {
                 continue;
-            }
+            }        
 
             camera.setLatestTarget(target);
             if (target == null) continue; // Skip if no april tags are found

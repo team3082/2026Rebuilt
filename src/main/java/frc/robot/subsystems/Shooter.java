@@ -5,6 +5,8 @@ import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Tuning;
@@ -13,7 +15,7 @@ public class Shooter {
     private TalonFX flywheelMotor;
     private TalonFX hoodMotor;
     
-    private double targetFlywheelSpeed = 0.0; // rotations per minute
+    private double targetFlywheelSpeed = 0.0; // rotations per second
     private double targetHoodAngle = 0.0; // radians
 
     /**
@@ -25,8 +27,14 @@ public class Shooter {
         
         flywheelMotor.getConfigurator().apply(new TalonFXConfiguration());
         TalonFXConfiguration flywheelConfiguration = new TalonFXConfiguration();
+        flywheelConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        
+        flywheelConfiguration.Slot0.kP = Tuning.Shooter.FLYWHEEL_P;
+        flywheelConfiguration.Slot0.kI = Tuning.Shooter.FLYWHEEL_I;
+        flywheelConfiguration.Slot0.kD = Tuning.Shooter.FLYWHEEL_D;
+
         flywheelConfiguration.CurrentLimits.StatorCurrentLimit = 120;
-        flywheelConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+        // flywheelConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         flywheelMotor.getConfigurator().apply(flywheelConfiguration);
 
         hoodMotor.getConfigurator().apply(new TalonFXConfiguration());
@@ -48,6 +56,7 @@ public class Shooter {
      * Updates the shooter
      */
     public void update() {
+        System.out.println("called");
         hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(targetHoodAngle)));
 
         switch (ShooterManager.getShooterState()) {
@@ -126,6 +135,10 @@ public class Shooter {
      * @return if it is at target speed
      */
     public boolean atRampedSpeed() {
+        System.out.println(flywheelMotor.get());
+        // System.out.println(flywheelMotor.getve)
+        System.out.println("t" + targetFlywheelSpeed);
+        System.out.println("v" + flywheelMotor.getVelocity());
         return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND;
     }
 

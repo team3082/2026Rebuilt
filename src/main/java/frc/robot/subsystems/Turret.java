@@ -30,7 +30,7 @@ public class Turret {
     public Turret() {
         hallEffectSensor = new DigitalInput(Constants.Shooter.HALL_EFFECT_SENSOR_ID);
 
-        turretMotor = new TalonFX(Constants.Shooter.TURRET_MOTOR_ID);
+        turretMotor = new TalonFX(Constants.Shooter.TURRET_MOTOR_ID, "CANivore");
         turretMotor.getConfigurator().apply(new TalonFXConfiguration());
 
         TalonFXConfiguration turretMotorConfig = new TalonFXConfiguration();
@@ -38,7 +38,7 @@ public class Turret {
         turretMotorConfig.Slot0.kI = Tuning.Shooter.TURRET_KI;
         turretMotorConfig.Slot0.kD = Tuning.Shooter.TURRET_KD;
 
-        turretMotorConfig.CurrentLimits.StatorCurrentLimit = 120;
+        turretMotorConfig.CurrentLimits.StatorCurrentLimit = 60;
         turretMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         turretMotor.getConfigurator().apply(turretMotorConfig);
@@ -55,11 +55,12 @@ public class Turret {
                     turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
                     
                     if (atZeroPosition()) {
-                        turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
+                        turretMotor.setPosition(angleToRot(Constants.Shooter.TURRET_ZERO_ANGLE));
                         turretState = TurretState.NORMAL;
                     }
 
                     if (atHardstop()) {
+                        System.out.println("hardstopping");
                         turretState = TurretState.ZEROING_REVERSE;
                         zeroStartTime = RTime.now();
                     }
@@ -71,7 +72,7 @@ public class Turret {
 
             case ZEROING_REVERSE:
                 if (Robot.isReal()){
-                    turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
+                    turretMotor.set(-Tuning.Shooter.TURRET_ZEROING_SPEED);
                     
                     if (atZeroPosition()) {
                         turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
@@ -160,7 +161,7 @@ public class Turret {
      * @return if turrent base is hitting hardstop
      */
     public boolean atHardstop() {
-        return turretMotor.getStatorCurrent().getValueAsDouble() > 100.0 && turretMotor.getVelocity().getValueAsDouble() < 0.05 && RTime.now() - 0.15 > zeroStartTime;
+        return turretMotor.getStatorCurrent().getValueAsDouble() > 25.0 && turretMotor.getVelocity().getValueAsDouble() < 0.05 && RTime.now() - 0.15 > zeroStartTime;
     }
 
     public boolean atZeroPosition() {

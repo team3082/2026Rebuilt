@@ -121,9 +121,9 @@ public class Constants {
 
     public static final class Shooter {
 
-        public static final int TURRET_MOTOR_ID = 0;
-        public static final int FLYWHEEL_MOTOR_ID = 0;
-        public static final int HOOD_MOTOR_ID = 0;
+        public static final int TURRET_MOTOR_ID = 12; // 12
+        public static final int FLYWHEEL_MOTOR_ID = 15;
+        public static final int HOOD_MOTOR_ID = 14;
         public static final int HALL_EFFECT_SENSOR_ID = 0;
         
         public static final double TURRET_GEAR_RATIO = 200.0 / 20.0; 
@@ -131,10 +131,10 @@ public class Constants {
 
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
-        public static final double TURRET_ZERO_ANGLE = 0.0;
-        public static final double TURRET_HARDSTOP_ZERO_ANGLE = 0.0; // used only when hall sensor is broken
-        public static final double TURRET_MIN_ANGLE = Math.toRadians(0.0);
-        public static final double TURRET_MAX_ANGLE = Math.toRadians(300.0);
+        public static final double TURRET_ZERO_ANGLE = Math.toRadians(288.0);
+        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(12.0); // used only when hall sensor is broken
+        public static final double TURRET_MIN_ANGLE = Math.toRadians(22.0);
+        public static final double TURRET_MAX_ANGLE = Math.toRadians(330.0);
 
         public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
         public static final double HOOD_ANGLE_OFFSET = Math.toRadians(25.0);
@@ -151,8 +151,8 @@ public class Constants {
     }
 
     public static final class Indexer {
-        public static final int SPINDEXER_ID = 0;
-        public static final int HANDOFF_ID = 0;
+        public static final int SPINDEXER_ID = 11;
+        public static final int HANDOFF_ID = 13;
     }
     public static final AprilTag[] APRIL_TAGS = {
         null,

@@ -78,32 +78,35 @@ public final class Tuning {
 
     public static final class Shooter {
         // Hood PID Constants
-        public static final double HOOD_KP = 0;
+        public static final double HOOD_KP = 0.03;
         public static final double HOOD_KD = 0;
-        public static final double HOOD_KI = 0;
-        public static final double HOOD_DEADBAND = 0.1;
+        public static final double HOOD_KI = 0.005;
+        public static final double HOOD_DEADBAND = 0.2;
 
+        public static final double FLYWHEEL_P = 0.2;
+        public static final double FLYWHEEL_I = 0.05;
+        public static final double FLYWHEEL_D = 0.001;
 
-        public static final double FLYWHEEL_SPEED_DEADBAND = 0.1;
+        public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
         
         // Turret PID Constants
-        public static final double TURRET_KP = 0.0;
-        public static final double TURRET_KI = 0.0;
-        public static final double TURRET_KD = 0.0;
-        public static final double TURRET_DEADBAND = 2.0;
+        public static final double TURRET_KP = 0.2;
+        public static final double TURRET_KI = 0.05;
+        public static final double TURRET_KD = 0.01;
+        public static final double TURRET_DEADBAND = 0.02;
         
         // Turret Control
-        public static final double TURRET_ZEROING_SPEED = -0.1;
+        public static final double TURRET_ZEROING_SPEED = 0.1;
 
         public static final ShooterTableValue[] SHOOTER_TABLE_HUB = { //TODO tune
-            new ShooterTableValue(48.0, Math.toRadians(25.0), 2800),
-            new ShooterTableValue(60.0, Math.toRadians(30.0), 3000),
-            new ShooterTableValue(72.0, Math.toRadians(35.0), 3200),
-            new ShooterTableValue(84.0, Math.toRadians(38.0), 3500),
-            new ShooterTableValue(96.0, Math.toRadians(40.0), 3700),
-            new ShooterTableValue(108.0, Math.toRadians(42.0), 3900),
-            new ShooterTableValue(120.0, Math.toRadians(43.0), 4000),
-            new ShooterTableValue(132.0, Math.toRadians(45.0), 4300)
+            new ShooterTableValue(48.0, Math.toRadians(25.0), 1000),
+            new ShooterTableValue(60.0, Math.toRadians(25.0), 1200),
+            new ShooterTableValue(72.0, Math.toRadians(25.0), 1300),
+            new ShooterTableValue(84.0, Math.toRadians(25.0), 1500),
+            new ShooterTableValue(96.0, Math.toRadians(25.0), 1700),
+            new ShooterTableValue(108.0, Math.toRadians(28.0), 1900),
+            new ShooterTableValue(120.0, Math.toRadians(30.0), 3100),
+            new ShooterTableValue(132.0, Math.toRadians(32.0), 3300)
         };
 
         public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = { //TODO tune
@@ -121,8 +124,8 @@ public final class Tuning {
     }
 
     public static final class Indexer {
-        public static final double SPINDEXER_SPEED = 0.0;
-        public static final double HANDOFF_SPEED = 0.0;
+        public static final double SPINDEXER_SPEED = 0.75;
+        public static final double HANDOFF_SPEED = -0.6;
     }
 
     public static final class Intake {
