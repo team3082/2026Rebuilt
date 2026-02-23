@@ -27,25 +27,25 @@ public class ShooterManager {
 
         aimTurret();
 
-        switch (shooterState) {
-            case IDLE:
-                // When idle, hood goes down to fit under trench
-                shooter.setTargetAngle(0);
-                break;
+        // switch (shooterState) {
+        //     case IDLE:
+        //         // When idle, hood goes down to fit under trench
+        //         shooter.setTargetAngle(0);
+        //         break;
 
-            case REVVING:
-                if (shooter.atAngle() && shooter.atRampedSpeed() && turret.atAngle()) {
-                    shooterState = ShooterState.SHOOTING;
-                }
-                setShooterAngleAndSpeed();
+        //     case REVVING:
+        //         if (shooter.atAngle() && shooter.atRampedSpeed() && turret.atAngle()) {
+        //             shooterState = ShooterState.SHOOTING;
+        //         }
+        //         setShooterAngleAndSpeed();
 
-                break;
+        //         break;
 
-            case SHOOTING:
-                setShooterAngleAndSpeed();
+        //     case SHOOTING:
+        //         setShooterAngleAndSpeed();
 
-                break;
-        }
+        //         break;
+        // }
 
         turret.update();
         shooter.update();
@@ -57,7 +57,7 @@ public class ShooterManager {
     }
 
     public static void shoot() {
-        shooterState = ShooterState.REVVING;
+        shooterState = ShooterState.SHOOTING;
     }
 
     public static ShooterState getShooterState() {

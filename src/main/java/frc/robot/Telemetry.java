@@ -16,11 +16,13 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
+import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.subsystems.visualizer.SubsystemVisualizer;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.swerve.visualizer.SwerveBaseVisualizer;
 import frc.robot.swerve.SwervePID;
+import frc.robot.swerve.Odometry;
 
 /*
  * handles telemetry for the robot
@@ -82,6 +84,7 @@ public class Telemetry {
     private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", ShooterManager.getTurret().getTurretState().name()).getEntry();
     private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", ShooterManager.getTurret().getTargetAngle()).getEntry();
     private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", ShooterManager.getTurret().getAngle()).getEntry();
+    private static final GenericEntry TURRET_HUB_DIST = turretTab.add("Hub to turret dist", ShooterTarget.HUB.pos.sub(Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()))).mag()).getEntry();
 
     // Intake
     private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
@@ -199,6 +202,7 @@ public class Telemetry {
         TURRET_STATE.setString(ShooterManager.getTurret().getTurretState().name());
         TURRET_TARGET_ANGLE.setDouble(ShooterManager.getTurret().getTargetAngle());
         TURRET_CURRENT_ANGLE.setDouble(ShooterManager.getTurret().getAngle());
+        TURRET_HUB_DIST.setDouble(ShooterTarget.HUB.pos.sub(Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()))).mag());
 
         INTAKE_STATE.setString(Intake.getIntakeState().name());
         INTAKE_ANGLE.setDouble(Intake.getAngle());

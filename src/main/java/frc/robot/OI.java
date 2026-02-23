@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants.Shooter;
 import frc.robot.controllermaps.LogitechF310;
 import frc.robot.subsystems.AutoTarget;
 import frc.robot.subsystems.Intake;
@@ -71,49 +72,85 @@ public class OI {
         
         SwerveManager.rotateAndDrive(rotate, drive);
 
-        // SCORING
+        // // SCORING
 
-        // intake
-        if (driverStick.getRawButtonPressed(toggleIntake)) {
-            intakeToggled = !intakeToggled; // intake toggles from on to off when button pressed
-        }
+        // // intake
+        // if (driverStick.getRawButtonPressed(toggleIntake)) {
+        //     intakeToggled = !intakeToggled; // intake toggles from on to off when button pressed
+        // }
 
-        if (driverStick.getRawAxis(reverseIntake) > 0.25) {
-            Intake.reverse();
-            intakeToggled = false; // toggle goes off so it stops when reverse button is released
-        } else if (intakeToggled) {
-            Intake.startIntaking();
-        } else {
-            Intake.stopIntaking();
-        }
+        // if (driverStick.getRawAxis(reverseIntake) > 0.25) {
+        //     Intake.reverse();
+        //     intakeToggled = false; // toggle goes off so it stops when reverse button is released
+        // } else if (intakeToggled) {
+        //     Intake.startIntaking();
+        // } else {
+        //     Intake.stopIntaking();
+        // }
 
-        // shooter
-        ShooterManager.setTarget(AutoTarget.getTarget());
+        // // shooter
+        // ShooterManager.setTarget(AutoTarget.getTarget());
         
-        if (AutoTarget.nearTrench()) { // prevents us from decapitation under the trench
-            ShooterManager.stopShooting();
-        } else {
-            if (driverStick.getRawButtonPressed(toggleShooter)) { // toggles shooting on and off when this button pressed
-                shooterToggled = !shooterToggled;
-            }
+        // if (AutoTarget.nearTrench()) { // prevents us from decapitation under the trench
+        //     ShooterManager.stopShooting();
+        // } else {
+        //     if (driverStick.getRawButtonPressed(toggleShooter)) { // toggles shooting on and off when this button pressed
+        //         shooterToggled = !shooterToggled;
+        //     }
 
-            if (driverStick.getRawAxis(activateShooter) > 0.25) { // shoots while this button is pressed for option that is not a toggle, may remove later because it is redundant
-                ShooterManager.shoot();
-                shooterToggled = false; // toggles shooter off if we shoot with this button
-            } else {
-                if (shooterToggled) {
-                    ShooterManager.shoot();
-                } else {
-                    ShooterManager.stopShooting();
-                }
-            }
-        }
+        //     if (driverStick.getRawAxis(activateShooter) > 0.25) { // shoots while this button is pressed for option that is not a toggle, may remove later because it is redundant
+        //         ShooterManager.shoot();
+        //         shooterToggled = false; // toggles shooter off if we shoot with this button
+        //     } else {
+        //         if (shooterToggled) {
+        //             ShooterManager.shoot();
+        //         } else {
+        //             ShooterManager.stopShooting();
+        //         }
+        //     }
+        // }
+
 
         if (driverStick.getRawButton(zeroTurret)) {
             ShooterManager.getTurret().zero();
         }
 
+        if (driverStick.getRawButtonPressed(toggleIntake)) {
+            on = !on;
+        }
+
+        if (!on) {
+            ShooterManager.getShooter().setTargetSpeed(0);
+            return;
+        }
+
+        if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_Y)) {
+            hoodAngle += Math.toRadians(1.0);
+        } else if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_A)) {
+            hoodAngle -= Math.toRadians(1.0);
+        }
+        hoodAngle = Math.min(Math.max(Math.toRadians(0.0), hoodAngle), Math.toRadians(30.0));
+        ShooterManager.getShooter().setTargetAngle(hoodAngle);
+
+        if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_B)) {
+            rpm += 100.0;
+        } else if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_X)) {
+            rpm -= 100.0;
+        }
+        System.out.println(rpm);
+        ShooterManager.getShooter().setTargetSpeed(rpm);
+
+        if (driverStick.getRawButton(8)) {
+            ShooterManager.shoot();
+        } else {
+            ShooterManager.stopShooting();
+        }
+
     }
+
+    public static boolean on = true;
+    public static double hoodAngle = Math.toRadians(0.0);
+    public static double rpm = 1000.0;
 
     private static void operatorInput() {}
 
