@@ -33,6 +33,9 @@ public class ShooterManager {
                 shooter.setTargetAngle(0);
                 break;
 
+            case ZEROING:
+                break;
+
             case REVVING:
                 if (shooter.atAngle() && shooter.atRampedSpeed() && turret.atAngle()) {
                     shooterState = ShooterState.SHOOTING;
@@ -50,10 +53,6 @@ public class ShooterManager {
         turret.update();
         shooter.update();
 
-    }
-
-    public static void idle() {
-        shooterState = ShooterState.IDLE;
     }
 
     public static void shoot() {
@@ -84,6 +83,14 @@ public class ShooterManager {
         shooterState = ShooterState.IDLE;
     }
 
+    public static void zeroTurret() {
+        turret.zero();
+    }
+
+    public static void zeroHood() {
+        shooterState = ShooterState.ZEROING;
+    }
+
     private static void aimTurret() { 
         // Change position for the fuel
         Vector2 deltaPos = target.pos.sub(Odometry.getPosition());
@@ -96,7 +103,7 @@ public class ShooterManager {
         if (targetTurretAngle == -10) {
             targetTurretAngle = Constants.Shooter.TURRET_MIN_ANGLE;
             // checks that driver is not rotating so rotation doesn't override their input
-            if (SwerveManager.rotationSpeed == 0 && shooterState != ShooterState.IDLE) {
+            if (SwerveManager.rotationSpeed == 0 && (shooterState == ShooterState.REVVING || shooterState == ShooterState.SHOOTING)) {
                 SwerveManager.rotateAndDrive(0.4, SwerveManager.movement);
             }
         }

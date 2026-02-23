@@ -63,6 +63,21 @@ public class Shooter {
                 flywheelMotor.setControl(new CoastOut());
                 break;
 
+            case ZEROING:
+                flywheelMotor.setControl(new CoastOut());
+                if (Robot.isReal()){
+                    hoodMotor.set(Tuning.Shooter.HOOD_ZEROING_SPEED);
+                    
+                    if (hoodMotor.getStatorCurrent().getValueAsDouble() > 80) {
+                        hoodMotor.setPosition(0);
+                        ShooterManager.stopShooting();
+                    }
+
+                } else {
+                    ShooterManager.stopShooting();
+                }
+                break;
+
             default:
                 flywheelMotor.setControl(new VelocityDutyCycle(targetFlywheelSpeed));
                 break;

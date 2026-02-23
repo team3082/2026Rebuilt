@@ -31,6 +31,7 @@ public class OI {
     private static final int activateShooter = LogitechF310.AXIS_RIGHT_TRIGGER;
 
     private static final int zeroTurret = LogitechF310.BUTTON_X;
+    private static final int zeroHood = LogitechF310.BUTTON_A;
 
     /**
      * Initialize OI with preset joystick ports.
@@ -110,7 +111,11 @@ public class OI {
         }
 
         if (driverStick.getRawButton(zeroTurret)) {
-            ShooterManager.getTurret().zero();
+            ShooterManager.zeroTurret();
+        }
+
+        if (driverStick.getRawButton(zeroHood)) {
+            ShooterManager.zeroHood();
         }
 
     }

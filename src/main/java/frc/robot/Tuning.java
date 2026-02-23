@@ -95,8 +95,9 @@ public final class Tuning {
         public static final double TURRET_KD = 0.01;
         public static final double TURRET_DEADBAND = 0.02;
         
-        // Turret Control
+        // zeroing
         public static final double TURRET_ZEROING_SPEED = 0.1;
+        public static final double HOOD_ZEROING_SPEED = -0.1;
 
         public static final ShooterTableValue[] SHOOTER_TABLE_HUB = { //TODO tune
             new ShooterTableValue(48.0, Math.toRadians(25.0), 1000),
