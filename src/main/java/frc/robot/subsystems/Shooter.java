@@ -56,7 +56,6 @@ public class Shooter {
      * Updates the shooter
      */
     public void update() {
-        System.out.println("called");
         hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(targetHoodAngle)));
 
         switch (ShooterManager.getShooterState()) {
@@ -135,10 +134,6 @@ public class Shooter {
      * @return if it is at target speed
      */
     public boolean atRampedSpeed() {
-        System.out.println(flywheelMotor.get());
-        // System.out.println(flywheelMotor.getve)
-        System.out.println("t" + targetFlywheelSpeed);
-        System.out.println("v" + flywheelMotor.getVelocity());
         return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND;
     }
 

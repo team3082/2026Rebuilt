@@ -96,7 +96,7 @@ public class ShooterManager {
         if (targetTurretAngle == -10) {
             targetTurretAngle = Constants.Shooter.TURRET_MIN_ANGLE;
             // checks that driver is not rotating so rotation doesn't override their input
-            if (SwerveManager.rotationSpeed == 0) {
+            if (SwerveManager.rotationSpeed == 0 && shooterState != ShooterState.IDLE) {
                 SwerveManager.rotateAndDrive(0.4, SwerveManager.movement);
             }
         }
