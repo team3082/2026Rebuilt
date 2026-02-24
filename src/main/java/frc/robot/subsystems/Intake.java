@@ -7,6 +7,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Tuning;
+import frc.robot.subsystems.LEDs.LEDManager;
+import frc.robot.subsystems.LEDs.LEDManager.Colors;
 
 public class Intake {
 
@@ -18,10 +20,10 @@ public class Intake {
 
     private static TalonFX pivotMotor;
     private static TalonFX rollerMotor;
-    private static IntakeState rollerState;
+    public static IntakeState rollerState;
 
     public static void init(){
-        rollerState = IntakeState.RESTING;
+        rollerState = IntakeState.INTAKING;
 
         rollerMotor = new TalonFX(Constants.Intake.ROLLER_MOTOR_ID);
         pivotMotor = new TalonFX(Constants.Intake.PIVOT_MOTOR_ID);

@@ -6,9 +6,15 @@ import frc.robot.subsystems.AutoTarget;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
+import frc.robot.subsystems.states.ShooterState;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.utils.Vector2;
 
+import frc.robot.utils.RMath;
+import frc.robot.utils.RTime;
+import frc.robot.subsystems.ShooterManager;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakeState;
 public class OI {
     private static Joystick driverStick;
 
