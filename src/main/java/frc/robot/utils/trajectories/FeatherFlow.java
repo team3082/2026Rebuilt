@@ -196,13 +196,21 @@ public class FeatherFlow {
                 }
             }
 
-            profiledPaths.add(ProfiledPath.generateProfiledPath(
+            profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
                 segPath,
-                Constants.MAX_PATH_VELOCITY,
-                Constants.MAX_PATH_ACCELERATION,
-                79.0,
+                200,
+                0.1,
+                200,
+                200,
                 targetHeadings
             ));
+            // profiledPaths.add(ProfiledPath.generateProfiledPath(
+            //     segPath,
+            //     Constants.MAX_PATH_VELOCITY,
+            //     Constants.MAX_PATH_ACCELERATION,
+            //     79.0,
+            //     targetHeadings
+            // ));
 
             segmentStartT = segEndT;
         }

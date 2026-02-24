@@ -65,13 +65,13 @@ public class FollowPath extends Command {
   public void execute() {
     double elapsed = RTime.now() - startTime;
 
-    ProfiledPoint currentState = path.getPointAtTime(elapsed);
-    SwervePosition.setPosition(currentState.getPosition());
-    Pigeon.setYaw(Math.toDegrees(currentState.getHeading()));
+    // ProfiledPoint currentState = path.getPointAtTime(elapsed);
+    // SwervePosition.setPosition(currentState.getPosition());
+    // Pigeon.setYaw(Math.toDegrees(currentState.getHeading()));
 
-    // Vector2 driveVector = holonomicDriveController.calculate();
-    // double rotOutput    = holonomicDriveController.calculateRotation();
-    // SwerveManager.rotateAndDrive(rotOutput, driveVector);
+    Vector2 driveVector = holonomicDriveController.calculate();
+    double rotOutput    = holonomicDriveController.calculateRotation();
+    SwerveManager.rotateAndDrive(rotOutput, driveVector);
 
     double duration = path.getDuration();
     while (eventIndex < events.length) {

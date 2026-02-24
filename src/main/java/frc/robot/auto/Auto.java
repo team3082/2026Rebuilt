@@ -59,6 +59,22 @@ public class Auto {
         );
     }
 
+     @AutoRoutine
+    public SequentialCommandGroup Smally2(){
+        System.out.println("Starting Long Line");
+
+        return FeatherFlow.buildFeatherAuto(
+            "Smally (Copy)", 
+            new InstantCommand(() -> {
+                System.out.println("Debug One");
+            }),
+            new InstantCommand(() -> {
+                System.out.println("Debug Two");
+            })
+        );
+    }
+
+
     @AutoRoutine()
     public  SequentialCommandGroup exampleAuto(){
         System.out.println("Starting Test Path Auto Routine");

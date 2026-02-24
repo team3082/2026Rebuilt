@@ -28,7 +28,7 @@ public class HolonomicDriveController {
 
         this.xPositionPID = new PIDController(posKp, posKi, posKd);
         this.yPositionPID = new PIDController(posKp, posKi, posKd);
-        this.rotationPID  = new PIDController(0.08, 0.002, 0.001);
+        this.rotationPID  = new PIDController(0.08, 0, 0.001);
         this.rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
         this.path = path;
@@ -60,7 +60,7 @@ public class HolonomicDriveController {
         // Get desired state from path
         ProfiledPoint desiredPoint = path.getPointAtTime(currentTime);
         Vector2 desiredPos = desiredPoint.getPosition();
-        Vector2 desiredVel = desiredPoint.getVelocity(); // field-frame, no rotation needed
+        Vector2 desiredVel = desiredPoint.getVelocity().rotate(-Math.PI/2);
 
         double xFF = desiredVel.x / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL;
         double yFF = desiredVel.y / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL;
