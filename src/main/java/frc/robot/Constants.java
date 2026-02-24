@@ -141,6 +141,9 @@ public class Constants {
 
         public static final Vector2 TURRET_POS_OFFSET = new Vector2(3.75, 4.25);
 
+        public static final double RPM_DROP = 50; // amount that rpm drops when ball is shot
+        public static final double BALL_TIMEOUT = 0.5; // seconds without shots to assume hopper is empty
+
     }
 
     public static final class Intake {
