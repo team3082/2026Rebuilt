@@ -9,6 +9,8 @@ public class ProfiledPoint {
     private double acceleration;
     private double time;
     private double distance;
+    private double heading;             // radians, tangent angle of the path
+    private double rotationalVelocity;  // rad/s
 
     public ProfiledPoint() {
         this.position = new Vector2(0, 0);
@@ -17,6 +19,8 @@ public class ProfiledPoint {
         this.acceleration = 0;
         this.time = 0;
         this.distance = 0;
+        this.heading = 0;
+        this.rotationalVelocity = 0;
     }
 
     public ProfiledPoint(Vector2 position, Vector2 velocity, double curvature, double acceleration, double time, double distance) {
@@ -26,6 +30,8 @@ public class ProfiledPoint {
         this.acceleration = acceleration;
         this.time = time;
         this.distance = distance;
+        this.heading = 0;
+        this.rotationalVelocity = 0;
     }
 
     public Vector2 getPosition() {
@@ -74,5 +80,21 @@ public class ProfiledPoint {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public double getHeading() {
+        return heading;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
+    }
+
+    public double getRotationalVelocity() {
+        return rotationalVelocity;
+    }
+
+    public void setRotationalVelocity(double rotationalVelocity) {
+        this.rotationalVelocity = rotationalVelocity;
     }
 }

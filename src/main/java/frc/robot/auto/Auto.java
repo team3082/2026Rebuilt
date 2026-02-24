@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
 import frc.robot.auto.routineManager.AutoRoutine;
@@ -29,14 +30,17 @@ public class Auto {
     public  SequentialCommandGroup basicAuto(){
         System.out.println("Starting Test Path Auto Routine");
 
-        return FeatherFlow.buildFeatherAuto(
-            "BasicAuto", 
-            new InstantCommand(() -> {
-                System.out.println("Debug One");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Two");
-            })
+        return new SequentialCommandGroup(
+            FeatherFlow.buildFeatherAuto(
+                "BasicAuto", 
+                new InstantCommand(() -> {
+                    System.out.println("Debug One");
+                }),
+                new InstantCommand(() -> {
+                    System.out.println("Debug Two");
+                })
+            ),
+            new WaitCommand(5)
         );
     }
 

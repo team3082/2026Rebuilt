@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherPath.FeatherActionDescriptor;
@@ -141,14 +142,69 @@ public class FeatherFlow {
             paths = List.of(fullPath);
         }
 
+        // Build a sorted list of (globalT, heading) pairs from "rotate" descriptors
+        List<double[]> rotateKeyframes = new ArrayList<>(); // {t, heading}
+        for (FeatherActionDescriptor action : actions) {
+            if (action.type.equals("rotate")) {
+                rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading+90)});
+            }
+        }
+        rotateKeyframes.sort((a, b) -> Double.compare(a[0], b[0]));
+
         List<ProfiledPath> profiledPaths = new ArrayList<>();
-        for (RobotPath path : paths) {
+        double segmentStartT = 0.0;
+
+        for (int segIdx = 0; segIdx < paths.size(); segIdx++) {
+            RobotPath segPath = paths.get(segIdx);
+            int pointCount = segPath.getPoints().size();
+
+            // Determine the global-T range this segment covers
+            double segEndT = 1.0;
+            if (!splitValues.isEmpty() && segIdx < splitValues.size()) {
+                segEndT = splitValues.get(segIdx);
+            }
+
+            // Build per-point target headings by interpolating rotate keyframes
+            // that fall within [segmentStartT, segEndT]
+            double[] targetHeadings = null;
+            if (!rotateKeyframes.isEmpty()) {
+                targetHeadings = new double[pointCount];
+                for (int i = 0; i < pointCount; i++) {
+                    // Map point index to global-T
+                    double globalT = segmentStartT + (segEndT - segmentStartT)
+                                     * (i / (double)(pointCount - 1));
+
+                    // Find surrounding keyframes and interpolate
+                    double prevT = segmentStartT;
+                    double prevH = rotateKeyframes.get(0)[1]; // default to first keyframe heading
+                    double nextT = segEndT;
+                    double nextH = prevH;
+
+                    for (double[] kf : rotateKeyframes) {
+                        if (kf[0] <= globalT) { prevT = kf[0]; prevH = kf[1]; }
+                        else                  { nextT = kf[0]; nextH = kf[1]; break; }
+                    }
+
+                    double span = nextT - prevT;
+                    double alpha = (span > 1e-9) ? (globalT - prevT) / span : 0.0;
+                    
+                    // Interpolate with shortest-path unwrapping
+                    double delta = nextH - prevH;
+                    while (delta >  Math.PI) delta -= 2 * Math.PI;
+                    while (delta < -Math.PI) delta += 2 * Math.PI;
+                    targetHeadings[i] = prevH + alpha * delta;
+                }
+            }
+
             profiledPaths.add(ProfiledPath.generateProfiledPath(
-                path,
+                segPath,
                 Constants.MAX_PATH_VELOCITY,
                 Constants.MAX_PATH_ACCELERATION,
-                79.0
+                79.0,
+                targetHeadings
             ));
+
+            segmentStartT = segEndT;
         }
         
         return new FeatherPath(profiledPaths, actions);
@@ -204,6 +260,7 @@ public class FeatherFlow {
 
         group.addCommands(new InstantCommand(() -> {
             SwervePosition.setPosition(featherPath.paths.get(0).getStartPoint());
+            Pigeon.setYaw(featherPath.paths.get(0).getStartHeading());
         }));
         
         int commandIndex = 0;

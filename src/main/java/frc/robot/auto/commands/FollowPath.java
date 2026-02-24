@@ -1,17 +1,14 @@
 package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.Tuning;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
-import frc.robot.utils.PIDController;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherEvent;
 import frc.robot.utils.trajectories.ProfiledPath;
 import frc.robot.utils.trajectories.ProfiledPoint;
-import frc.robot.utils.trajectories.RobotPath;
 
 /**
  * Command that follows a {@link RobotPath} using a {@link PurePursuit} algorithm
@@ -25,8 +22,6 @@ import frc.robot.utils.trajectories.RobotPath;
 public class FollowPath extends Command {
   private final ProfiledPath path;
   private final FeatherEvent[] events;  
-  private final PIDController xPidController;
-  private final PIDController yPidController;
   private final HolonomicDriveController holonomicDriveController;
   private double startTime;
 
@@ -42,15 +37,6 @@ public class FollowPath extends Command {
   public FollowPath(ProfiledPath path, FeatherEvent[] events) {
     this.path = path;
     this.events = events;
-
-    this.xPidController = new PIDController(
-      Tuning.holonomic_pos_kp, Tuning.holonomic_pos_ki, Tuning.holonomic_pos_kd, .1, .1, 1
-    );
-
-    this.yPidController = new PIDController(
-      Tuning.holonomic_pos_kp, Tuning.holonomic_pos_ki, Tuning.holonomic_pos_kd, .1, .1, 1
-    );
-
     this.holonomicDriveController = new HolonomicDriveController(path);
   }
 
@@ -61,6 +47,7 @@ public class FollowPath extends Command {
   @Override
   public void initialize() {
     startTime = RTime.now();
+    eventIndex = 0;
     holonomicDriveController.initialize(path);
   }
 
@@ -76,15 +63,26 @@ public class FollowPath extends Command {
    */
   @Override
   public void execute() {
-    // double elapsedTime = RTime.now() - startTime;s
+    double elapsed = RTime.now() - startTime;
 
-    Vector2 driveVector = holonomicDriveController.calculate();
-    SwerveManager.rotateAndDrive(0, driveVector);
+    ProfiledPoint currentState = path.getPointAtTime(elapsed);
+    SwervePosition.setPosition(currentState.getPosition());
+    Pigeon.setYaw(Math.toDegrees(currentState.getHeading()));
 
-    // double elapsedTime = RTime.now() - startTime;
-    // ProfiledPoint targetPoint = path.getPointAtTime(elapsedTime);
+    // Vector2 driveVector = holonomicDriveController.calculate();
+    // double rotOutput    = holonomicDriveController.calculateRotation();
+    // SwerveManager.rotateAndDrive(rotOutput, driveVector);
 
-    // Event handling would go here, but is not the focus of this change.
+    double duration = path.getDuration();
+    while (eventIndex < events.length) {
+      double eventTime = events[eventIndex].t * duration;
+      if (elapsed >= eventTime) {
+        events[eventIndex].command.schedule();
+        eventIndex++;
+      } else {
+        break;
+      }
+    }
   }
 
   /**

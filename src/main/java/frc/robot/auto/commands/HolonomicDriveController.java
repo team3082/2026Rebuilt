@@ -4,9 +4,9 @@ import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.ProfiledPath;
 import frc.robot.utils.trajectories.ProfiledPoint;
 import frc.robot.Constants;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
-
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class HolonomicDriveController {
     private PIDController xPositionPID;
     private PIDController yPositionPID;
+    private PIDController rotationPID;
     
     private ProfiledPath path;
     private double startTime;
@@ -21,13 +22,15 @@ public class HolonomicDriveController {
 
 
     public HolonomicDriveController(ProfiledPath path) {
-        double posKp = 0.01; // Position PID constants
+        double posKp = 0.01;
         double posKi = 0.005;
         double posKd = 0;
 
         this.xPositionPID = new PIDController(posKp, posKi, posKd);
         this.yPositionPID = new PIDController(posKp, posKi, posKd);
-        
+        this.rotationPID  = new PIDController(0.08, 0.002, 0.001);
+        this.rotationPID.enableContinuousInput(-Math.PI, Math.PI);
+
         this.path = path;
         this.isFinished = false;
     }
@@ -36,6 +39,9 @@ public class HolonomicDriveController {
         this.path = path;
         this.startTime = RTime.now();
         this.isFinished = false;
+        xPositionPID.reset();
+        yPositionPID.reset();
+        rotationPID.reset();
     }
     
     /**
@@ -54,10 +60,10 @@ public class HolonomicDriveController {
         // Get desired state from path
         ProfiledPoint desiredPoint = path.getPointAtTime(currentTime);
         Vector2 desiredPos = desiredPoint.getPosition();
-        Vector2 desiredVel = desiredPoint.getVelocity().rotate(-Math.PI/2);
+        Vector2 desiredVel = desiredPoint.getVelocity(); // field-frame, no rotation needed
 
-        double xFF = desiredVel.x/(Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
-        double yFF = desiredVel.y/(Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
+        double xFF = desiredVel.x / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL;
+        double yFF = desiredVel.y / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL;
         
         // Get current robot pose
         Vector2 currentPos = SwervePosition.getPosition();
@@ -65,16 +71,49 @@ public class HolonomicDriveController {
         // Calculate feedback velocities (based on position error).
         double xFeedback = xPositionPID.calculate(currentPos.x, desiredPos.x);
         double yFeedback = yPositionPID.calculate(currentPos.y, desiredPos.y);
-        Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI/2);
 
-
-        SmartDashboard.putNumber("Error Magnitude", desiredPos.sub(currentPos).mag());
-        SmartDashboard.putNumber("xFF", xFF);
-        SmartDashboard.putNumber("yFF", yFF);
-        SmartDashboard.putNumber("xFeedback", xFeedback);
-        SmartDashboard.putNumber("yFeedback", yFeedback);
+        SmartDashboard.putNumber("Holonomic/xPosError", desiredPos.x - currentPos.x);
+        SmartDashboard.putNumber("Holonomic/yPosError", desiredPos.y - currentPos.y);
+        SmartDashboard.putNumber("Holonomic/xFF", xFF);
+        SmartDashboard.putNumber("Holonomic/yFF", yFF);
         
-        return new Vector2(xFF, yFF  );
+        return new Vector2(xFF + xFeedback, yFF + yFeedback);
+    }
+
+    /**
+     * Calculate the rotational control output for the current time.
+     * Combines a heading feedforward (profiled rotational velocity) with a
+     * heading-error feedback PID.
+     *
+     * @return Rotational speed command as a percentage (-1 to 1), suitable for
+     *         passing directly as the {@code rotSpeed} argument of
+     *         {@link frc.robot.swerve.SwerveManager#rotateAndDrive}.
+     */
+    public double calculateRotation() {
+        double currentTime = RTime.now() - startTime;
+        if (currentTime >= path.getDuration()) {
+            return 0.0;
+        }
+
+        ProfiledPoint desiredPoint = path.getPointAtTime(currentTime);
+        double desiredHeading = desiredPoint.getHeading();
+        double desiredRotVel  = desiredPoint.getRotationalVelocity();
+
+        double currentHeading = Pigeon.getRotationRad();
+
+        // Feedforward: scale profiled rot velocity to [-1, 1]
+        double rotFF = desiredRotVel / Constants.MAX_ROT_VELOCITY;
+
+        // Feedback: PID on heading error (continuous input already enabled)
+        double rotFeedback = rotationPID.calculate(currentHeading, desiredHeading);
+
+        double rotOutput = rotFF + rotFeedback;
+
+        SmartDashboard.putNumber("Holonomic/headingError", desiredHeading - currentHeading);
+        SmartDashboard.putNumber("Holonomic/rotFF", rotFF);
+        SmartDashboard.putNumber("Holonomic/rotFeedback", rotFeedback);
+
+        return Math.max(-1.0, Math.min(1.0, rotOutput));
     }
     
   
