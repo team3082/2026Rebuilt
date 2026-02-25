@@ -131,8 +131,8 @@ public class Constants {
 
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
-        public static final double TURRET_ZERO_ANGLE = Math.toRadians(288.0);
-        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(12.0); // used only when hall sensor is broken
+        public static final double TURRET_ZERO_ANGLE = Math.toRadians(279.0);
+        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(340.0); // used only when hall sensor is broken
         public static final double TURRET_MIN_ANGLE = Math.toRadians(22.0);
         public static final double TURRET_MAX_ANGLE = Math.toRadians(330.0);
 

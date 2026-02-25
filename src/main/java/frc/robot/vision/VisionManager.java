@@ -22,7 +22,7 @@ public class VisionManager {
 
         if (Robot.isReal()) {
             cameras = new Camera[] {
-                new Camera(new PhotonCamera("ApriltagCamera3"), new Vector2(11.0, 8.5), Math.toRadians(-15.0), -Math.PI/2)
+                new Camera(new PhotonCamera("ApriltagCamera3"), new Vector2(11.0, 8.5), 0, Math.toRadians(15.0), -Math.PI/2)
             };
         }
 
@@ -57,7 +57,7 @@ public class VisionManager {
 
             // Rotate robot position to align with field coordinate frame
             double xdistRobot = vectorTransform.x * Math.cos(camera.cameraPitch) - transform.getZ() * Math.sin(camera.cameraPitch);
-            double ydistRobot = vectorTransform.y;
+            double ydistRobot = vectorTransform.y * Math.cos(camera.cameraRoll) + transform.getZ() * Math.sin(camera.cameraRoll);
 
             Vector2 distRobot = new Vector2(xdistRobot, ydistRobot);
 
@@ -96,8 +96,6 @@ public class VisionManager {
     };
 
     public static Optional<Double> getRotation(double pigeonAngle) {
-
-        // Warning! Current solution does not account for cameras having roll, only pitch and yaw
 
         List<Double> robotYaws = new ArrayList<>();
 
