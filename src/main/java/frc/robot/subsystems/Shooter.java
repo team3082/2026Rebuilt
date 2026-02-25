@@ -32,6 +32,7 @@ public class Shooter {
         flywheelConfiguration.Slot0.kP = Tuning.Shooter.FLYWHEEL_P;
         flywheelConfiguration.Slot0.kI = Tuning.Shooter.FLYWHEEL_I;
         flywheelConfiguration.Slot0.kD = Tuning.Shooter.FLYWHEEL_D;
+        flywheelConfiguration.Slot0.kV = Tuning.Shooter.FLYWHEEL_KV;
 
         flywheelConfiguration.CurrentLimits.StatorCurrentLimit = 120;
         // flywheelConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -64,6 +65,7 @@ public class Shooter {
                 break;
 
             default:
+                System.out.println("shooter" + targetFlywheelSpeed);
                 flywheelMotor.setControl(new VelocityDutyCycle(targetFlywheelSpeed));
                 break;
         }

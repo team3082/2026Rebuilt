@@ -11,14 +11,16 @@ public class Camera {
     public Vector2 robotToCamera;
     public double cameraPitch;
     public double cameraYaw;
+    public double cameraRoll;
     public PhotonTrackedTarget latestTarget;
     private boolean disabled;
 
-    public Camera(PhotonCamera photonCamera, Vector2 robotToCamera, double cameraPitch, double cameraYaw) {
+    public Camera(PhotonCamera photonCamera, Vector2 robotToCamera, double cameraPitch, double cameraYaw, double cameraRoll) {
         this.photonCamera = photonCamera;
         this.robotToCamera = robotToCamera;
         this.cameraPitch = cameraPitch;
         this.cameraYaw = cameraYaw;
+        this.cameraRoll = cameraRoll;
         disabled = false;
     }
 

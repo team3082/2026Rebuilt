@@ -124,23 +124,23 @@ public class OI {
             return;
         }
 
-        if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_Y)) {
-            hoodAngle += Math.toRadians(1.0);
-        } else if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_A)) {
-            hoodAngle -= Math.toRadians(1.0);
+        if (driverStick.getPOV() == 0) {
+            hoodAngle += Math.toRadians(0.25);
+        } else if (driverStick.getPOV() == 180) {
+            hoodAngle -= Math.toRadians(0.25);
         }
         hoodAngle = Math.min(Math.max(Math.toRadians(0.0), hoodAngle), Math.toRadians(30.0));
         ShooterManager.getShooter().setTargetAngle(hoodAngle);
 
-        if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_B)) {
-            rpm += 100.0;
-        } else if (driverStick.getRawButtonPressed(LogitechF310.BUTTON_X)) {
-            rpm -= 100.0;
+        if (driverStick.getPOV() == 90) {
+            rpm += 10.0;
+        } else if (driverStick.getPOV() == 270) {
+            rpm -= 10.0;
         }
         System.out.println(rpm);
         ShooterManager.getShooter().setTargetSpeed(rpm);
 
-        if (driverStick.getRawButton(8)) {
+        if (driverStick.getRawButton(LogitechF310.BUTTON_RIGHT_BUMPER)) {
             ShooterManager.shoot();
         } else {
             ShooterManager.stopShooting();

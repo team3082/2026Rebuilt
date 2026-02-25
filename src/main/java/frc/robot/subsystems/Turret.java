@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -37,6 +38,10 @@ public class Turret {
         turretMotorConfig.Slot0.kP = Tuning.Shooter.TURRET_KP;
         turretMotorConfig.Slot0.kI = Tuning.Shooter.TURRET_KI;
         turretMotorConfig.Slot0.kD = Tuning.Shooter.TURRET_KD;
+
+        turretMotorConfig.MotionMagic.MotionMagicCruiseVelocity = Tuning.Shooter.TURRET_MAX_VEL;
+        turretMotorConfig.MotionMagic.MotionMagicAcceleration = Tuning.Shooter.TURRET_MAX_ACCEL;
+        turretMotorConfig.MotionMagic.MotionMagicJerk = Tuning.Shooter.TURRET_MAX_JERK;
 
         turretMotorConfig.CurrentLimits.StatorCurrentLimit = 60;
         turretMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -89,7 +94,7 @@ public class Turret {
                 break;
                 
             case NORMAL:
-                turretMotor.setControl(new PositionDutyCycle(angleToRot(targetAngle)));
+                turretMotor.setControl(new MotionMagicDutyCycle(angleToRot(targetAngle)));
                 break;
         }
     }
