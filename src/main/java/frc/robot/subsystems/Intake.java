@@ -7,8 +7,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Tuning;
-import frc.robot.subsystems.LEDs.LEDManager;
-import frc.robot.subsystems.LEDs.LEDManager.Colors;
 
 public class Intake {
 
@@ -16,6 +14,7 @@ public class Intake {
         RESTING,
         INTAKING,
         REVERSE,
+        FEEDING,
     }
 
     private static TalonFX pivotMotor;
@@ -65,6 +64,11 @@ public class Intake {
                 pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(Tuning.Intake.REVERSE_SPEED);
                 break;
+
+            case FEEDING:
+                pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_UP_ANGLE));
+                rollerMotor.set(0);
+                break;
         }
     }
 
@@ -84,11 +88,19 @@ public class Intake {
         rollerState = IntakeState.RESTING;
     }
 
+    public static void startFeeding() {
+        rollerState = IntakeState.FEEDING;
+    }
+
     public static double getAngle() {
         if (Robot.isReal()) {
             return pivotMotor.getPosition().getValueAsDouble();
         } else {
-            return Constants.Intake.INTAKE_DOWN_ANGLE;
+            if (rollerState == IntakeState.FEEDING) {
+                return Constants.Intake.INTAKE_UP_ANGLE;
+            } else {
+                return Constants.Intake.INTAKE_DOWN_ANGLE;
+            }
         }
     }
 
@@ -105,6 +117,9 @@ public class Intake {
 
                 case REVERSE:
                     return Tuning.Intake.REVERSE_SPEED;
+                
+                case FEEDING:
+                    return 0;
             }
         }
         return 0;

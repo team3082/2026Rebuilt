@@ -148,6 +148,7 @@ public class Constants {
         public static final int ROLLER_MOTOR_ID = 0;
 
         public static final double INTAKE_DOWN_ANGLE = 0.0;
+        public static final double INTAKE_UP_ANGLE = 0.0;
     }
 
     public static final class Indexer {

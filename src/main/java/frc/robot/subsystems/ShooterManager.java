@@ -2,9 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import frc.robot.Tuning;
-import frc.robot.subsystems.Intake.IntakeState;
-import frc.robot.subsystems.LEDs.LEDManager;
-import frc.robot.subsystems.LEDs.LEDManager.Colors;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterState;
 import frc.robot.subsystems.states.ShooterTarget;
@@ -159,6 +156,12 @@ public class ShooterManager {
 
         // gets distance between turret and hub
         double distance = target.pos.sub(turretPos).mag();
+
+        if (distance < Tuning.Shooter.SHOOTER_TABLE_HUB[0].getDist()) { // defaults to lowest value if too close, does this because if it interpolates to lower flywheel speed the shot won't go high enough
+            shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getSpeed());
+            shooter.setTargetAngle(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getAngle() - Constants.Shooter.HOOD_ANGLE_OFFSET);
+            return;
+        }
 
         for (int i = 0; i < Tuning.Shooter.SHOOTER_TABLE_HUB.length - 1; i++) {
             // finds which two values current distance is between and interpolates hood angle and flywheel speed between those values

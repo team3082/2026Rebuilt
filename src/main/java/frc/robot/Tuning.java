@@ -104,13 +104,13 @@ public final class Tuning {
         public static final double TURRET_ZEROING_SPEED = 0.06;
         public static final double HOOD_ZEROING_SPEED = -0.1;
 
-        public static final ShooterTableValue[] SHOOTER_TABLE_HUB = { //TODO tune
+        public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
             new ShooterTableValue(75.0, Math.toRadians(25.0), 1250),
             new ShooterTableValue(90.0, Math.toRadians(25.0), 1250),
             new ShooterTableValue(106.0, Math.toRadians(25.0), 1360),
-            new ShooterTableValue(120.0, Math.toRadians(25.0), 1500), // uh oh but prolly 1440
+            new ShooterTableValue(120.0, Math.toRadians(25.0), 1440), // uh oh but prolly 1440
             new ShooterTableValue(136.0, Math.toRadians(25.0), 1510),
-            new ShooterTableValue(150.0, Math.toRadians(25.0), 1700), // done
+            new ShooterTableValue(150.0, Math.toRadians(25.0), 1700),
             new ShooterTableValue(165.0, Math.toRadians(25.0), 1750),
             new ShooterTableValue(187.0, Math.toRadians(25.0), 1810),
             new ShooterTableValue(220.0, Math.toRadians(30.0), 1920)
@@ -139,7 +139,7 @@ public final class Tuning {
         public static final double SPEED = 0.7;
         public static final double REVERSE_SPEED = -0.5;
         
-        public static final double PIVOT_P = 0.0;
+        public static final double PIVOT_P = 0.01;
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
     }

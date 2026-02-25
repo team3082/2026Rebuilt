@@ -57,10 +57,13 @@ public class Shooter {
      * Updates the shooter
      */
     public void update() {
-        hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(targetHoodAngle)));
+        if (AutoTarget.nearTrench()) { // final safety check to override other potential errors
+            targetHoodAngle = 0;
+        }
 
         switch (ShooterManager.getShooterState()) {
             case IDLE:
+                hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(0)));
                 flywheelMotor.setControl(new CoastOut());
                 break;
 
@@ -80,6 +83,7 @@ public class Shooter {
                 break;
 
             default:
+                hoodMotor.setControl(new PositionDutyCycle(hoodAngleToRot(targetHoodAngle)));
                 flywheelMotor.setControl(new VelocityDutyCycle(targetFlywheelSpeed));
                 break;
         }
