@@ -17,6 +17,9 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.LEDs.LEDManager;
 import frc.robot.subsystems.LEDs.LEDMech2D;
+import frc.robot.subsystems.LEDs.LEDsAuto;
+import frc.robot.subsystems.LEDs.LEDsPreGame;
+import frc.robot.subsystems.LEDs.LEDsTeleop;
 import frc.robot.auto.Auto;
     
 // SUBSYSTEMS
@@ -94,7 +97,9 @@ public class Robot extends LoggedRobot {
     SwervePosition.update();
     SwerveManager.update();
     LEDManager.update();
-    
+    LEDsTeleop.update();
+    LEDsAuto.update();
+    LEDsPreGame.update();
 
   }
 

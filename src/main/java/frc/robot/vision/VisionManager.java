@@ -17,6 +17,8 @@ public class VisionManager {
 
     private static Camera[] cameras;
     private static boolean enabled = true;
+    public static int cameraNum;
+    public static boolean seeAprilTag; // for LED logic
 
     public static void init() {
 
@@ -32,12 +34,17 @@ public class VisionManager {
 
         List<Vector2> positions = new ArrayList<>();
 
-
+        seeAprilTag = false;
+        cameraNum = 0;
         for (Camera camera : cameras) {
             if(camera.isDisabled()) continue;
             PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();  
             
-            
+            // for LED logic
+            if (target != null){
+                seeAprilTag = true;
+            }
+            cameraNum++;
             if (target != null) if (camera.isLatestTarget(target)) {
                 continue;
             }        
@@ -106,7 +113,6 @@ public class VisionManager {
             PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();
 
             if (target == null) continue; // Skip if no april tags are found
-
             // Calculate robot rotation
             Transform3d transform = target.getBestCameraToTarget();
             Rotation3d rotationTransform = transform.getRotation();

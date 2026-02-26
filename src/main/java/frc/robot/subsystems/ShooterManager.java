@@ -18,19 +18,26 @@ public class ShooterManager {
     private static ShooterTarget target;
     private static Shooter shooter;
     private static Turret turret;
-    public static boolean inRange = true; // for LEDs, to track and display if we are in range to shoot at the Hub
-    
+    public enum LEDCheckReturn{
+        AIMING,
+        REVVING,
+        SHOOTING,
+        TOO_CLOSE,
+        CANT_AIM,
+        ALL_CLEAR,
+        TRENCH,
+        ZEROING
+    }
     public static void init() {
         turret = new Turret();
         shooter = new Shooter();
-        shooterState = ShooterState.SHOOTING;
+        shooterState = ShooterState.IDLE;
         target = ShooterTarget.HUB;
     }
 
     public static void update() { 
 
         aimTurret();
-        
         switch (shooterState) {
             case IDLE:
                 // When idle, hood goes down to fit under trench
@@ -95,7 +102,42 @@ public class ShooterManager {
     public static void zeroHood() {
         shooterState = ShooterState.ZEROING;
     }
+    public static LEDCheckReturn ledChecks() {
+        Vector2 turretPos = Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()));
 
+        // gets distance between turret and target
+        double distance = target.pos.sub(turretPos).mag();
+        
+        Vector2 deltaPos = target.pos.sub(Odometry.getPosition());
+
+        // gets angle that turret need to relative to robot
+        double targetTurretAngle = turret.clampAngle(Math.atan2(deltaPos.x, deltaPos.y) + Pigeon.getRotationRad());
+        if (shooterState == ShooterState.ZEROING){
+            return LEDCheckReturn.ZEROING;
+        }
+        if (AutoTarget.nearTrench()) {
+            return LEDCheckReturn.TRENCH; //near trench return
+        }
+        if (Tuning.Shooter.SHOOTER_TABLE_PASSING[0].getDist() < distance) {
+            return LEDCheckReturn.TOO_CLOSE; //too close return
+        }
+        if (targetTurretAngle == -10) {
+            return LEDCheckReturn.CANT_AIM; //cannot aim at angle return
+        }
+        if (shooterState == ShooterState.REVVING || shooterState == ShooterState.SHOOTING) {
+            if (!shooter.atAngle() || !turret.atAngle()) {
+                return LEDCheckReturn.AIMING; //not at angle return
+            }
+            if (!shooter.atRampedSpeed()) {
+                return LEDCheckReturn.REVVING; //not at speed return
+            }
+            if (shooterState == ShooterState.SHOOTING){
+                return LEDCheckReturn.SHOOTING; //shooting return
+            }
+        }
+        return LEDCheckReturn.ALL_CLEAR; //all good return
+        
+    }
     private static void aimTurret() { 
         // Change position for the fuel
         Vector2 deltaPos = target.pos.sub(Odometry.getPosition());
@@ -149,7 +191,6 @@ public class ShooterManager {
         shooter.setTargetAngle(0);
         shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
-        inRange = false; // see variable creation before impulse deleting
 
     }
 
@@ -184,7 +225,6 @@ public class ShooterManager {
         shooter.setTargetAngle(0);
         shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
-        inRange = false;
     }
 }
         

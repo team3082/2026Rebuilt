@@ -23,7 +23,7 @@ public class Intake {
     public static IntakeState rollerState;
 
     public static void init(){
-        rollerState = IntakeState.INTAKING;
+        rollerState = IntakeState.RESTING;
 
         rollerMotor = new TalonFX(Constants.Intake.ROLLER_MOTOR_ID);
         pivotMotor = new TalonFX(Constants.Intake.PIVOT_MOTOR_ID);
