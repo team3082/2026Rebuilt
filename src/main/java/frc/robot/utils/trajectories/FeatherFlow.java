@@ -168,11 +168,19 @@ public class FeatherFlow {
         }
         double totalPathDist = fullDist[allPts.size() - 1];
 
-        // Convert rotate keyframes from globalT → arc-length distance
-        // {distanceAlongFullPath, heading}
+        // Convert rotate keyframes from globalT → true arc-length distance
+        // by walking the precomputed fullDist array
         List<double[]> rotateByDist = new ArrayList<>();
         for (double[] kf : rotateKeyframes) {
-            rotateByDist.add(new double[]{kf[0] * totalPathDist, kf[1]});
+            double globalT = kf[0];
+            // fullDist is indexed by point, fullPath has N points sampled uniformly
+            // across all bezier segments — map globalT to a point index and interpolate
+            double pointIndex = globalT * (allPts.size() - 1);
+            int lo = (int) Math.floor(pointIndex);
+            int hi = Math.min(lo + 1, allPts.size() - 1);
+            double frac = pointIndex - lo;
+            double dist = fullDist[lo] + frac * (fullDist[hi] - fullDist[lo]);
+            rotateByDist.add(new double[]{dist, kf[1]});
         }
         // rotateByDist is already sorted since rotateKeyframes was sorted by t
 
