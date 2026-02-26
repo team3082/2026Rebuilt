@@ -76,10 +76,17 @@ public class FeatherFlow {
         List<Vector2> allPoints = new ArrayList<>();
         List<Double> allCurvatures = new ArrayList<>();
         
-        for (CubicBezierCurve bezier : beziers) {
-            allPoints.addAll(List.of(bezier.getPoints()));
-            for (double curvature : bezier.getCurvatures()) {
-                allCurvatures.add(curvature);
+        for (int i = 0; i < beziers.size(); i++) {
+            CubicBezierCurve bezier = beziers.get(i);
+            Vector2[] pts = bezier.getPoints();
+            double[] curvs = bezier.getCurvatures();
+
+            // Skip the first point of every curve except the first —
+            // it is identical to the last point of the previous curve.
+            int start = (i == 0) ? 0 : 1;
+            for (int j = start; j < pts.length; j++) {
+                allPoints.add(pts[j]);
+                allCurvatures.add(curvs[j]);
             }
         }
         
