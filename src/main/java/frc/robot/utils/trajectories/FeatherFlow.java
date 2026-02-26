@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
+import frc.robot.auto.commands.RotateAndDriveTo;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
@@ -150,68 +151,110 @@ public class FeatherFlow {
         }
 
         // Build a sorted list of (globalT, heading) pairs from "rotate" descriptors
-        List<double[]> rotateKeyframes = new ArrayList<>(); // {t, heading}
+        List<double[]> rotateKeyframes = new ArrayList<>();
         for (FeatherActionDescriptor action : actions) {
             if (action.type.equals("rotate")) {
-                rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading)});
+                rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading+90)});
             }
         }
         rotateKeyframes.sort((a, b) -> Double.compare(a[0], b[0]));
 
+        // Compute full path arc-length distances once
+        List<Vector2> allPts = fullPath.getPoints();
+        double[] fullDist = new double[allPts.size()];
+        fullDist[0] = 0.0;
+        for (int i = 1; i < allPts.size(); i++) {
+            fullDist[i] = fullDist[i - 1] + allPts.get(i - 1).dist(allPts.get(i));
+        }
+        double totalPathDist = fullDist[allPts.size() - 1];
+
+        // Convert rotate keyframes from globalT → arc-length distance
+        // {distanceAlongFullPath, heading}
+        List<double[]> rotateByDist = new ArrayList<>();
+        for (double[] kf : rotateKeyframes) {
+            rotateByDist.add(new double[]{kf[0] * totalPathDist, kf[1]});
+        }
+        // rotateByDist is already sorted since rotateKeyframes was sorted by t
+
+        // Starting heading = first keyframe heading (path-planning convention).
+        // Ending heading   = last keyframe heading.
+        // If no keyframes, both default to 0.
+        double startRotation = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(0)[1];
+        double endRotation   = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(rotateByDist.size() - 1)[1];
+
         List<ProfiledPath> profiledPaths = new ArrayList<>();
         double segmentStartT = 0.0;
+        double segmentDistOffset = 0.0;
 
         for (int segIdx = 0; segIdx < paths.size(); segIdx++) {
             RobotPath segPath = paths.get(segIdx);
-            int pointCount = segPath.getPoints().size();
+            List<Vector2> segPts = segPath.getPoints();
+            int pointCount = segPts.size();
 
-            // Determine the global-T range this segment covers
             double segEndT = 1.0;
             if (!splitValues.isEmpty() && segIdx < splitValues.size()) {
                 segEndT = splitValues.get(segIdx);
             }
 
-            // Build per-point target headings by interpolating rotate keyframes
-            // that fall within [segmentStartT, segEndT]
-            double[] targetHeadings = null;
-            if (!rotateKeyframes.isEmpty()) {
-                targetHeadings = new double[pointCount];
-                for (int i = 0; i < pointCount; i++) {
-                    // Map point index to global-T
-                    double globalT = segmentStartT + (segEndT - segmentStartT)
-                                     * (i / (double)(pointCount - 1));
+            // Compute cumulative arc-length within this segment
+            double[] segDist = new double[pointCount];
+            segDist[0] = 0.0;
+            for (int i = 1; i < pointCount; i++) {
+                segDist[i] = segDist[i - 1] + segPts.get(i - 1).dist(segPts.get(i));
+            }
 
-                    // Find surrounding keyframes and interpolate
-                    double prevT = segmentStartT;
-                    double prevH = rotateKeyframes.get(0)[1]; // default to first keyframe heading
-                    double nextT = segEndT;
-                    double nextH = prevH;
+            double[] targetHeadings = new double[pointCount];
 
-                    for (double[] kf : rotateKeyframes) {
-                        if (kf[0] <= globalT) { prevT = kf[0]; prevH = kf[1]; }
-                        else                  { nextT = kf[0]; nextH = kf[1]; break; }
-                    }
+            for (int i = 0; i < pointCount; i++) {
+                // True arc-length distance of this point along the full path
+                double d = segmentDistOffset + segDist[i];
 
-                    double span = nextT - prevT;
-                    double alpha = (span > 1e-9) ? (globalT - prevT) / span : 0.0;
-                    
-                    // Interpolate with shortest-path unwrapping
-                    double delta = nextH - prevH;
-                    while (delta >  Math.PI) delta -= 2 * Math.PI;
-                    while (delta < -Math.PI) delta += 2 * Math.PI;
-                    targetHeadings[i] = prevH + alpha * delta;
+                if (rotateByDist.isEmpty()) {
+                    targetHeadings[i] = 0.0;
+                    continue;
                 }
+
+                // Before first keyframe → hold first keyframe heading
+                if (d <= rotateByDist.get(0)[0]) {
+                    targetHeadings[i] = rotateByDist.get(0)[1];
+                    continue;
+                }
+
+                // After last keyframe → hold last keyframe heading
+                if (d >= rotateByDist.get(rotateByDist.size() - 1)[0]) {
+                    targetHeadings[i] = rotateByDist.get(rotateByDist.size() - 1)[1];
+                    continue;
+                }
+
+                // Between two keyframes → find them and interpolate shortest-path
+                double prevD = rotateByDist.get(0)[0];
+                double prevH = rotateByDist.get(0)[1];
+                double nextD = rotateByDist.get(rotateByDist.size() - 1)[0];
+                double nextH = rotateByDist.get(rotateByDist.size() - 1)[1];
+
+                for (int k = 0; k < rotateByDist.size() - 1; k++) {
+                    if (rotateByDist.get(k)[0] <= d && rotateByDist.get(k + 1)[0] > d) {
+                        prevD = rotateByDist.get(k)[0];
+                        prevH = rotateByDist.get(k)[1];
+                        nextD = rotateByDist.get(k + 1)[0];
+                        nextH = rotateByDist.get(k + 1)[1];
+                        break;
+                    }
+                }
+
+                double span  = nextD - prevD;
+                double alpha = (span > 1e-9) ? (d - prevD) / span : 0.0;
+                double delta = nextH - prevH;
+                while (delta >  Math.PI) delta -= 2 * Math.PI;
+                while (delta < -Math.PI) delta += 2 * Math.PI;
+                targetHeadings[i] = prevH + alpha * delta;
             }
 
             profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
-                segPath,
-                200,
-                5,
-                200,
-                200,
-                targetHeadings
+                segPath, 200, 5, 200, 200, targetHeadings
             ));
 
+            segmentDistOffset += segDist[pointCount - 1];
             segmentStartT = segEndT;
         }
         
@@ -266,10 +309,7 @@ public class FeatherFlow {
         
         SequentialCommandGroup group = new SequentialCommandGroup();
 
-        group.addCommands(new InstantCommand(() -> {
-            SwervePosition.setPosition(featherPath.paths.get(0).getStartPoint());
-            Pigeon.setYaw(featherPath.paths.get(0).getStartHeading());
-        }));
+        group.addCommands(new RotateAndDriveTo(featherPath.paths.get(0).getStartHeading(), featherPath.paths.get(0).getStartPoint()));
         
         int commandIndex = 0;
         

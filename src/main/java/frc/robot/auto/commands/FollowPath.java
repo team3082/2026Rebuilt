@@ -74,9 +74,10 @@ public class FollowPath extends Command {
 
 
     double duration = path.getDuration();
-    ProfiledPoint point = path.getPointAtTime(elapsed);
-    SwervePosition.setPosition(point.getPosition());
-    Pigeon.setYaw(point.getHeading());
+    // ProfiledPoint point = path.getPointAtTime(elapsed);
+    // SwervePosition.setPosition(point.getPosition());
+    // Pigeon.setSimulatedRot(point.getHeading());
+    // System.out.println(point.getHeading());
 
     while (eventIndex < events.length) {
       double eventTime = events[eventIndex].t * duration;

@@ -15,7 +15,7 @@ public final class Tuning {
     public static final double ROTP = 0.4;
     public static final double ROTI = 0.05;
     public static final double ROTD = 0.075;
-    public static final double ROTDEAD = 0.02;
+    public static final double ROTDEAD = 0.5;
     public static final double ROTVELDEAD = 0.05;
     public static final double ROTMAXSPEED = 0.3;
  
@@ -41,13 +41,13 @@ public final class Tuning {
      public static final double ROT_DEADBAND = 0.03; // radians
     
     // Holonomic Drive Controller
-    public static final double holonomic_pos_kp = 0.01;
+    public static final double holonomic_pos_kp = 0.005;
     public static final double holonomic_pos_ki = 0.0;
     public static final double holonomic_pos_kd = 0.001;
 
     public static final double holonomic_rot_kp = 0.009;
     public static final double holonomic_rot_ki = 0.0;
-    public static final double holonomic_rot_kd = 0.01;
+    public static final double holonomic_rot_kd = 0.001;
 
     public static final double holonomic_vel_kp = 0.05;
     public static final double holonomic_vel_ki = 0.0;
