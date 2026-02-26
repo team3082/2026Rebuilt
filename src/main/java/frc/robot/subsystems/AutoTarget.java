@@ -34,8 +34,15 @@ public class AutoTarget {
      * @return returns if we are close enough to trench to need to move the hood down
      */
     public static boolean nearTrench() {
-        Vector2 trenchPos = new Vector2(143.5, 133.5);
-        return trenchPos.sub(Odometry.getPosition()).mag() < 60.0; // TODO determine safe distance away
+        double SAFE_DIST = 60.0; // TODO determine safe distance away
+        Vector2 trenchPos1 = new Vector2(143.5, 133.5);
+        Vector2 trenchPos2 = new Vector2(trenchPos1.x, -trenchPos1.y);
+        Vector2 trenchPos3 = new Vector2(-trenchPos1.x, trenchPos1.y);
+        Vector2 trenchPos4 = new Vector2(-trenchPos1.x, -trenchPos1.y);
+        return trenchPos1.sub(Odometry.getPosition()).mag() < SAFE_DIST
+            || trenchPos2.sub(Odometry.getPosition()).mag() < SAFE_DIST
+            || trenchPos3.sub(Odometry.getPosition()).mag() < SAFE_DIST
+            || trenchPos4.sub(Odometry.getPosition()).mag() < SAFE_DIST;
     }
 
     private static boolean inAllianceZone() {

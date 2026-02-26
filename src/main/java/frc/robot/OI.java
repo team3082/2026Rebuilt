@@ -5,12 +5,14 @@ import frc.robot.controllermaps.LogitechF310;
 import frc.robot.subsystems.AutoTarget;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
+import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.sensors.Pigeon;
+import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.utils.Vector2;
 
 public class OI {
-    private static Joystick driverStick;
+    private static Joystick driverStick, operatorStick;
 
     // ------------------ Driver Controls ------------------ //
 
@@ -31,12 +33,16 @@ public class OI {
     private static final int activateShooter = LogitechF310.AXIS_RIGHT_TRIGGER;
 
     private static final int zeroTurret = LogitechF310.BUTTON_X;
+    private static final int zeroHood = LogitechF310.BUTTON_A;
+
+    private static final int intakeFeed = LogitechF310.BUTTON_A;
 
     /**
      * Initialize OI with preset joystick ports.
      */
     public static void init() {
         driverStick = new Joystick(0);
+        operatorStick = new Joystick(1);
     }
 
     public static void userInput() {
@@ -90,7 +96,7 @@ public class OI {
         // shooter
         ShooterManager.setTarget(AutoTarget.getTarget());
         
-        if (AutoTarget.nearTrench()) { // prevents us from decapitation under the trench
+        if (AutoTarget.nearTrench() && ShooterManager.getTarget() != ShooterTarget.HUB) { // prevents us from decapitation under the trench
             ShooterManager.stopShooting();
         } else {
             if (driverStick.getRawButtonPressed(toggleShooter)) { // toggles shooting on and off when this button pressed
@@ -110,11 +116,25 @@ public class OI {
         }
 
         if (driverStick.getRawButton(zeroTurret)) {
-            ShooterManager.getTurret().zero();
+            ShooterManager.zeroTurret();
+        }
+
+        if (driverStick.getRawButton(zeroHood)) {
+            ShooterManager.zeroHood();
         }
 
     }
 
-    private static void operatorInput() {}
+    private static void operatorInput() {
+        if (Intake.getIntakeState() == IntakeState.INTAKING || Intake.getIntakeState() == IntakeState.REVERSE) {
+            return; // driver overrides operator if they are intaking
+        }
+
+        if (operatorStick.getRawButton(intakeFeed)) {
+            Intake.startFeeding();
+        } else {
+            Intake.stopIntaking();
+        }
+    }
 
 }
