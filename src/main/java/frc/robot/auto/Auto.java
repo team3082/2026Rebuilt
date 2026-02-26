@@ -42,9 +42,15 @@ public class Auto {
                 new InstantCommand(() -> {
                     Intake.stopIntaking();
                 }),
+                new Shoot(),
+                new InstantCommand(() -> {
+                    Intake.startIntaking();
+                }),
+                new InstantCommand(() -> {
+                    Intake.stopIntaking();
+                }),
                 new Shoot()
-            ),
-            new WaitCommand(5)
+            )
         );
     }
 

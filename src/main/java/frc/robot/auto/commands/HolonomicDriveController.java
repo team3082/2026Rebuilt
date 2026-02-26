@@ -58,8 +58,8 @@ public class HolonomicDriveController {
         Vector2 desiredPos = desiredPoint.getPosition();
         Vector2 desiredVel = desiredPoint.getVelocity().rotate(-Math.PI/2);
 
-        double xFF = desiredVel.x / (Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL * 1.3);
-        double yFF = desiredVel.y / (Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL * 1.3);
+        double xFF = desiredVel.x / (Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL * 1.1);
+        double yFF = desiredVel.y / (Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL * 1.1);
         
         // Get current robot pose
         Vector2 currentPos = SwervePosition.getPosition();
@@ -100,7 +100,8 @@ public class HolonomicDriveController {
 
         double currentHeading = Pigeon.getRotationRad();
 
-        double rotFF = desiredRotVel;
+        double rotFF = desiredRotVel / 2;
+        rotFF = 0;
 
         double rotFeedback = rotationPID.calculate(currentHeading, desiredHeading);
 

@@ -2,36 +2,14 @@
   "snapPoints": [
     {
       "position": {
-        "x": 469.6711055418371,
-        "y": 24.296546953140933
+        "x": 122.98179622986319,
+        "y": 197.50108525166127
       },
-      "name": "Blue Trench Bottom",
+      "name": "Start",
       "color": "blue",
       "enabled": true,
       "locked": true,
-      "id": "snap-1768160722256"
-    },
-    {
-      "position": {
-        "x": 469.6128063782257,
-        "y": 292.5075652497071
-      },
-      "name": "Blue Trench Up",
-      "color": "blue",
-      "enabled": true,
-      "locked": true,
-      "id": "snap-1768161719888"
-    },
-    {
-      "position": {
-        "x": 7.654880791617458,
-        "y": 5.67178994779789
-      },
-      "name": "Snap Point 3",
-      "color": "blue",
-      "enabled": true,
-      "locked": false,
-      "id": "snap-1770480273055"
+      "id": "snap-1772141201226"
     }
   ],
   "snapSettings": {
