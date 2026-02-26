@@ -4,6 +4,7 @@ import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.ProfiledPath;
 import frc.robot.utils.trajectories.ProfiledPoint;
 import frc.robot.Constants;
+import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
@@ -21,13 +22,9 @@ public class HolonomicDriveController {
     private boolean isFinished;
 
     public HolonomicDriveController(ProfiledPath path) {
-        double posKp = 0.01;
-        double posKi = 0;
-        double posKd = 0.001;
-
-        this.xPositionPID = new PIDController(posKp, posKi, posKd);
-        this.yPositionPID = new PIDController(posKp, posKi, posKd);
-        this.rotationPID  = new PIDController(0.009, 0, 0.01);
+        this.xPositionPID = new PIDController(Tuning.holonomic_pos_kp, Tuning.holonomic_pos_ki, Tuning.holonomic_pos_kd);
+        this.yPositionPID = new PIDController(Tuning.holonomic_pos_kp, Tuning.holonomic_pos_ki, Tuning.holonomic_pos_kd);
+        this.rotationPID  = new PIDController(Tuning.holonomic_rot_kp, Tuning.holonomic_rot_ki, Tuning.holonomic_rot_kd);
         this.rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
         this.path = path;
