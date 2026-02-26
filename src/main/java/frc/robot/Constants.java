@@ -197,6 +197,10 @@ public class Constants {
     public static final double MAX_PATH_VELOCITY = 181;
     public static final double MAX_PATH_ACCELERATION = 181;
 
+    // Maximum rotational speed (rad/s) and acceleration (rad/s²) for heading profiling
+    public static final double MAX_ROT_VELOCITY = Math.PI * 2;     // 360 deg/s
+    public static final double MAX_ROT_ACCELERATION = Math.PI * 4; // 720 deg/s²
+
     public static class TrajectoryConstants{
         public static final int CURVE_RESOLUTION = 2000;
     }

@@ -39,6 +39,64 @@ public final class SwerveManager {
         }
     }
 
+    public static void rotateAndDriveFF(double rotSpeed, Vector2 move) {
+        movement = move;
+        rotationSpeed = rotSpeed;
+        double heading = Pigeon.getRotationRad();
+        
+        // Array containing the unclamped movement vectors of each module
+        Vector2[] vectors = new Vector2[mods.length];
+
+        // Multiply the movement vector by a rotation matrix to compensate for the pigeon's heading
+        Vector2 relMove = move.rotate(-(heading - Math.PI / 2));
+
+        // The greatest magnitude of any module's distance from the center of rotation
+        double maxModPosMagnitude = 0;
+        for (int i = 0; i < mods.length; i++) {
+            maxModPosMagnitude = Math.max(maxModPosMagnitude,
+                mods[i].pos.mag());
+        }
+
+        // Pass 1: compute per-module rotate vectors at full rotSpeed
+        Vector2[] rotateVecs = new Vector2[mods.length];
+        for (int i = 0; i < mods.length; i++) {
+            rotateVecs[i] = new Vector2(
+                (-1 * mods[i].pos.y / maxModPosMagnitude) * rotSpeed,
+                (     mods[i].pos.x / maxModPosMagnitude) * rotSpeed);
+        }
+
+        // Pass 2: scale rotation down to preserve full translation
+        double rotScale = 1.0;
+        double transMag = relMove.mag();
+        if (transMag > 1e-9) {
+            for (int i = 0; i < mods.length; i++) {
+                double rotMag = rotateVecs[i].mag();
+                if (rotMag > 1e-9) {
+                    double s = (1.0 - transMag) / rotMag;
+                    if (s < rotScale) rotScale = Math.max(0.0, s);
+                }
+            }
+        }
+
+        // Pass 3: build final vectors and find the largest magnitude
+        double maxSpeed = 1.0;
+        for (int i = 0; i < mods.length; i++) {
+            vectors[i] = relMove.add(rotateVecs[i].mul(rotScale));
+            maxSpeed = Math.max(maxSpeed, vectors[i].mag());
+        }
+
+        // Pass 4: drive
+        for (int i = 0; i < mods.length; i++) {
+            double direction = vectors[i].atan2();
+            double power = vectors[i].mag() / maxSpeed;
+
+            if (power != 0)
+                mods[i].rotateToRad(direction);
+            mods[i].drive(power);
+        }
+    }
+
+    
     public static void rotateAndDrive(double rotSpeed, Vector2 move) {
         movement = move;
         rotationSpeed = rotSpeed;

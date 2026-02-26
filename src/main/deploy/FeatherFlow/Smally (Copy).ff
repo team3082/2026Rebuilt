@@ -1,6 +1,6 @@
 {
-  "id": "1770495038779",
-  "name": "Smally",
+  "id": "1771965489078",
+  "name": "Smally (Copy)",
   "anchorPoints": [
     {
       "position": {
@@ -42,12 +42,12 @@
         "y": 296.70203340321524
       },
       "handleInOffset": {
-        "x": -53.01160608170742,
-        "y": 29.873301230304484
+        "x": -44.32719828093953,
+        "y": 41.68625670794757
       },
       "handleOutOffset": {
-        "x": 82.58986092225467,
-        "y": -46.54135153152487
+        "x": 38.52644500781253,
+        "y": -36.231102774904684
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -88,80 +88,7 @@
       "name": ""
     }
   ],
-  "controlPoints": [
-    {
-      "id": 1771631613151,
-      "u": 0.35,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 180
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1771626902994,
-      "u": 0.52,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 0
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1771965013224,
-      "u": 0.65,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 180
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1771965022177,
-      "u": 0.78,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 0
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1771628804149,
-      "u": 1.5899999999999999,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 45
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1771631637732,
-      "u": 2.27,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 315
-        }
-      ],
-      "name": ""
-    }
-  ],
-  "created": "2026-02-07T20:10:38.779Z",
-  "lastModified": "2026-02-24T21:07:28.820Z"
+  "controlPoints": [],
+  "created": "2026-02-24T20:38:09.078Z",
+  "lastModified": "2026-02-24T20:38:15.299Z"
 }
