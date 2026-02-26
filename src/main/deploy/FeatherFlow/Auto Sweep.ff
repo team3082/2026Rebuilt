@@ -1,0 +1,145 @@
+{
+  "id": "1772076850740",
+  "name": "Auto Sweep",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 115.38610581700956,
+        "y": 205.23111765711698
+      },
+      "handleOutOffset": {
+        "x": 0.8589894156614548,
+        "y": 73.83564647947537
+      },
+      "handleInOffset": {
+        "x": -0.23266032936337516,
+        "y": -19.998646683491753
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 239.93957108791795,
+        "y": 293.6621826267212
+      },
+      "handleInOffset": {
+        "x": -98.35428809323452,
+        "y": 6.439155216233303
+      },
+      "handleOutOffset": {
+        "x": 58.48876972307771,
+        "y": -3.829200271333474
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 325.40901794623096,
+        "y": 157.58136905699044
+      },
+      "handleOutOffset": {
+        "x": 0.7377132905421036,
+        "y": -65.86898404620979
+      },
+      "handleInOffset": {
+        "x": -0.6571269029809628,
+        "y": 58.67358233031797
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 243.48079462413267,
+        "y": 12.73762815868281
+      },
+      "handleInOffset": {
+        "x": 53.32503485089494,
+        "y": 19.009719771344404
+      },
+      "handleOutOffset": {
+        "x": -40.78805018132363,
+        "y": -14.540438766417097
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 111.70158497315805,
+        "y": 150.37001632270443
+      },
+      "handleOutOffset": {
+        "x": 1.2153543330138552,
+        "y": 42.58729637031695
+      },
+      "handleInOffset": {
+        "x": -4.354040925793555,
+        "y": -152.57018161562388
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1761525063428,
+      "u": 1.28,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "command",
+          "action": "",
+          "stopping": false
+        },
+        {
+          "type": "rotate",
+          "heading": 90
+        }
+      ],
+      "name": "Start Intaking"
+    },
+    {
+      "id": 1772077040473,
+      "u": 2.74,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "action": "",
+          "stopping": false
+        },
+        {
+          "type": "rotate",
+          "heading": 90
+        }
+      ],
+      "name": "Stop Intaking"
+    },
+    {
+      "id": 1772077739327,
+      "u": 4,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        },
+        {
+          "type": "rotate",
+          "heading": 0
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-02-26T03:34:10.740Z",
+  "lastModified": "2026-02-26T04:08:33.106Z"
+}

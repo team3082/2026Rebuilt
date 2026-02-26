@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
+import frc.robot.auto.commands.Shoot;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
 import frc.robot.swerve.SwervePosition;
@@ -18,6 +19,8 @@ import frc.robot.utils.trajectories.CubicBezierCurve;
 import frc.robot.utils.trajectories.FeatherEvent;
 import frc.robot.utils.trajectories.FeatherFlow;
 import frc.robot.utils.trajectories.RobotPath;
+import frc.robot.subsystems.Intake;
+
 /**
  * Manages autonomous routines for the robot.
  * Uses {@link RoutineManager} to automatically detect and handle routines
@@ -27,18 +30,19 @@ public class Auto {
     public static RoutineManager routineManager;
 
     @AutoRoutine()
-    public  SequentialCommandGroup basicAuto(){
+    public  SequentialCommandGroup AutoSweep(){
         System.out.println("Starting Test Path Auto Routine");
 
         return new SequentialCommandGroup(
             FeatherFlow.buildFeatherAuto(
-                "BasicAuto", 
+                "Auto Sweep", 
                 new InstantCommand(() -> {
-                    System.out.println("Debug One");
+                    Intake.startIntaking();
                 }),
                 new InstantCommand(() -> {
-                    System.out.println("Debug Two");
-                })
+                    Intake.stopIntaking();
+                }),
+                new Shoot()
             ),
             new WaitCommand(5)
         );

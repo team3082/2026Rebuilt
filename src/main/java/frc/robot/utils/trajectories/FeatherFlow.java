@@ -153,7 +153,7 @@ public class FeatherFlow {
         List<double[]> rotateKeyframes = new ArrayList<>(); // {t, heading}
         for (FeatherActionDescriptor action : actions) {
             if (action.type.equals("rotate")) {
-                rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading+90)});
+                rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading)});
             }
         }
         rotateKeyframes.sort((a, b) -> Double.compare(a[0], b[0]));

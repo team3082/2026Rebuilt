@@ -205,6 +205,6 @@ public class Constants {
     public static final double MAX_ROT_ACCELERATION = Math.PI * 4; // 720 deg/s²
 
     public static class TrajectoryConstants{
-        public static final int CURVE_RESOLUTION = 2000;
+        public static final int CURVE_RESOLUTION = 3000;
     }
 }
