@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.utils.Vector2;
+import frc.robot.vision.VisionManager;
 
 import static frc.robot.swerve.SwerveManager.mods;
 
@@ -35,6 +36,8 @@ public class Odometry {
 
         odomThread.setDaemon(true);
         odomThread.start();
+
+        VisionManager.init();
     }
     
     private static Thread odomThread= new Thread(){
@@ -75,6 +78,12 @@ public class Odometry {
                     position = position.add(innovation);
 
                     odometryBuffer.addValue(innovation);
+
+                    Optional<Vector2> visionPos = Optional.empty();
+                    if (real) {
+                        visionPos = VisionManager.getPosition(pigeonAngle);
+                    }
+                    if (visionPos.isPresent() && VisionManager.isEnabled()) position = new Vector2(-visionPos.get().y, visionPos.get().x).add(odometryBuffer.getTotalBuffer());
 
                     try {
                         sleep(7);

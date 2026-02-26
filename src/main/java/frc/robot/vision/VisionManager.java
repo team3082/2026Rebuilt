@@ -22,8 +22,7 @@ public class VisionManager {
 
         if (Robot.isReal()) {
             cameras = new Camera[] {
-                new Camera(new PhotonCamera("ApriltagCamera4"), new Vector2(-9.3, 8.9), 0.0, Math.toRadians(-15)), // test these later
-                new Camera(new PhotonCamera("ApriltagCamera2"), new Vector2(9.3, 8.9), 0, Math.toRadians(15))
+                new Camera(new PhotonCamera("ApriltagCamera3"), new Vector2(11.0, 8.5), 0, Math.toRadians(15.0), -Math.PI/2)
             };
         }
 
@@ -33,17 +32,15 @@ public class VisionManager {
 
         List<Vector2> positions = new ArrayList<>();
 
+
         for (Camera camera : cameras) {
             if(camera.isDisabled()) continue;
-            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();
-            
-            System.out.println();
-            
+            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();  
             
             
             if (target != null) if (camera.isLatestTarget(target)) {
                 continue;
-            }
+            }        
 
             camera.setLatestTarget(target);
             if (target == null) continue; // Skip if no april tags are found
@@ -60,7 +57,7 @@ public class VisionManager {
 
             // Rotate robot position to align with field coordinate frame
             double xdistRobot = vectorTransform.x * Math.cos(camera.cameraPitch) - transform.getZ() * Math.sin(camera.cameraPitch);
-            double ydistRobot = vectorTransform.y;
+            double ydistRobot = vectorTransform.y * Math.cos(camera.cameraRoll) + transform.getZ() * Math.sin(camera.cameraRoll);
 
             Vector2 distRobot = new Vector2(xdistRobot, ydistRobot);
 
@@ -99,8 +96,6 @@ public class VisionManager {
     };
 
     public static Optional<Double> getRotation(double pigeonAngle) {
-
-        // Warning! Current solution does not account for cameras having roll, only pitch and yaw
 
         List<Double> robotYaws = new ArrayList<>();
 

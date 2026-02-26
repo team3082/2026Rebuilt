@@ -11,14 +11,14 @@ public class Indexer {
     private static TalonFX handoffMotor;
 
     public static void init() {
-        spindexerMotor = new TalonFX(Constants.Indexer.SPINDEXER_ID);
+        spindexerMotor = new TalonFX(Constants.Indexer.SPINDEXER_ID, "CANivore");
         spindexerMotor.getConfigurator().apply(new TalonFXConfiguration());
         TalonFXConfiguration spindexerConfiguration = new TalonFXConfiguration();
         spindexerConfiguration.CurrentLimits.StatorCurrentLimit = 120;
         spindexerConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         spindexerMotor.getConfigurator().apply(spindexerConfiguration);
 
-        handoffMotor = new TalonFX(Constants.Indexer.HANDOFF_ID);
+        handoffMotor = new TalonFX(Constants.Indexer.HANDOFF_ID, "CANivore");
         handoffMotor.getConfigurator().apply(new TalonFXConfiguration());
         TalonFXConfiguration handoffConfiguration = new TalonFXConfiguration();
         spindexerConfiguration.CurrentLimits.StatorCurrentLimit = 100;
