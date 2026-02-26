@@ -9,6 +9,7 @@ import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherEvent;
 import frc.robot.utils.trajectories.ProfiledPath;
 import frc.robot.utils.trajectories.ProfiledPoint;
+import frc.robot.utils.trajectories.RobotPath;
 
 /**
  * Command that follows a {@link RobotPath} using a {@link PurePursuit} algorithm
@@ -68,7 +69,7 @@ public class FollowPath extends Command {
 
     Vector2 driveVector = holonomicDriveController.calculate();
     double rotOutput = holonomicDriveController.calculateRotation();
-    SwerveManager.rotateAndDrive(rotOutput, driveVector);
+    SwerveManager.rotateAndDriveFF(rotOutput, driveVector);
 
   
     double duration = path.getDuration();
@@ -96,7 +97,7 @@ public class FollowPath extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    SwerveManager.rotateAndDrive(0, new Vector2());
+    SwerveManager.rotateAndDriveFF(0, new Vector2());
 
     for (FeatherEvent event : events) {
       if (event.command.isScheduled()) {
