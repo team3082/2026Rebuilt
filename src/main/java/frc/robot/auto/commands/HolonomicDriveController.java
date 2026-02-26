@@ -20,15 +20,14 @@ public class HolonomicDriveController {
     private double startTime;
     private boolean isFinished;
 
-
     public HolonomicDriveController(ProfiledPath path) {
         double posKp = 0.01;
-        double posKi = 0.005;
-        double posKd = 0;
+        double posKi = 0;
+        double posKd = 0.001;
 
         this.xPositionPID = new PIDController(posKp, posKi, posKd);
         this.yPositionPID = new PIDController(posKp, posKi, posKd);
-        this.rotationPID  = new PIDController(0.08, 0, 0.001);
+        this.rotationPID  = new PIDController(0.009, 0, 0.01);
         this.rotationPID.enableContinuousInput(-Math.PI, Math.PI);
 
         this.path = path;
@@ -101,10 +100,8 @@ public class HolonomicDriveController {
 
         double currentHeading = Pigeon.getRotationRad();
 
-        // Feedforward: scale profiled rot velocity to [-1, 1]
-        double rotFF = desiredRotVel / Constants.MAX_ROT_VELOCITY;
+        double rotFF = desiredRotVel;
 
-        // Feedback: PID on heading error (continuous input already enabled)
         double rotFeedback = rotationPID.calculate(currentHeading, desiredHeading);
 
         double rotOutput = rotFF + rotFeedback;

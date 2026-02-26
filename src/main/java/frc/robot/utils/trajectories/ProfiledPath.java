@@ -43,179 +43,13 @@ public class ProfiledPath {
         return result;
     }
 
-    public static ProfiledPath generateProfiledPath(RobotPath path, double maxVelocity, double maxAcceleration, double maxLateralAcceleration) {
-        // Delegate with tangent-following headings (no rotation override)
-        return generateProfiledPath(path, maxVelocity, maxAcceleration, maxLateralAcceleration, null);
-    }
-
-    /**
-     * Generates a speed profile that jointly limits translational and rotational velocity
-     * against the physical swerve module speed limit.
-     *
-     * <p>At each point the rotational demand consumes {@code |omega| * r_max} of module
-     * bandwidth, leaving {@code v_module_max - |omega| * r_max} for translation.
-     * Both translation and rotation are then forward/backward pass profiled against
-     * {@code maxAcceleration}.
-     *
-     * @param path                  The geometric path to follow.
-     * @param maxVelocity           Absolute translational speed cap (in/s).
-     * @param maxAcceleration       Max translational + rotational accel (in/s² / rad/s²).
-     * @param maxLateralAcceleration Max lateral acceleration for curvature limiting (in/s²).
-     * @param targetHeadings        Per-point target headings in radians, or {@code null}
-     *                              to follow the path tangent.
-     */
-    public static ProfiledPath generateProfiledPath(
-            RobotPath path, double maxVelocity, double maxAcceleration,
-            double maxLateralAcceleration, double[] targetHeadings) {
-
-        if (path.getPoints().size() < 2) {
-            return new ProfiledPath(new ArrayList<>());
-        }
-
-        ArrayList<ProfiledPoint> profiledPoints = initializeProfiledPoints(path);
-        int N = profiledPoints.size();
-
-        // ── 1. Resolve target headings ────────────────────────────────────────────
-        double[] headings = new double[N];
-        if (targetHeadings != null && targetHeadings.length == N) {
-            // Caller supplied per-point headings (e.g. from rotate descriptors)
-            System.arraycopy(targetHeadings, 0, headings, 0, N);
-        } else {
-            // Default: follow the path tangent
-            headings[0] = profiledPoints.get(1).getPosition()
-                              .sub(profiledPoints.get(0).getPosition()).atan2();
-            for (int i = 1; i < N - 1; i++) {
-                Vector2 dir = profiledPoints.get(i + 1).getPosition()
-                                  .sub(profiledPoints.get(i - 1).getPosition());
-                headings[i] = (dir.mag() > 1e-9) ? dir.atan2() : headings[i - 1];
-            }
-            headings[N - 1] = headings[N - 2];
-        }
-
-        // Unwrap headings to remove ±2π jumps
-        for (int i = 1; i < N; i++) {
-            double delta = headings[i] - headings[i - 1];
-            while (delta >  Math.PI) delta -= 2 * Math.PI;
-            while (delta < -Math.PI) delta += 2 * Math.PI;
-            headings[i] = headings[i - 1] + delta;
-        }
-
-        // ── 2. Compute per-point heading change per unit distance (rad/in) ────────
-        // This gives us the "rotational demand density" at each point.
-        // r_max is the distance from center to the farthest module (in).
-        double r_max = Math.hypot(
-            Math.abs(Constants.Swerve.SWERVEMODX0),
-            Math.abs(Constants.Swerve.SWERVEMODY0)
-        );
-        double v_module_max = Constants.Swerve.maxChassisVelocity;
-
-        // dtheta[i] = heading change between point i-1 and i (radians)
-        double[] dtheta = new double[N];
-        dtheta[0] = 0.0;
-        for (int i = 1; i < N; i++) {
-            dtheta[i] = headings[i] - headings[i - 1];
-        }
-
-        // ── 3. Translational velocity ceiling at each point ───────────────────────
-        // For a swerve drive the worst-case module speed is v_trans + |omega| * r_max.
-        // We don't yet know v_trans (circular dependency), so we iteratively cap:
-        // given ds between points, omega = dtheta / dt and dt = ds / v_trans →
-        // omega = dtheta * v_trans / ds  →  v_trans + (dtheta/ds) * r_max * v_trans ≤ v_module_max
-        // → v_trans ≤ v_module_max / (1 + (dtheta/ds) * r_max)
-        ArrayList<Double> scalarVelocities = new ArrayList<>();
-        for (int i = 0; i < N; i++) scalarVelocities.add(maxVelocity);
-
-        // Lateral (curvature) constraint
-        for (int i = 0; i < N; i++) {
-            double curvature = profiledPoints.get(i).getCurvature();
-            if (Math.abs(curvature) > 1e-9) {
-                scalarVelocities.set(i, Math.min(scalarVelocities.get(i),
-                    Math.sqrt(maxLateralAcceleration / Math.abs(curvature))));
-            }
-        }
-
-        // Module-speed constraint: v_trans * (1 + dtheta/ds * r_max) ≤ v_module_max
-        for (int i = 1; i < N; i++) {
-            double ds = profiledPoints.get(i).getDistance() - profiledPoints.get(i - 1).getDistance();
-            if (ds > 1e-9 && dtheta[i] > 1e-9) {
-                double rotDemandFraction = (Math.abs(dtheta[i]) / ds) * r_max;
-                double v_cap = v_module_max / (1.0 + rotDemandFraction);
-                scalarVelocities.set(i, Math.min(scalarVelocities.get(i), v_cap));
-            }
-        }
-
-        // ── 4. Forward pass (acceleration) ───────────────────────────────────────
-        scalarVelocities.set(0, 0.0);
-        for (int i = 1; i < N; i++) {
-            double prev_v = scalarVelocities.get(i - 1);
-            double ds = profiledPoints.get(i).getDistance() - profiledPoints.get(i - 1).getDistance();
-            double v_accel = Math.sqrt(prev_v * prev_v + 2 * maxAcceleration * ds);
-            scalarVelocities.set(i, Math.min(scalarVelocities.get(i), v_accel));
-        }
-
-        // ── 5. Backward pass (deceleration) ──────────────────────────────────────
-        scalarVelocities.set(N - 1, 0.0);
-        for (int i = N - 2; i >= 0; i--) {
-            double next_v = scalarVelocities.get(i + 1);
-            double ds = profiledPoints.get(i + 1).getDistance() - profiledPoints.get(i).getDistance();
-            double v_decel = Math.sqrt(next_v * next_v + 2 * maxAcceleration * ds);
-            scalarVelocities.set(i, Math.min(scalarVelocities.get(i), v_decel));
-        }
-
-        // ── 6. Integrate time, build velocity vectors and rotational velocity ─────
-        double accumulatedTime = 0.0;
-        profiledPoints.get(0).setTime(0.0);
-        profiledPoints.get(0).setVelocity(new Vector2(0, 0));
-        profiledPoints.get(0).setHeading(headings[0]);
-        profiledPoints.get(0).setRotationalVelocity(0.0);
-
-        for (int i = 1; i < N; i++) {
-            double v_avg = (scalarVelocities.get(i) + scalarVelocities.get(i - 1)) / 2.0;
-            double ds = profiledPoints.get(i).getDistance() - profiledPoints.get(i - 1).getDistance();
-            double dt = (Math.abs(v_avg) > 1e-9) ? ds / v_avg : 0.0;
-            accumulatedTime += dt;
-            profiledPoints.get(i).setTime(accumulatedTime);
-
-            // Translational velocity vector along path tangent
-            Vector2 direction = profiledPoints.get(i).getPosition()
-                                    .sub(profiledPoints.get(i - 1).getPosition()).norm();
-            if (direction.mag() == 0 && i > 1) {
-                direction = profiledPoints.get(i - 1).getPosition()
-                                .sub(profiledPoints.get(i - 2).getPosition()).norm();
-            }
-            profiledPoints.get(i).setVelocity(direction.mul(scalarVelocities.get(i)).rotate(-Math.PI/2));
-
-            // Rotational velocity: heading change over elapsed time
-            double rotVel = (dt > 1e-9) ? (dtheta[i] / dt) : 0.0;
-            profiledPoints.get(i).setHeading(headings[i]);
-            profiledPoints.get(i).setRotationalVelocity(rotVel);
-        }
-
-        // ── 7. Translational acceleration ─────────────────────────────────────────
-        for (int i = 1; i < N; i++) {
-            double dv = scalarVelocities.get(i) - scalarVelocities.get(i - 1);
-            double dt = profiledPoints.get(i).getTime() - profiledPoints.get(i - 1).getTime();
-            profiledPoints.get(i).setAcceleration((dt > 1e-9) ? dv / dt : 0.0);
-        }
-        profiledPoints.get(0).setAcceleration(profiledPoints.get(1).getAcceleration());
-
-        return new ProfiledPath(profiledPoints);
-    }
-
-        /**
-     * Simplified velocity profiling using just:
-     * - maxTransVelocity: max robot translation speed (in/s)
-     * - maxRotVelocity: max robot rotation speed (rad/s)  
-     * - maxWheelSpeed: physical module speed limit (in/s)
-     * - maxAcceleration: max accel/decel (in/s²)
-     */
     public static ProfiledPath generateSimplifiedProfile(
-            RobotPath path,
-            double maxTransVelocity,
-            double maxRotVelocity,
-            double maxWheelSpeed,
-            double maxAcceleration,
-            double[] targetHeadings) {
+        RobotPath path,
+        double maxTransVelocity,
+        double maxRotVelocity,
+        double maxWheelSpeed,
+        double maxAcceleration,
+        double[] targetHeadings) {
 
         ArrayList<ProfiledPoint> points = initializeProfiledPoints(path);
         int N = points.size();
@@ -225,10 +59,12 @@ public class ProfiledPath {
         if (targetHeadings != null && targetHeadings.length == N) {
             System.arraycopy(targetHeadings, 0, headings, 0, N);
         } else {
-           
+            // Default: hold the initial path heading throughout
+            double initialHeading = points.get(0).getHeading();
+            for (int i = 0; i < N; i++) headings[i] = initialHeading;
         }
 
-        // Unwrap to eliminate ±2π jumps (fixes Bug 1)
+        // Unwrap to eliminate ±2 pi jumps
         for (int i = 1; i < N; i++) {
             double delta = headings[i] - headings[i - 1];
             while (delta >  Math.PI) delta -= 2 * Math.PI;
@@ -240,12 +76,10 @@ public class ProfiledPath {
         double[] dtheta = new double[N];
         dtheta[0] = 0.0;
         for (int i = 1; i < N; i++) {
-            dtheta[i] = headings[i] - headings[i - 1]; // already unwrapped
+            dtheta[i] = headings[i] - headings[i - 1];
         }
 
-        // ── 3. Module-speed constraint: linear worst-case (fixes Bugs 2, 3, 4)
-        // v_trans + |dtheta/ds| * r_max * v_trans ≤ maxWheelSpeed
-        // → v_trans ≤ maxWheelSpeed / (1 + |dtheta/ds| * r_max)
+        // ── 3. Velocity constraints ────────────────────────────────────
         double r_max = Math.hypot(
             Math.abs(Constants.Swerve.SWERVEMODX0),
             Math.abs(Constants.Swerve.SWERVEMODY0)
@@ -256,14 +90,22 @@ public class ProfiledPath {
         for (int i = 1; i < N; i++) {
             double ds = points.get(i).getDistance() - points.get(i - 1).getDistance();
             if (ds > 1e-9) {
+                // Wheel speed constraint: translation + rotation share wheel budget
                 double rotDensity = (Math.abs(dtheta[i]) / ds) * r_max;
-                double v_cap = maxWheelSpeed / (1.0 + rotDensity);
-                velocities.set(i, Math.min(velocities.get(i), v_cap));
+                double v_wheel = maxWheelSpeed / (1.0 + rotDensity);
+                velocities.set(i, Math.min(velocities.get(i), v_wheel));
+
+                // ── FIX: maxRotVelocity constraint ──────────────────────
+                // omega = dtheta/dt = dtheta * v/ds  =>  v <= maxRotVelocity * ds / |dtheta|
+                // This ensures omega is never clipped after the fact.
+                if (Math.abs(dtheta[i]) > 1e-9) {
+                    double v_rot = maxRotVelocity * ds / Math.abs(dtheta[i]);
+                    velocities.set(i, Math.min(velocities.get(i), v_rot));
+                }
             }
         }
 
-        // Lateral (curvature) constraint: v ≤ sqrt(maxLateralAcceleration / |k|)
-        // Reuse maxAcceleration as the lateral limit (same physical units).
+        // Lateral (curvature) constraint
         for (int i = 0; i < N; i++) {
             double k = points.get(i).getCurvature();
             if (Math.abs(k) > 1e-9) {
@@ -290,7 +132,7 @@ public class ProfiledPath {
             velocities.set(i, Math.min(velocities.get(i), v_decel));
         }
 
-        // ── 6. Integrate time, set velocity vectors and omega (fixes Bugs 5, 6) ──
+        // ── 6. Integrate time, set velocity vectors and omega ─────────
         double time = 0.0;
         points.get(0).setTime(0.0);
         points.get(0).setVelocity(new Vector2(0, 0));
@@ -303,13 +145,12 @@ public class ProfiledPath {
             double dt = (v_avg > 1e-9) ? ds / v_avg : 0.0;
             time += dt;
 
-            // Omega from actual dt — no pre-estimate bias (fixes Bug 2)
+            // Omega is now guaranteed within maxRotVelocity by the step 3 cap —
+            // no clamp needed here, but kept as a safety net for floating point edge cases
             double omega = (dt > 1e-9) ? dtheta[i] / dt : 0.0;
-            omega = Math.max(-maxRotVelocity, Math.min(maxRotVelocity, omega));
 
-            // Translational velocity vector along path tangent (no spurious rotation)
             Vector2 dir = points.get(i).getPosition()
-                              .sub(points.get(i - 1).getPosition()).norm();
+                            .sub(points.get(i - 1).getPosition()).norm();
             points.get(i).setVelocity(dir.mul(velocities.get(i)));
             points.get(i).setTime(time);
             points.get(i).setHeading(headings[i]);
@@ -318,7 +159,7 @@ public class ProfiledPath {
 
         return new ProfiledPath(points);
     }
-
+        
     /**
      * Initializes the list of ProfiledPoint objects from the RobotPath.
      * @param path The path to profile.

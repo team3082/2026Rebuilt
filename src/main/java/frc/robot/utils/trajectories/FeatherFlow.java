@@ -199,18 +199,11 @@ public class FeatherFlow {
             profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
                 segPath,
                 200,
-                0.1,
+                5,
                 200,
                 200,
                 targetHeadings
             ));
-            // profiledPaths.add(ProfiledPath.generateProfiledPath(
-            //     segPath,
-            //     Constants.MAX_PATH_VELOCITY,
-            //     Constants.MAX_PATH_ACCELERATION,
-            //     79.0,
-            //     targetHeadings
-            // ));
 
             segmentStartT = segEndT;
         }

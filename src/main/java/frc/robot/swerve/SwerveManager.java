@@ -57,39 +57,40 @@ public final class SwerveManager {
                 mods[i].pos.mag());
         }
 
-        // The greatest speed of the modules. If any one module's speed is
-        // greater than 1.0, all the speeds are scaled down.
-        double maxSpeed = 1.0;
-
-        // Calculate unclamped movement vectors
+        // Pass 1: compute per-module rotate vectors at full rotSpeed
+        Vector2[] rotateVecs = new Vector2[mods.length];
         for (int i = 0; i < mods.length; i++) {
-            // The vector representing the direction the module should move to achieve the
-            // desired rotation. Calculated by taking the derivative of the module's
-            // position on the circle around the center of rotation, normalizing the
-            // resulting vector according to maxModPosMagnitude (such that the magnitude of
-            // the largest vector is 1), and scaling it by a factor of rotSpeed.
-
-            Vector2 rotate = new Vector2(
+            rotateVecs[i] = new Vector2(
                 (-1 * mods[i].pos.y / maxModPosMagnitude) * rotSpeed,
                 (     mods[i].pos.x / maxModPosMagnitude) * rotSpeed);
-
-            // The final movement vector, calculated by summing movement and rotation
-            // vectors
-
-            Vector2 rotMove = relMove.add(rotate);
-
-            vectors[i] = rotMove;
-            maxSpeed = Math.max(maxSpeed, rotMove.mag());
         }
 
+        // Pass 2: scale rotation down to preserve full translation
+        double rotScale = 1.0;
+        double transMag = relMove.mag();
+        if (transMag > 1e-9) {
+            for (int i = 0; i < mods.length; i++) {
+                double rotMag = rotateVecs[i].mag();
+                if (rotMag > 1e-9) {
+                    double s = (1.0 - transMag) / rotMag;
+                    if (s < rotScale) rotScale = Math.max(0.0, s);
+                }
+            }
+        }
+
+        // Pass 3: build final vectors and find the largest magnitude
+        double maxSpeed = 1.0;
         for (int i = 0; i < mods.length; i++) {
-            // Convert the movement vectors to a directions and magnitudes, clamping the
-            // magnitudes based on 'max'. 
+            vectors[i] = relMove.add(rotateVecs[i].mul(rotScale));
+            maxSpeed = Math.max(maxSpeed, vectors[i].mag());
+        }
+
+        // Pass 4: drive
+        for (int i = 0; i < mods.length; i++) {
             double direction = vectors[i].atan2();
             double power = vectors[i].mag() / maxSpeed;
 
-            // Drive the swerve modules
-            if(power != 0)
+            if (power != 0)
                 mods[i].rotateToRad(direction);
             mods[i].drive(power);
         }
