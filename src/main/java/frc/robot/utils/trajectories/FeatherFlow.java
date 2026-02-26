@@ -191,18 +191,14 @@ public class FeatherFlow {
         double endRotation   = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(rotateByDist.size() - 1)[1];
 
         List<ProfiledPath> profiledPaths = new ArrayList<>();
-        double segmentStartT = 0.0;
+        List<Double> sortedSplits = new ArrayList<>(splitValues);
+        sortedSplits.sort(Double::compareTo);
         double segmentDistOffset = 0.0;
 
         for (int segIdx = 0; segIdx < paths.size(); segIdx++) {
             RobotPath segPath = paths.get(segIdx);
             List<Vector2> segPts = segPath.getPoints();
             int pointCount = segPts.size();
-
-            double segEndT = 1.0;
-            if (!splitValues.isEmpty() && segIdx < splitValues.size()) {
-                segEndT = splitValues.get(segIdx);
-            }
 
             // Compute cumulative arc-length within this segment
             double[] segDist = new double[pointCount];
@@ -263,7 +259,6 @@ public class FeatherFlow {
             ));
 
             segmentDistOffset += segDist[pointCount - 1];
-            segmentStartT = segEndT;
         }
         
         return new FeatherPath(profiledPaths, actions);

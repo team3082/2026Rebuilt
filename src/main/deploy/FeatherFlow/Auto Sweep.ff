@@ -189,40 +189,6 @@
       "isCurved": true,
       "handlesAligned": true,
       "name": ""
-    },
-    {
-      "position": {
-        "x": 117.1659797797875,
-        "y": 295.83060772656756
-      },
-      "handleOutOffset": {
-        "x": 20,
-        "y": 0
-      },
-      "handleInOffset": {
-        "x": -20,
-        "y": 0
-      },
-      "isCurved": true,
-      "handlesAligned": true,
-      "name": ""
-    },
-    {
-      "position": {
-        "x": 116.38791884132348,
-        "y": 275.6112768808195
-      },
-      "handleOutOffset": {
-        "x": 20,
-        "y": 0
-      },
-      "handleInOffset": {
-        "x": -20,
-        "y": 0
-      },
-      "isCurved": true,
-      "handlesAligned": true,
-      "name": ""
     }
   ],
   "controlPoints": [
@@ -364,5 +330,5 @@
     }
   ],
   "created": "2026-02-26T03:34:10.740Z",
-  "lastModified": "2026-02-26T22:39:32.136Z"
+  "lastModified": "2026-02-26T22:43:01.229Z"
 }
