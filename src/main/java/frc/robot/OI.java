@@ -5,7 +5,6 @@ import frc.robot.controllermaps.LogitechF310;
 import frc.robot.subsystems.AutoTarget;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
-import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.SwerveManager;
@@ -28,14 +27,12 @@ public class OI {
     private static boolean intakeToggled = false;
     private static final int reverseIntake = LogitechF310.AXIS_LEFT_TRIGGER;
 
-    private static final int toggleShooter = LogitechF310.BUTTON_RIGHT_BUMPER;
-    private static boolean shooterToggled = false;
-    private static final int activateShooter = LogitechF310.AXIS_RIGHT_TRIGGER;
+    private static final int shoot = LogitechF310.BUTTON_RIGHT_BUMPER;
 
     private static final int zeroTurret = LogitechF310.BUTTON_X;
     private static final int zeroHood = LogitechF310.BUTTON_A;
 
-    private static final int intakeFeed = LogitechF310.BUTTON_A;
+    private static final int intakeFeed = LogitechF310.AXIS_RIGHT_TRIGGER;
 
     /**
      * Initialize OI with preset joystick ports.
@@ -89,6 +86,9 @@ public class OI {
             intakeToggled = false; // toggle goes off so it stops when reverse button is released
         } else if (intakeToggled) {
             Intake.startIntaking();
+        } else if (driverStick.getRawAxis(intakeFeed) > 0.10) {
+            System.out.println("it is");
+            Intake.startFeeding(driverStick.getRawAxis(intakeFeed));
         } else {
             Intake.stopIntaking();
         }
@@ -99,19 +99,10 @@ public class OI {
         if (AutoTarget.nearTrench() && ShooterManager.getTarget() != ShooterTarget.HUB) { // prevents us from decapitation under the trench
             ShooterManager.stopShooting();
         } else {
-            if (driverStick.getRawButtonPressed(toggleShooter)) { // toggles shooting on and off when this button pressed
-                shooterToggled = !shooterToggled;
-            }
-
-            if (driverStick.getRawAxis(activateShooter) > 0.25) { // shoots while this button is pressed for option that is not a toggle, may remove later because it is redundant
+            if (driverStick.getRawButton(shoot)) { // toggles shooting on and off when this button pressed
                 ShooterManager.shoot();
-                shooterToggled = false; // toggles shooter off if we shoot with this button
             } else {
-                if (shooterToggled) {
-                    ShooterManager.shoot();
-                } else {
-                    ShooterManager.stopShooting();
-                }
+                ShooterManager.stopShooting();
             }
         }
 
@@ -125,16 +116,6 @@ public class OI {
 
     }
 
-    private static void operatorInput() {
-        if (Intake.getIntakeState() == IntakeState.INTAKING || Intake.getIntakeState() == IntakeState.REVERSE) {
-            return; // driver overrides operator if they are intaking
-        }
-
-        if (operatorStick.getRawButton(intakeFeed)) {
-            Intake.startFeeding();
-        } else {
-            Intake.stopIntaking();
-        }
-    }
+    private static void operatorInput() {}
 
 }

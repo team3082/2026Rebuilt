@@ -21,6 +21,8 @@ public class Intake {
     private static TalonFX rollerMotor;
     public static IntakeState rollerState;
 
+    private static double feedPercent; // percent that the intake should raise
+
     public static void init(){
         rollerState = IntakeState.INTAKING;
 
@@ -66,7 +68,9 @@ public class Intake {
                 break;
 
             case FEEDING:
-                pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_UP_ANGLE));
+                double targetAngle = feedPercent * (Constants.Intake.INTAKE_UP_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE; // lets driver control how far intake raises
+
+                pivotMotor.setControl(new PositionDutyCycle(targetAngle));
                 rollerMotor.set(0);
                 break;
         }
@@ -88,8 +92,13 @@ public class Intake {
         rollerState = IntakeState.RESTING;
     }
 
-    public static void startFeeding() {
+    /**
+     * Starts feeding by raising pivot angle
+     * @param percent percent that the intake should raise up
+     */
+    public static void startFeeding(double percent) {
         rollerState = IntakeState.FEEDING;
+        feedPercent = percent;
     }
 
     public static double getAngle() {
@@ -97,7 +106,7 @@ public class Intake {
             return pivotMotor.getPosition().getValueAsDouble();
         } else {
             if (rollerState == IntakeState.FEEDING) {
-                return Constants.Intake.INTAKE_UP_ANGLE;
+                return feedPercent * (Constants.Intake.INTAKE_UP_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE;
             } else {
                 return Constants.Intake.INTAKE_DOWN_ANGLE;
             }
@@ -119,7 +128,7 @@ public class Intake {
                     return Tuning.Intake.REVERSE_SPEED;
                 
                 case FEEDING:
-                    return 0;
+                    return 0;                    
             }
         }
         return 0;

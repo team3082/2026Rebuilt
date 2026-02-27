@@ -1,7 +1,6 @@
 package frc.robot;
 
 import frc.robot.subsystems.ShooterTableValue;
-import frc.robot.utils.Vector2;
 
 public final class Tuning {
     //Swerve
@@ -121,16 +120,16 @@ public final class Tuning {
         };
 
         public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = { //TODO tune
-            new ShooterTableValue(0.0, Math.toRadians(60.0), 1000),
-            new ShooterTableValue(60.0, Math.toRadians(60.0), 2800),
-            new ShooterTableValue(120.0, Math.toRadians(60.0), 3000),
-            new ShooterTableValue(180.0, Math.toRadians(60.0), 3200),
-            new ShooterTableValue(240.0, Math.toRadians(60.0), 3500),
-            new ShooterTableValue(300.0, Math.toRadians(60.0), 3700),
-            new ShooterTableValue(360.0, Math.toRadians(60.0), 3900),
-            new ShooterTableValue(420.0, Math.toRadians(60.0), 4000),
-            new ShooterTableValue(480.0, Math.toRadians(60.0), 4300),
-            new ShooterTableValue(540.0, Math.toRadians(60.0), 4600)
+            new ShooterTableValue(0.0, Math.toRadians(50.0), 800),
+            new ShooterTableValue(60.0, Math.toRadians(50.0), 1000),
+            new ShooterTableValue(120.0, Math.toRadians(50.0), 1300),
+            new ShooterTableValue(180.0, Math.toRadians(50.0), 1600),
+            new ShooterTableValue(240.0, Math.toRadians(50.0), 2000),
+            new ShooterTableValue(300.0, Math.toRadians(50.0), 2300),
+            new ShooterTableValue(360.0, Math.toRadians(50.0), 2600),
+            new ShooterTableValue(420.0, Math.toRadians(50.0), 3000),
+            new ShooterTableValue(480.0, Math.toRadians(50.0), 3300),
+            new ShooterTableValue(540.0, Math.toRadians(50.0), 3600)
         };
     }
 
