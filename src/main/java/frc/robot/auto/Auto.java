@@ -1,24 +1,15 @@
 package frc.robot.auto;
 
-import java.util.List;
-import java.util.Vector;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.auto.commands.FollowPath;
 import frc.robot.auto.commands.Shoot;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
-import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
-import frc.robot.utils.trajectories.CubicBezierCurve;
-import frc.robot.utils.trajectories.FeatherEvent;
 import frc.robot.utils.trajectories.FeatherFlow;
-import frc.robot.utils.trajectories.RobotPath;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -30,7 +21,7 @@ public class Auto {
     public static RoutineManager routineManager;
 
     @AutoRoutine()
-    public  SequentialCommandGroup AutoSweep(){
+    public SequentialCommandGroup AutoSweep(){
         System.out.println("Starting Test Path Auto Routine");
 
         return new SequentialCommandGroup(
@@ -54,112 +45,18 @@ public class Auto {
         );
     }
 
-    @AutoRoutine
-    public SequentialCommandGroup Smally(){
-        System.out.println("Starting Long Line");
-
-        return FeatherFlow.buildFeatherAuto(
-            "Smally", 
-            new InstantCommand(() -> {
-                System.out.println("Debug One");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Two");
-            })
-        );
-    }
-
-     @AutoRoutine
-    public SequentialCommandGroup Smally2(){
-        System.out.println("Starting Long Line");
-
-        return FeatherFlow.buildFeatherAuto(
-            "Smally (Copy)", 
-            new InstantCommand(() -> {
-                System.out.println("Debug One");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Two");
-            })
-        );
-    }
-
-
     @AutoRoutine()
-    public  SequentialCommandGroup exampleAuto(){
-        System.out.println("Starting Test Path Auto Routine");
-
-        return FeatherFlow.buildFeatherAuto(
-            "ExampleAuto", 
+    public SequentialCommandGroup Left3Piece() {
+        
+        return new SequentialCommandGroup(
             new InstantCommand(() -> {
-                System.out.println("Debug One");
+                Intake.startIntaking();
             }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Two");
-            })
-        );
-    }
-
-    @AutoRoutine()
-    public  SequentialCommandGroup testTwo(){
-        System.out.println("Starting Test Two Auto Routine");
-
-        return FeatherFlow.buildFeatherAuto(
-            "Test2", 
-            new InstantCommand(() -> {
-                System.out.println("Debug One");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Two");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Three");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Four");
-            })
-        );
-    }
-
-    @AutoRoutine()
-    public  SequentialCommandGroup untitled3(){
-        System.out.println("Starting Test Two Auto Routine");
-
-        return FeatherFlow.buildFeatherAuto(
-            "Untitled 3", 
-            new InstantCommand(() -> {
-                System.out.println("Debug One");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Two");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Three");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Four");
-            })
-        );
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup Silly(){
-        System.out.println("Starting Test Two Auto Routine");
-
-        return FeatherFlow.buildFeatherAuto(
-            "Silly", 
-            new InstantCommand(() -> {
-                System.out.println("Debug One");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Two");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Three");
-            }),
-            new InstantCommand(() -> {
-                System.out.println("Debug Four");
-            })
+            FeatherFlow.buildFeatherAuto("3 Piece Left", 
+            
+            new Shoot(),
+            new Shoot(),
+            new Shoot())
         );
     }
 

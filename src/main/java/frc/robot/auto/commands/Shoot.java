@@ -13,6 +13,7 @@ public class Shoot extends Command{
     
     @Override
     public void initialize() {
+        System.out.println("shooting");
         lastShotTime = RTime.now();
         ShooterManager.shoot();
     }

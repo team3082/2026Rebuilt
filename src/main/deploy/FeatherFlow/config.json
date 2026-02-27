@@ -2,14 +2,25 @@
   "snapPoints": [
     {
       "position": {
-        "x": 122.98179622986319,
-        "y": 197.50108525166127
+        "x": 510,
+        "y": 25
       },
-      "name": "Start",
-      "color": "blue",
+      "name": "Trench Alliance Side",
+      "color": "purple",
       "enabled": true,
       "locked": true,
       "id": "snap-1772141201226"
+    },
+    {
+      "position": {
+        "x": 415,
+        "y": 25
+      },
+      "name": "Trench Neutral Side",
+      "color": "purple",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1772209472910"
     }
   ],
   "snapSettings": {
