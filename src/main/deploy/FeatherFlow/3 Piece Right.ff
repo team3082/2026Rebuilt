@@ -1,11 +1,11 @@
 {
-  "id": "1772207870067",
-  "name": "3 Piece Left",
+  "id": "1772253422633",
+  "name": "3 Piece Right",
   "anchorPoints": [
     {
       "position": {
         "x": 510,
-        "y": 25
+        "y": 292
       },
       "handleOutOffset": {
         "x": 0,
@@ -18,38 +18,38 @@
       "isCurved": false,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772141201226"
+      "snapPointId": "snap-1772253433219"
     },
     {
       "position": {
         "x": 415,
-        "y": 25
+        "y": 292
       },
       "handleOutOffset": {
-        "x": -53.20585540605799,
-        "y": -3.4823920532605257
+        "x": -38.427485141396176,
+        "y": -3.349914684411658
       },
       "handleInOffset": {
-        "x": 12.27900313120648,
-        "y": 0.8036766367110394
+        "x": 90.07652138251879,
+        "y": 7.852417627375785
       },
       "isCurved": true,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772209472910"
+      "snapPointId": "snap-1772253494052"
     },
     {
       "position": {
-        "x": 339.09755448642466,
-        "y": 100.63609717354674
+        "x": 337.8322471414835,
+        "y": 220.26411136484495
       },
       "handleOutOffset": {
-        "x": -2.7983670420368214,
-        "y": 18.18016631270457
+        "x": 5.442783803909947,
+        "y": -25.8401191203275
       },
       "handleInOffset": {
-        "x": 7.0766446203064675,
-        "y": -45.97487541857092
+        "x": -4.122210306378021,
+        "y": 19.57057439601585
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -58,7 +58,7 @@
     {
       "position": {
         "x": 415,
-        "y": 25
+        "y": 292
       },
       "handleOutOffset": {
         "x": 20,
@@ -71,65 +71,12 @@
       "isCurved": true,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772209472910"
+      "snapPointId": "snap-1772253494052"
     },
     {
       "position": {
         "x": 510,
-        "y": 25
-      },
-      "handleOutOffset": {
-        "x": 0,
-        "y": 0
-      },
-      "handleInOffset": {
-        "x": 0,
-        "y": 0
-      },
-      "isCurved": false,
-      "handlesAligned": true,
-      "name": "",
-      "snapPointId": "snap-1772141201226"
-    },
-    {
-      "position": {
-        "x": 415,
-        "y": 25
-      },
-      "handleOutOffset": {
-        "x": -20.74016383390927,
-        "y": 15.547238615718593
-      },
-      "handleInOffset": {
-        "x": 3.345201144750945,
-        "y": -2.5076291986655406
-      },
-      "isCurved": true,
-      "handlesAligned": true,
-      "name": "",
-      "snapPointId": "snap-1772209472910"
-    },
-    {
-      "position": {
-        "x": 356.4925565986289,
-        "y": 133.17737375719153
-      },
-      "handleOutOffset": {
-        "x": 7.532235245861088,
-        "y": 20.565433066605443
-      },
-      "handleInOffset": {
-        "x": -13.690626311100516,
-        "y": -37.379828145377815
-      },
-      "isCurved": true,
-      "handlesAligned": true,
-      "name": ""
-    },
-    {
-      "position": {
-        "x": 415,
-        "y": 25
+        "y": 292
       },
       "handleOutOffset": {
         "x": 20,
@@ -142,56 +89,38 @@
       "isCurved": true,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772209472910"
-    },
-    {
-      "position": {
-        "x": 510,
-        "y": 25
-      },
-      "handleOutOffset": {
-        "x": 0,
-        "y": 0
-      },
-      "handleInOffset": {
-        "x": 0,
-        "y": 0
-      },
-      "isCurved": false,
-      "handlesAligned": true,
-      "name": "",
-      "snapPointId": "snap-1772141201226"
+      "snapPointId": "snap-1772253433219"
     },
     {
       "position": {
         "x": 415,
-        "y": 25
+        "y": 292
       },
       "handleOutOffset": {
-        "x": -24.153575942577277,
-        "y": 6.228791161574918
+        "x": -38.904588635034884,
+        "y": -13.423605389891407
       },
       "handleInOffset": {
-        "x": 19.36639778728249,
-        "y": -4.99426038015047
+        "x": 18.906226723027547,
+        "y": 6.52338800758313
       },
       "isCurved": true,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772209472910"
+      "snapPointId": "snap-1772253494052"
     },
     {
       "position": {
-        "x": 367.40413296765047,
-        "y": 127.74948524090908
+        "x": 345.7374856432186,
+        "y": 205.07803305003938
       },
       "handleOutOffset": {
-        "x": -15.922450395689452,
-        "y": -47.15371837802141
+        "x": 0.757686420266964,
+        "y": -31.04939757215334
       },
       "handleInOffset": {
-        "x": 5.229558029807421,
-        "y": 15.487132975827492
+        "x": -0.48790700226309386,
+        "y": 19.994047783206447
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -200,7 +129,25 @@
     {
       "position": {
         "x": 415,
-        "y": 25
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 29.666032399125186,
+        "y": 5.1303029154197475
+      },
+      "handleInOffset": {
+        "x": -13.350228935601953,
+        "y": -2.3087252622248022
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253494052"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 292
       },
       "handleOutOffset": {
         "x": 20,
@@ -213,12 +160,65 @@
       "isCurved": true,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772209472910"
+      "snapPointId": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 415,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": -15.79515281689254,
+        "y": -10.015744680752618
+      },
+      "handleInOffset": {
+        "x": 16.890507052961635,
+        "y": 10.710311456435592
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253494052"
+    },
+    {
+      "position": {
+        "x": 346.74379196464764,
+        "y": 182.17707437182244
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 415,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 23.604541036989474,
+        "y": 12.324675523601627
+      },
+      "handleInOffset": {
+        "x": -16.004866771300513,
+        "y": -8.35664584393505
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253494052"
     },
     {
       "position": {
         "x": 510,
-        "y": 25
+        "y": 292
       },
       "handleOutOffset": {
         "x": 0,
@@ -231,13 +231,13 @@
       "isCurved": false,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772141201226"
+      "snapPointId": "snap-1772253433219"
     }
   ],
   "controlPoints": [
     {
-      "id": 1772210379531,
-      "u": 1.01,
+      "id": 1772253851871,
+      "u": 1,
       "color": "blue",
       "attributes": [
         {
@@ -248,32 +248,32 @@
       "name": ""
     },
     {
-      "id": 1772210502950,
-      "u": 1.63,
+      "id": 1772253953492,
+      "u": 1.55,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
-          "heading": 110
+          "heading": 210
         }
       ],
       "name": ""
     },
     {
-      "id": 1772210522651,
-      "u": 1.99,
+      "id": 1772253964202,
+      "u": 1.98,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
-          "heading": 90
+          "heading": 270
         }
       ],
       "name": ""
     },
     {
-      "id": 1772210381348,
-      "u": 3,
+      "id": 1772253830774,
+      "u": 3.01,
       "color": "blue",
       "attributes": [
         {
@@ -284,8 +284,8 @@
       "name": ""
     },
     {
-      "id": 1772210107829,
-      "u": 4,
+      "id": 1772253609080,
+      "u": 4.09,
       "color": "green",
       "attributes": [
         {
@@ -300,8 +300,8 @@
       "name": ""
     },
     {
-      "id": 1772210382098,
-      "u": 4.98,
+      "id": 1772253847831,
+      "u": 5,
       "color": "blue",
       "attributes": [
         {
@@ -312,31 +312,31 @@
       "name": ""
     },
     {
-      "id": 1772210565417,
-      "u": 5.52,
+      "id": 1772253982837,
+      "u": 5.47,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
-          "heading": 120
+          "heading": 220
         }
       ],
       "name": ""
     },
     {
-      "id": 1772210578818,
-      "u": 5.95,
+      "id": 1772253983849,
+      "u": 6,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
-          "heading": 90
+          "heading": 270
         }
       ],
       "name": ""
     },
     {
-      "id": 1772210380299,
+      "id": 1772253854435,
       "u": 7,
       "color": "blue",
       "attributes": [
@@ -348,24 +348,24 @@
       "name": ""
     },
     {
-      "id": 1772210116195,
+      "id": 1772253677315,
       "u": 8,
-      "color": "blue",
+      "color": "green",
       "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        },
         {
           "type": "command",
           "stopping": true
-        },
-        {
-          "type": "rotate",
-          "heading": 180
         }
       ],
       "name": ""
     },
     {
-      "id": 1772210383032,
-      "u": 8.97,
+      "id": 1772253858294,
+      "u": 9,
       "color": "blue",
       "attributes": [
         {
@@ -376,19 +376,31 @@
       "name": ""
     },
     {
-      "id": 1772210588268,
-      "u": 9.99,
+      "id": 1772253984899,
+      "u": 9.54,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
-          "heading": 90
+          "heading": 230
         }
       ],
       "name": ""
     },
     {
-      "id": 1772210378631,
+      "id": 1772253985905,
+      "u": 10.01,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772253861823,
       "u": 11,
       "color": "blue",
       "attributes": [
@@ -400,9 +412,9 @@
       "name": ""
     },
     {
-      "id": 1772210134030,
-      "u": 11.9,
-      "color": "blue",
+      "id": 1772253752349,
+      "u": 12.9,
+      "color": "green",
       "attributes": [
         {
           "type": "command",
@@ -416,6 +428,6 @@
       "name": ""
     }
   ],
-  "created": "2026-02-27T15:57:50.067Z",
-  "lastModified": "2026-02-28T05:31:25.767Z"
+  "created": "2026-02-28T04:37:02.634Z",
+  "lastModified": "2026-02-28T05:37:07.189Z"
 }

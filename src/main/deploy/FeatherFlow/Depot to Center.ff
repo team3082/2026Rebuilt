@@ -1,0 +1,238 @@
+{
+  "id": "1772254180620",
+  "name": "Depot to Center",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 496.8461830731713,
+        "y": 111.9862691500256
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 620,
+        "y": 84
+      },
+      "handleOutOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "isCurved": false,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772254789722"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 25
+      },
+      "handleOutOffset": {
+        "x": -28.624390204125714,
+        "y": -8.980216336033058
+      },
+      "handleInOffset": {
+        "x": 14.283294348284471,
+        "y": 4.481041249233158
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772141201226"
+    },
+    {
+      "position": {
+        "x": 415,
+        "y": 25
+      },
+      "handleOutOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "isCurved": false,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772209472910"
+    },
+    {
+      "position": {
+        "x": 339.2369849715235,
+        "y": 131.88249553310845
+      },
+      "handleOutOffset": {
+        "x": -1.2210924520844544,
+        "y": 19.962688526935978
+      },
+      "handleInOffset": {
+        "x": 6.431673859915236,
+        "y": -105.14642175795206
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 415,
+        "y": 25
+      },
+      "handleOutOffset": {
+        "x": 18.007234118051112,
+        "y": -8.702845478215485
+      },
+      "handleInOffset": {
+        "x": -31.559326183739813,
+        "y": 15.252533363708665
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772209472910"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 25
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772141201226"
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1772255285059,
+      "u": 0.0005,
+      "color": "green",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772254464949,
+      "u": 1.0006,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 0
+        },
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": "Shoot"
+    },
+    {
+      "id": 1772257114196,
+      "u": 1.74,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772255033263,
+      "u": 1.99,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772254968318,
+      "u": 3.68,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 130
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772254514247,
+      "u": 4,
+      "color": "purple",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 90
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772254513583,
+      "u": 4.99,
+      "color": "purple",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772255010953,
+      "u": 5.99,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        },
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-02-28T04:49:40.620Z",
+  "lastModified": "2026-02-28T05:44:24.359Z"
+}

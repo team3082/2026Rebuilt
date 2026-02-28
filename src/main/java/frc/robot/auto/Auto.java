@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.auto.commands.Shoot;
+import frc.robot.auto.commands.StartIntake;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
 import frc.robot.utils.Vector2;
@@ -49,9 +50,7 @@ public class Auto {
     public SequentialCommandGroup Left3Piece() {
         
         return new SequentialCommandGroup(
-            new InstantCommand(() -> {
-                Intake.startIntaking();
-            }),
+            new StartIntake(),
             FeatherFlow.buildFeatherAuto("3 Piece Left", 
             
             new Shoot(),
@@ -60,6 +59,41 @@ public class Auto {
         );
     }
 
+    @AutoRoutine()
+    public SequentialCommandGroup Right3Piece() {
+        
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("3 Piece Right", 
+            
+            new Shoot(),
+            new Shoot(),
+            new Shoot())
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup DepotToCenter() {
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Depot to Center", 
+
+            new Shoot(),
+            new Shoot(),
+            new Shoot()
+            ));
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup CenterToDepot() {
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Center to Depot", 
+
+            new Shoot(),
+            new Shoot()
+            ));
+    }
 
     private static Vector2 parseFieldPosition(Vector2 posNode) {
         return new Vector2(

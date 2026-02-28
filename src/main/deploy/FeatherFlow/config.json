@@ -21,6 +21,61 @@
       "enabled": true,
       "locked": true,
       "id": "snap-1772209472910"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "name": "Trench Right Alliance Side",
+      "color": "blue",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 415,
+        "y": 292
+      },
+      "name": "Trench Left Alliance Side",
+      "color": "blue",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1772253494052"
+    },
+    {
+      "position": {
+        "x": 630,
+        "y": 40
+      },
+      "name": "Depot Left",
+      "color": "yellow",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1772254587030"
+    },
+    {
+      "position": {
+        "x": 630,
+        "y": 120
+      },
+      "name": "Depot Right",
+      "color": "yellow",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1772254650518"
+    },
+    {
+      "position": {
+        "x": 620,
+        "y": 84
+      },
+      "name": "Depot Center",
+      "color": "yellow",
+      "enabled": true,
+      "locked": false,
+      "id": "snap-1772254789722"
     }
   ],
   "snapSettings": {
