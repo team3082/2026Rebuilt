@@ -45,7 +45,7 @@
       },
       "handleOutOffset": {
         "x": -2.7983670420368214,
-        "y": 18.18016631270457
+        "y": 18.016631270457
       },
       "handleInOffset": {
         "x": 7.0766446203064675,
@@ -242,7 +242,7 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -278,7 +278,7 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -294,7 +294,7 @@
         },
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -306,7 +306,7 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -342,7 +342,7 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -358,7 +358,7 @@
         },
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -370,7 +370,7 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -394,7 +394,7 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -410,7 +410,7 @@
         },
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""

@@ -150,7 +150,7 @@ public class Constants {
         public static final int PIVOT_MOTOR_ID = 10;
         public static final int ROLLER_MOTOR_ID = 9;
 
-        public static final double INTAKE_DOWN_ANGLE = 5.0;
+        public static final double INTAKE_DOWN_ANGLE = 4.8;
         public static final double INTAKE_UP_ANGLE = 3.0;
         public static final double INTAKE_SAFE_ANGLE = 1.3; // andle where turret won't hit intake
     }

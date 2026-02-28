@@ -24,7 +24,6 @@ public class OI {
     private static final int zero = LogitechF310.BUTTON_Y;
 
     private static final int toggleIntake = LogitechF310.BUTTON_LEFT_BUMPER;
-    private static boolean intakeToggled = false;
     private static final int reverseIntake = LogitechF310.AXIS_LEFT_TRIGGER;
 
     private static final int shoot = LogitechF310.BUTTON_RIGHT_BUMPER;
@@ -80,14 +79,10 @@ public class OI {
         // SCORING
 
         // intake
-        if (driverStick.getRawButtonPressed(toggleIntake)) {
-            intakeToggled = !intakeToggled; // intake toggles from on to off when button pressed
-        }
 
         if (driverStick.getRawAxis(reverseIntake) > 0.25) {
             Intake.reverse();
-            intakeToggled = false; // toggle goes off so it stops when reverse button is released
-        } else if (intakeToggled) {
+        } else if (driverStick.getRawButton(toggleIntake)) {
             Intake.startIntaking();
         } else if (driverStick.getRawAxis(intakeFeed) > 0.10) {
             System.out.println("it is");

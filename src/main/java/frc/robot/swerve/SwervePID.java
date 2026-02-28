@@ -20,7 +20,7 @@ public class SwervePID {
     private static double totalDist;
 
     public static void init() {
-        movePID = new PIDController(MOVEP, MOVEI, MOVED, 0.0, 0.01, MOVEMAXSPEED);
+        movePID = new PIDController(MOVEP, MOVEI, MOVED, 0, 0.01, MOVEMAXSPEED);
         rotPID = new RotationalPIDController(ROTP, ROTI, ROTD, ROTDEAD, 0.01, ROTMAXSPEED);
     }
 

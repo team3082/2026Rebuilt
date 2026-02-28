@@ -7,7 +7,7 @@ public final class Tuning {
     public static final double MOVEP = 0.0375;
     public static final double MOVEI = 0.0001;
     public static final double MOVED = 0.004;
-    public static final double MOVEDEAD = 0.5;
+    public static final double MOVEDEAD = 1;
     public static final double MOVEVELDEAD = 0.05;
     public static final double MOVEMAXSPEED = 0.3;
     
@@ -40,7 +40,7 @@ public final class Tuning {
      public static final double ROT_DEADBAND = 0.005; // radians
     
     // Holonomic Drive Controller
-    public static final double holonomic_pos_kp = 0.01;
+    public static final double holonomic_pos_kp = 0.03;
     public static final double holonomic_pos_ki = 0.0001;
     public static final double holonomic_pos_kd = 0.002;
 
@@ -91,7 +91,7 @@ public final class Tuning {
         public static final double FLYWHEEL_D = 0.0;
         public static final double FLYWHEEL_KV = 0.035;
 
-        public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
+        public static final double FLYWHEEL_SPEED_DEADBAND = 300; // bro this is in rpm who set it to 0.1
         
         // Turret PID Constants
         public static final double TURRET_KP = 0.5;
@@ -139,10 +139,10 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double SPEED = -0.35;
+        public static final double SPEED = -0.5;
         public static final double REVERSE_SPEED = 0.2;
         
-        public static final double PIVOT_P = 0.07;
+        public static final double PIVOT_P = 0.077;
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
     }

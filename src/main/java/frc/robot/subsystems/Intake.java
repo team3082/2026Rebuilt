@@ -24,7 +24,6 @@ public class Intake {
     private static double feedPercent; // percent that the intake should raise
 
     public static void init(){
-        rollerState = IntakeState.INTAKING;
 
         rollerMotor = new TalonFX(Constants.Intake.ROLLER_MOTOR_ID);
         pivotMotor = new TalonFX(Constants.Intake.PIVOT_MOTOR_ID);

@@ -340,6 +340,9 @@ public class FeatherFlow {
             }
             
             FeatherEvent[] events = eventsForSegment.toArray(new FeatherEvent[0]);
+            group.addCommands(new InstantCommand(() -> {
+                System.out.println("Following Path Segment");
+            }));
             group.addCommands(new FollowPath(currentPath, events));
             
             for (FeatherActionDescriptor action : featherPath.actions) {

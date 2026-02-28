@@ -183,7 +183,7 @@ public class ShooterManager {
                 double baseAngle = Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle();
                 double angle = baseAngle + (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getAngle() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle()) * t;
                 
-                shooter.setTargetSpeed(speed);
+                shooter.setTargetSpeed(speed * 1.1);
                 shooter.setTargetAngle(angle - Constants.Shooter.HOOD_ANGLE_OFFSET);
                 return;
             }

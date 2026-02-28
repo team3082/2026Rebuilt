@@ -46,12 +46,20 @@ public class Auto {
         );
     }
 
+     @AutoRoutine()
+    public SequentialCommandGroup Shoot(){
+        return new SequentialCommandGroup(
+           new StartIntake(),
+           new Shoot()
+        );
+    }
+
     @AutoRoutine()
     public SequentialCommandGroup Left3Piece() {
         
         return new SequentialCommandGroup(
             new StartIntake(),
-            FeatherFlow.buildFeatherAuto("3 Piece Left", 
+            FeatherFlow.buildFeatherAuto("3 Piece Left (Copy)", 
             
             new Shoot(),
             new Shoot(),
@@ -65,6 +73,19 @@ public class Auto {
         return new SequentialCommandGroup(
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("3 Piece Right", 
+            
+            new Shoot(),
+            new Shoot(),
+            new Shoot())
+        );
+    }
+
+     @AutoRoutine()
+    public SequentialCommandGroup Stupid() {
+        
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Untitled", 
             
             new Shoot(),
             new Shoot(),
