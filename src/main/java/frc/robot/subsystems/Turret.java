@@ -56,6 +56,12 @@ public class Turret {
         switch (turretState) {
             case ZEROING:
                 if (Robot.isReal()){
+
+                    if (Intake.getAngle() < Constants.Intake.INTAKE_SAFE_ANGLE) {
+                        turretMotor.set(0);
+                        return;
+                    }
+
                     turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
                     
                     if (atZeroPosition()) {

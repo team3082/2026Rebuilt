@@ -152,6 +152,7 @@ public class Constants {
 
         public static final double INTAKE_DOWN_ANGLE = 0.0;
         public static final double INTAKE_UP_ANGLE = 0.0;
+        public static final double INTAKE_SAFE_ANGLE = 0.0; // andle where turret won't hit intake
     }
 
     public static final class Indexer {

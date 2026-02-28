@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterState;
@@ -108,6 +109,10 @@ public class ShooterManager {
             if (SwerveManager.rotationSpeed == 0 && (shooterState == ShooterState.REVVING || shooterState == ShooterState.SHOOTING)) {
                 SwerveManager.rotateAndDrive(0.4, SwerveManager.movement);
             }
+        }
+
+        if (OI.manualAim) {
+            targetTurretAngle = turret.getAngle();
         }
 
         turret.setAngle(targetTurretAngle);

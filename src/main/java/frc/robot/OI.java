@@ -34,6 +34,9 @@ public class OI {
 
     private static final int intakeFeed = LogitechF310.AXIS_RIGHT_TRIGGER;
 
+    public static boolean manualAim = false;
+    public static final int toggleManual = LogitechF310.BUTTON_B;
+
     /**
      * Initialize OI with preset joystick ports.
      */
@@ -106,13 +109,18 @@ public class OI {
             }
         }
 
-        if (driverStick.getRawButton(zeroTurret)) {
+        if (driverStick.getRawButtonPressed(zeroTurret)) {
             ShooterManager.zeroTurret();
         }
 
-        if (driverStick.getRawButton(zeroHood)) {
+        if (driverStick.getRawButtonPressed(zeroHood)) {
             ShooterManager.zeroHood();
         }
+
+        if (driverStick.getRawButtonPressed(toggleManual)) {
+            manualAim = !manualAim;
+        }
+        System.out.println(manualAim);
 
     }
 
