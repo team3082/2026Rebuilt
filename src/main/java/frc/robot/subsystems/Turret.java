@@ -151,6 +151,8 @@ public class Turret {
      * @return True if at target angle within deadband
      */
     public boolean atAngle() {
+        System.out.println(getAngle());
+        System.out.println(targetAngle);
         return Math.abs(getAngle() - targetAngle) < Tuning.Shooter.TURRET_DEADBAND && turretState == TurretState.NORMAL;
     }
 

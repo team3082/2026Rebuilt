@@ -40,6 +40,7 @@ public class ShooterManager {
                 break;
 
             case REVVING:
+                System.out.println(shooter.atAngle() + "s " + shooter.atRampedSpeed() + "t " + turret.atAngle());
                 if (shooter.atAngle() && shooter.atRampedSpeed() && turret.atAngle()) {
                     shooterState = ShooterState.SHOOTING;
                 }

@@ -81,9 +81,9 @@ public final class Tuning {
 
     public static final class Shooter {
         // Hood PID Constants
-        public static final double HOOD_KP = 0.03;
+        public static final double HOOD_KP = 0.05;
         public static final double HOOD_KD = 0;
-        public static final double HOOD_KI = 0.005;
+        public static final double HOOD_KI = 0.000;
         public static final double HOOD_DEADBAND = 0.2;
 
         public static final double FLYWHEEL_P = 0.04;
@@ -99,9 +99,9 @@ public final class Tuning {
         public static final double TURRET_KD = 0.005;
         public static final double TURRET_DEADBAND = 0.02;
         
-        public static final double TURRET_VEL = 200;
-        public static final double TURRET_ACCEL = 100;
-        public static final double TURRET_JERK = 200;
+        public static final double TURRET_VEL = 300;
+        public static final double TURRET_ACCEL = 150;
+        public static final double TURRET_JERK = 300;
 
         // zeroing
         public static final double TURRET_ZEROING_SPEED = 0.06;
@@ -139,10 +139,10 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double SPEED = 0.7;
-        public static final double REVERSE_SPEED = -0.5;
+        public static final double SPEED = -0.35;
+        public static final double REVERSE_SPEED = 0.2;
         
-        public static final double PIVOT_P = 0.01;
+        public static final double PIVOT_P = 0.07;
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
     }
