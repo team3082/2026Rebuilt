@@ -142,8 +142,9 @@ public final class Tuning {
         public static final double SPEED = -0.5;
         public static final double REVERSE_SPEED = 0.2;
         
-        public static final double PIVOT_P = 0.05;
+        public static final double PIVOT_P = 0.065;
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
+        public static final double PIVAT_KG = -0.054;
     }
 }

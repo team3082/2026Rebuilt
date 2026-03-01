@@ -42,6 +42,7 @@ public class Intake {
         pivotConfig.Slot0.kP = Tuning.Intake.PIVOT_P;
         pivotConfig.Slot0.kI = Tuning.Intake.PIVOT_I;
         pivotConfig.Slot0.kD = Tuning.Intake.PIVOT_D;
+        pivotConfig.Slot0.kG = Tuning.Intake.PIVAT_KG;
         
         pivotConfig.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
