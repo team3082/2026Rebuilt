@@ -21,7 +21,7 @@ public class ShooterManager {
     public static void init() {
         turret = new Turret();
         shooter = new Shooter();
-        shooterState = ShooterState.SHOOTING;
+        shooterState = ShooterState.IDLE;
         target = ShooterTarget.HUB;
     }
 

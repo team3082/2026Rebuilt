@@ -76,6 +76,17 @@
       "enabled": true,
       "locked": false,
       "id": "snap-1772254789722"
+    },
+    {
+      "position": {
+        "x": 325.6018032667399,
+        "y": 158.69507890553982
+      },
+      "name": "Center",
+      "color": "green",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1772322530506"
     }
   ],
   "snapSettings": {

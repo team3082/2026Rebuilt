@@ -25,6 +25,8 @@ public class Intake {
 
     public static void init(){
 
+        rollerState = IntakeState.RESTING;
+
         rollerMotor = new TalonFX(Constants.Intake.ROLLER_MOTOR_ID);
         pivotMotor = new TalonFX(Constants.Intake.PIVOT_MOTOR_ID);
 
@@ -46,6 +48,7 @@ public class Intake {
 
         pivotMotor.getConfigurator().apply(pivotConfig);
 
+        pivotMotor.setPosition(0);
     }
 
     

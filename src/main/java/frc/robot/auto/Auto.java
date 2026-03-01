@@ -116,6 +116,14 @@ public class Auto {
             ));
     }
 
+    @AutoRoutine()
+    public SequentialCommandGroup Test1() {
+        return new SequentialCommandGroup(
+            FeatherFlow.buildFeatherAuto("Untitled"
+
+            ));
+    }
+
     private static Vector2 parseFieldPosition(Vector2 posNode) {
         return new Vector2(
             posNode.x - (Constants.FIELD_WIDTH/2),
