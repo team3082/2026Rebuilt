@@ -2,9 +2,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.Tuning;
 import frc.robot.utils.RTime;
@@ -99,7 +101,11 @@ public class Turret {
                 break;
                 
             case NORMAL:
-                turretMotor.setControl(new MotionMagicDutyCycle(angleToRot(targetAngle)));
+                if (OI.manualAim) {
+                    turretMotor.setControl(new StaticBrake());
+                } else {
+                    turretMotor.setControl(new MotionMagicDutyCycle(angleToRot(targetAngle)));
+                }
                 break;
         }
     }
@@ -151,9 +157,7 @@ public class Turret {
      * @return True if at target angle within deadband
      */
     public boolean atAngle() {
-        System.out.println(getAngle());
-        System.out.println(targetAngle);
-        return Math.abs(getAngle() - targetAngle) < Tuning.Shooter.TURRET_DEADBAND && turretState == TurretState.NORMAL;
+        return (OI.manualAim || Math.abs(getAngle() - targetAngle) < Tuning.Shooter.TURRET_DEADBAND) && turretState == TurretState.NORMAL;
     }
 
     public TurretState getTurretState() {
