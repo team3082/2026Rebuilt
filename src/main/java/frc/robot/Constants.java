@@ -21,7 +21,7 @@ public class Constants {
         public static final int STEERID2 = 1;
         public static final int STEERID3 = 3;
 
-        public static final double MODOFFSET0 = 0.801514;
+        public static final double MODOFFSET0 = -0.195312;
         public static final double MODOFFSET1 = 0.221191;
         public static final double MODOFFSET2 = 0.127197;
         public static final double MODOFFSET3 = 0.115479;
@@ -150,7 +150,7 @@ public class Constants {
         public static final int PIVOT_MOTOR_ID = 10;
         public static final int ROLLER_MOTOR_ID = 9;
 
-        public static final double INTAKE_DOWN_ANGLE = 5.0;
+        public static final double INTAKE_DOWN_ANGLE = 5.5;
         public static final double INTAKE_UP_ANGLE = 1.75;
         public static final double INTAKE_SAFE_ANGLE = 1.3; // andle where turret won't hit intake
     }

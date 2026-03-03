@@ -47,36 +47,34 @@ public class HolonomicDriveController {
     public Vector2 calculate() {
         double currentTime = RTime.now() - startTime;
         
-        // Check if path is complete
         if (currentTime >= path.getDuration()) {
-            isFinished = true;
-            return new Vector2(0, 0);
+            currentTime = path.getDuration();
         }
         
-        // Get desired state from path
         ProfiledPoint desiredPoint = path.getPointAtTime(currentTime);
-        Vector2 desiredPos = desiredPoint.getPosition();
-        Vector2 desiredVel = desiredPoint.getVelocity().rotate(-Math.PI/2);
-
-        double xFF = desiredVel.x / (Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL * 1.1);
-        double yFF = desiredVel.y / (Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL * 1.1);
-        
-        // Get current robot pose
         Vector2 currentPos = SwervePosition.getPosition();
 
-        // Calculate feedback velocities (based on position error).
+        Vector2 desiredPos = desiredPoint.getPosition();
+        Vector2 desiredVel = desiredPoint.getVelocity().rotate(-Math.PI/2);
+        
+        Vector2 feedFoward = desiredVel.div(Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL*1.1);
+
         double xFeedback = xPositionPID.calculate(currentPos.x, desiredPos.x);
         double yFeedback = yPositionPID.calculate(currentPos.y, desiredPos.y);
-
         Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI/2);
         
-
         SmartDashboard.putNumber("Holonomic/xPosError", desiredPos.x - currentPos.x);
         SmartDashboard.putNumber("Holonomic/yPosError", desiredPos.y - currentPos.y);
-        SmartDashboard.putNumber("Holonomic/xFF", xFF);
-        SmartDashboard.putNumber("Holonomic/yFF", yFF);
-        
-        return feedbackVector.add(new Vector2(xFF, yFF));
+        SmartDashboard.putNumber("Holonomic/xFF", feedFoward.x);
+        SmartDashboard.putNumber("Holonomic/yFF", feedFoward.y);
+
+        Vector2 combinedVector = feedbackVector.add(feedFoward);
+
+        if(combinedVector.mag() > 1){
+            combinedVector = combinedVector.norm();
+        }
+
+        return combinedVector;
     }
 
     /**

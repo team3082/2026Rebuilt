@@ -40,7 +40,7 @@ public final class Tuning {
      public static final double ROT_DEADBAND = 0.005; // radians
     
     // Holonomic Drive Controller
-    public static final double holonomic_pos_kp = 0.03;
+    public static final double holonomic_pos_kp = 0.05;
     public static final double holonomic_pos_ki = 0.0001;
     public static final double holonomic_pos_kd = 0.002;
 
@@ -86,25 +86,26 @@ public final class Tuning {
         public static final double HOOD_KI = 0.000;
         public static final double HOOD_DEADBAND = 0.2;
 
-        public static final double FLYWHEEL_P = 0.04;
+        public static final double FLYWHEEL_P = 0.00;
         public static final double FLYWHEEL_I = 0.0;
         public static final double FLYWHEEL_D = 0.0;
-        public static final double FLYWHEEL_KV = 0.035;
+        public static final double FLYWHEEL_KV = 0.21;
 
-        public static final double FLYWHEEL_SPEED_DEADBAND = 300; // bro this is in rpm who set it to 0.1
+        public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
         
         // Turret PID Constants
-        public static final double TURRET_KP = 0.5;
+        public static final double TURRET_KP = 0.4;
         public static final double TURRET_KI = 0.0;
-        public static final double TURRET_KD = 0.005;
+        public static final double TURRET_KD = 0.2;
+        public static final double TURRET_KS = 0.3;
         public static final double TURRET_DEADBAND = 0.02;
         
-        public static final double TURRET_VEL = 300;
-        public static final double TURRET_ACCEL = 150;
-        public static final double TURRET_JERK = 300;
+        public static final double TURRET_VEL = 2000;
+        public static final double TURRET_ACCEL = 1000;
+        public static final double TURRET_JERK = 2000;
 
         // zeroing
-        public static final double TURRET_ZEROING_SPEED = 0.06;
+        public static final double TURRET_ZEROING_SPEED = 0.05;
         public static final double HOOD_ZEROING_SPEED = -0.1;
 
         public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
@@ -139,12 +140,12 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double SPEED = -0.5;
-        public static final double REVERSE_SPEED = 0.2;
+        public static final double SPEED = -0.45;
+        public static final double REVERSE_SPEED = -0.4;
         
-        public static final double PIVOT_P = 0.065;
+        public static final double PIVOT_P = 0.78;
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
-        public static final double PIVAT_KG = -0.054;
+        public static final double PIVAT_KG = -0.96;
     }
 }

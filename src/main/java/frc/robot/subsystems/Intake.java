@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
@@ -56,24 +56,24 @@ public class Intake {
     public static void update(){
         switch (rollerState) {
             case RESTING:
-                pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_DOWN_ANGLE));
+                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(0);
                 break;
         
             case INTAKING:
-                pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_DOWN_ANGLE));
+                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(Tuning.Intake.SPEED);
                 break;
 
             case REVERSE:
-                pivotMotor.setControl(new PositionDutyCycle(Constants.Intake.INTAKE_DOWN_ANGLE));
+                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(Tuning.Intake.REVERSE_SPEED);
                 break;
 
             case FEEDING:
                 double targetAngle = feedPercent * (Constants.Intake.INTAKE_UP_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE; // lets driver control how far intake raises
 
-                pivotMotor.setControl(new PositionDutyCycle(targetAngle));
+                pivotMotor.setControl(new PositionVoltage(targetAngle));
                 rollerMotor.set(0);
                 break;
         }

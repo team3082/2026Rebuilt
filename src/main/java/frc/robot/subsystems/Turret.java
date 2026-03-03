@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -39,6 +41,7 @@ public class Turret {
         turretMotorConfig.Slot0.kP = Tuning.Shooter.TURRET_KP;
         turretMotorConfig.Slot0.kI = Tuning.Shooter.TURRET_KI;
         turretMotorConfig.Slot0.kD = Tuning.Shooter.TURRET_KD;
+        turretMotorConfig.Slot0.kS = Tuning.Shooter.TURRET_KS;
 
         turretMotorConfig.MotionMagic.MotionMagicCruiseVelocity = Tuning.Shooter.TURRET_VEL;
         turretMotorConfig.MotionMagic.MotionMagicAcceleration = Tuning.Shooter.TURRET_ACCEL;
@@ -104,7 +107,7 @@ public class Turret {
                 if (OI.manualAim) {
                     turretMotor.setControl(new StaticBrake());
                 } else {
-                    turretMotor.setControl(new MotionMagicDutyCycle(angleToRot(targetAngle)));
+                    turretMotor.setControl(new MotionMagicVoltage(angleToRot(targetAngle)));
                 }
                 break;
         }
