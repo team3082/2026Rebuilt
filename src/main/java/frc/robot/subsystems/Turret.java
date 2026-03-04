@@ -68,36 +68,12 @@ public class Turret {
                     }
 
                     turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
-                    
-                    if (atZeroPosition()) {
-                        turretMotor.setPosition(angleToRot(Constants.Shooter.TURRET_ZERO_ANGLE));
-                        turretState = TurretState.NORMAL;
-                    }
 
                     if (atHardstop()) {
-                        System.out.println("hardstopping");
-                        turretState = TurretState.ZEROING_REVERSE;
-                        zeroStartTime = RTime.now();
-                    }
-
-                } else {
-                    turretState = TurretState.NORMAL;
-                }
-                break;
-
-            case ZEROING_REVERSE:
-                if (Robot.isReal()){
-                    turretMotor.set(-Tuning.Shooter.TURRET_ZEROING_SPEED);
-                    
-                    if (atZeroPosition()) {
-                        turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
                         turretState = TurretState.NORMAL;
-                    }
-
-                    if (atHardstop()) {
                         turretMotor.setPosition(Constants.Shooter.TURRET_HARDSTOP_ZERO_ANGLE);
-                        turretState = TurretState.NORMAL;
                     }
+
                 } else {
                     turretState = TurretState.NORMAL;
                 }
@@ -180,7 +156,9 @@ public class Turret {
      * @return if turrent base is hitting hardstop
      */
     public boolean atHardstop() {
-        return turretMotor.getStatorCurrent().getValueAsDouble() > 25.0 && turretMotor.getVelocity().getValueAsDouble() < 0.05 && RTime.now() - 0.15 > zeroStartTime;
+        System.out.println("current check" + turretMotor.getStatorCurrent().getValueAsDouble());
+        System.out.println("vel check" + (turretMotor.getVelocity().getValueAsDouble() < 0.05));
+        return turretMotor.getStatorCurrent().getValueAsDouble() > 25.0 && turretMotor.getVelocity().getValueAsDouble() < 0.05;
     }
 
     public boolean atZeroPosition() {

@@ -32,7 +32,7 @@ public class TuneSpeed extends Command {
 
     @Override
     public void execute() {
-       SwerveManager.rotateAndDrive(0, new Vector2(0, motorPercentOutput));
+       SwerveManager.rotateAndDrive(0, new Vector2(motorPercentOutput, 0));
 
        Vector2 currentPos = Odometry.getPosition();
 

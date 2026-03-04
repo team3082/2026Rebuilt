@@ -131,19 +131,19 @@ public class Auto {
     public SequentialCommandGroup VelocityTuning() {
         return new SequentialCommandGroup(
             new RotateAndDriveTo(0, new Vector2()),
-            new TuneSpeed(.1,3),
+            new TuneSpeed(.1,1.1),
             new RotateAndDriveTo(0, new Vector2()),
             new WaitCommand(.5),
-            new TuneSpeed(.25, 3),
+            new TuneSpeed(.25, 1.1),
             new RotateAndDriveTo(0, new Vector2()),
             new WaitCommand(.5),
-            new TuneSpeed(.5, 3),
+            new TuneSpeed(.5, 1.1),
             new RotateAndDriveTo(0, new Vector2()),
             new WaitCommand(.5),
-            new TuneSpeed(.75, 3),
+            new TuneSpeed(.75, 1.1),
             new RotateAndDriveTo(0, new Vector2()),
             new WaitCommand(.5),
-            new TuneSpeed(1, 3),
+            new TuneSpeed(1, 1.1),
             new RotateAndDriveTo(0, new Vector2())
         );
     }
