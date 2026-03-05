@@ -2,9 +2,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.Tuning;
 import frc.robot.utils.RTime;
@@ -37,6 +41,7 @@ public class Turret {
         turretMotorConfig.Slot0.kP = Tuning.Shooter.TURRET_KP;
         turretMotorConfig.Slot0.kI = Tuning.Shooter.TURRET_KI;
         turretMotorConfig.Slot0.kD = Tuning.Shooter.TURRET_KD;
+        turretMotorConfig.Slot0.kS = Tuning.Shooter.TURRET_KS;
 
         turretMotorConfig.MotionMagic.MotionMagicCruiseVelocity = Tuning.Shooter.TURRET_VEL;
         turretMotorConfig.MotionMagic.MotionMagicAcceleration = Tuning.Shooter.TURRET_ACCEL;
@@ -63,43 +68,23 @@ public class Turret {
                     }
 
                     turretMotor.set(Tuning.Shooter.TURRET_ZEROING_SPEED);
-                    
-                    if (atZeroPosition()) {
-                        turretMotor.setPosition(angleToRot(Constants.Shooter.TURRET_ZERO_ANGLE));
-                        turretState = TurretState.NORMAL;
-                    }
 
                     if (atHardstop()) {
-                        System.out.println("hardstopping");
-                        turretState = TurretState.ZEROING_REVERSE;
-                        zeroStartTime = RTime.now();
-                    }
-
-                } else {
-                    turretState = TurretState.NORMAL;
-                }
-                break;
-
-            case ZEROING_REVERSE:
-                if (Robot.isReal()){
-                    turretMotor.set(-Tuning.Shooter.TURRET_ZEROING_SPEED);
-                    
-                    if (atZeroPosition()) {
-                        turretMotor.setPosition(Constants.Shooter.TURRET_ZERO_ANGLE);
                         turretState = TurretState.NORMAL;
-                    }
-
-                    if (atHardstop()) {
                         turretMotor.setPosition(Constants.Shooter.TURRET_HARDSTOP_ZERO_ANGLE);
-                        turretState = TurretState.NORMAL;
                     }
+
                 } else {
                     turretState = TurretState.NORMAL;
                 }
                 break;
                 
             case NORMAL:
-                turretMotor.setControl(new MotionMagicDutyCycle(angleToRot(targetAngle)));
+                if (OI.manualAim || OI.superManualAim) {
+                    turretMotor.setControl(new StaticBrake());
+                } else {
+                    turretMotor.setControl(new MotionMagicVoltage(angleToRot(targetAngle)));
+                }
                 break;
         }
     }
@@ -151,9 +136,7 @@ public class Turret {
      * @return True if at target angle within deadband
      */
     public boolean atAngle() {
-        System.out.println(getAngle());
-        System.out.println(targetAngle);
-        return Math.abs(getAngle() - targetAngle) < Tuning.Shooter.TURRET_DEADBAND && turretState == TurretState.NORMAL;
+        return (OI.manualAim || Math.abs(getAngle() - targetAngle) < Tuning.Shooter.TURRET_DEADBAND) && turretState == TurretState.NORMAL;
     }
 
     public TurretState getTurretState() {
@@ -173,7 +156,9 @@ public class Turret {
      * @return if turrent base is hitting hardstop
      */
     public boolean atHardstop() {
-        return turretMotor.getStatorCurrent().getValueAsDouble() > 25.0 && turretMotor.getVelocity().getValueAsDouble() < 0.05 && RTime.now() - 0.15 > zeroStartTime;
+        System.out.println("current check" + turretMotor.getStatorCurrent().getValueAsDouble());
+        System.out.println("vel check" + (turretMotor.getVelocity().getValueAsDouble() < 0.05));
+        return turretMotor.getStatorCurrent().getValueAsDouble() > 25.0 && turretMotor.getVelocity().getValueAsDouble() < 0.05;
     }
 
     public boolean atZeroPosition() {

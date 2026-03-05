@@ -4,9 +4,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.auto.commands.RotateAndDriveTo;
 import frc.robot.auto.commands.Shoot;
 import frc.robot.auto.commands.StartIntake;
+import frc.robot.auto.commands.TuneSpeed;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
 import frc.robot.utils.Vector2;
@@ -122,6 +125,27 @@ public class Auto {
             FeatherFlow.buildFeatherAuto("Untitled"
 
             ));
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup VelocityTuning() {
+        return new SequentialCommandGroup(
+            new RotateAndDriveTo(0, new Vector2()),
+            new TuneSpeed(.1,1.1),
+            new RotateAndDriveTo(0, new Vector2()),
+            new WaitCommand(.5),
+            new TuneSpeed(.25, 1.1),
+            new RotateAndDriveTo(0, new Vector2()),
+            new WaitCommand(.5),
+            new TuneSpeed(.5, 1.1),
+            new RotateAndDriveTo(0, new Vector2()),
+            new WaitCommand(.5),
+            new TuneSpeed(.75, 1.1),
+            new RotateAndDriveTo(0, new Vector2()),
+            new WaitCommand(.5),
+            new TuneSpeed(1, 1.1),
+            new RotateAndDriveTo(0, new Vector2())
+        );
     }
 
     private static Vector2 parseFieldPosition(Vector2 posNode) {

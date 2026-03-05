@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.OI;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterState;
@@ -112,10 +111,6 @@ public class ShooterManager {
             }
         }
 
-        if (OI.manualAim) {
-            targetTurretAngle = turret.getAngle();
-        }
-
         turret.setAngle(targetTurretAngle);
     }
 
@@ -183,7 +178,7 @@ public class ShooterManager {
                 double baseAngle = Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle();
                 double angle = baseAngle + (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getAngle() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle()) * t;
                 
-                shooter.setTargetSpeed(speed * 1.1);
+                shooter.setTargetSpeed(speed);
                 shooter.setTargetAngle(angle - Constants.Shooter.HOOD_ANGLE_OFFSET);
                 return;
             }

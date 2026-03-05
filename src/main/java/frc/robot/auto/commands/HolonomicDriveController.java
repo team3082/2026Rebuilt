@@ -54,8 +54,7 @@ public class HolonomicDriveController {
         double currentTime = RTime.now() - startTime;
 
         if (currentTime >= path.getDuration()) {
-            isFinished = true;
-            return new Vector2(0, 0);
+            currentTime = path.getDuration();
         }
 
         // --- Feedforward: desired velocity at the lookahead point ---
