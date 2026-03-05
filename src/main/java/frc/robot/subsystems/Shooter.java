@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.Tuning;
 
@@ -96,6 +97,10 @@ public class Shooter {
      */
     public void setTargetAngle(double angle) {
         targetHoodAngle = angle;
+
+        if (OI.superManualAim) {
+            targetHoodAngle = 0;
+        }
     }
 
     public double getTargetAngle() {
@@ -108,6 +113,10 @@ public class Shooter {
      */
     public void setTargetSpeed(double speed) {
         targetFlywheelSpeed = speed / 60.0;
+
+        if (OI.superManualAim) {
+            targetFlywheelSpeed = Tuning.Shooter.SHOOTER_TABLE_HUB[2].getSpeed() / 60.0;
+        }
     }
 
     /**

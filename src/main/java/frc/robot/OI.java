@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.controllermaps.LogitechF310;
 import frc.robot.subsystems.AutoTarget;
 import frc.robot.subsystems.Intake;
@@ -33,7 +34,8 @@ public class OI {
 
     private static final int intakeFeed = LogitechF310.AXIS_RIGHT_TRIGGER;
 
-    public static boolean manualAim = false;
+    public static boolean manualAim = false; // keeps turret angle constant
+    public static boolean superManualAim = false; // keeps turret angle constant and doesn't change flywheel velocity (for if vision breaks)
     public static final int toggleManual = LogitechF310.BUTTON_B;
 
     /**
@@ -113,10 +115,29 @@ public class OI {
         }
 
         if (driverStick.getRawButtonPressed(toggleManual)) {
-            manualAim = !manualAim;
+            if (manualAim) {
+                superManualAim = true;
+                manualAim = false;
+            } else if (superManualAim) {
+                superManualAim = false;
+                manualAim = false;
+            } else {
+                manualAim = true;
+                superManualAim = false;
+            }
         }
-        System.out.println(manualAim);
 
+        // rumble feedback
+        if (manualAim) {
+            driverStick.setRumble(RumbleType.kLeftRumble, 0.9);
+            System.out.println("m");
+        } else if (superManualAim) {
+            driverStick.setRumble(RumbleType.kRightRumble, 0.9);
+            System.out.println("sm");
+        } else {
+            driverStick.setRumble(RumbleType.kBothRumble, 0);
+            System.out.println("n");
+        }
     }
 
     private static void operatorInput() {}

@@ -80,7 +80,7 @@ public class Turret {
                 break;
                 
             case NORMAL:
-                if (OI.manualAim) {
+                if (OI.manualAim || OI.superManualAim) {
                     turretMotor.setControl(new StaticBrake());
                 } else {
                     turretMotor.setControl(new MotionMagicVoltage(angleToRot(targetAngle)));
