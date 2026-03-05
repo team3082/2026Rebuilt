@@ -59,7 +59,7 @@ public class Auto {
         
         return new SequentialCommandGroup(
             new StartIntake(),
-            FeatherFlow.buildFeatherAuto("3 Piece Left (Copy)", 
+            FeatherFlow.buildFeatherAuto("3 Piece Left", 
             
             new Shoot(),
             new Shoot(),
