@@ -15,6 +15,7 @@ import frc.robot.auto.routineManager.RoutineManager;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherFlow;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.sensors.Pigeon;
 
 /**
  * Manages autonomous routines for the robot.
@@ -59,40 +60,30 @@ public class Auto {
 
     @AutoRoutine()
     public SequentialCommandGroup Left3Piece() {
-        
+        Pigeon.setYaw(90);
         return new SequentialCommandGroup(
+            new Shoot(),
             new StartIntake(),
-            FeatherFlow.buildFeatherAuto("3 Piece Left", 
-            
-            new Shoot(),
-            new Shoot(),
-            new Shoot())
+            FeatherFlow.buildFeatherAuto("3 Piece Left",
+                true, 
+                new Shoot(),
+                new Shoot(),
+                new Shoot()
+            )
         );
     }
 
     @AutoRoutine()
     public SequentialCommandGroup Right3Piece() {
-        
+        Pigeon.setYaw(-90);
         return new SequentialCommandGroup(
+            new Shoot(),
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("3 Piece Right", 
-            
-            new Shoot(),
-            new Shoot(),
-            new Shoot())
-        );
-    }
-
-     @AutoRoutine()
-    public SequentialCommandGroup Stupid() {
-        
-        return new SequentialCommandGroup(
-            new StartIntake(),
-            FeatherFlow.buildFeatherAuto("Untitled", 
-            
-            new Shoot(),
-            new Shoot(),
-            new Shoot())
+                new Shoot(),
+                new Shoot(),
+                new Shoot()
+            )
         );
     }
 
@@ -101,10 +92,9 @@ public class Auto {
         return new SequentialCommandGroup(
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("Depot to Center", 
-
-            new Shoot(),
-            new Shoot(),
-            new Shoot()
+                new Shoot(),
+                new Shoot(),
+                new Shoot()
             ));
     }
 
@@ -113,47 +103,11 @@ public class Auto {
         return new SequentialCommandGroup(
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("Center to Depot", 
-
-            new Shoot(),
-            new Shoot()
+                new Shoot(),
+                new Shoot()
             ));
     }
 
-    @AutoRoutine()
-    public SequentialCommandGroup Test1() {
-        return new SequentialCommandGroup(
-            FeatherFlow.buildFeatherAuto("Untitled"
-
-            ));
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup VelocityTuning() {
-        return new SequentialCommandGroup(
-            new RotateAndDriveTo(0, new Vector2()),
-            new TuneSpeed(.1,1.1),
-            new RotateAndDriveTo(0, new Vector2()),
-            new WaitCommand(.5),
-            new TuneSpeed(.25, 1.1),
-            new RotateAndDriveTo(0, new Vector2()),
-            new WaitCommand(.5),
-            new TuneSpeed(.5, 1.1),
-            new RotateAndDriveTo(0, new Vector2()),
-            new WaitCommand(.5),
-            new TuneSpeed(.75, 1.1),
-            new RotateAndDriveTo(0, new Vector2()),
-            new WaitCommand(.5),
-            new TuneSpeed(1, 1.1),
-            new RotateAndDriveTo(0, new Vector2())
-        );
-    }
-
-    private static Vector2 parseFieldPosition(Vector2 posNode) {
-        return new Vector2(
-            posNode.x - (Constants.FIELD_WIDTH/2),
-            -((Constants.FIELD_HEIGHT/2) - posNode.y)
-        );
-    }
 
     /**
      * Gets the auto selector from {@link RoutineManager}

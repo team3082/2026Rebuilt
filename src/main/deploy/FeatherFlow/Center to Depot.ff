@@ -4,21 +4,20 @@
   "anchorPoints": [
     {
       "position": {
-        "x": 510,
-        "y": 25
+        "x": 533.1330446622007,
+        "y": 78.48464208427805
       },
       "handleOutOffset": {
-        "x": 20,
-        "y": 0
+        "x": 7.283291254981805,
+        "y": -68.09948060235297
       },
       "handleInOffset": {
-        "x": -20,
-        "y": 0
+        "x": -2.055190473611719,
+        "y": 19.216230532608503
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
-      "snapPointId": "snap-1772141201226"
+      "name": ""
     },
     {
       "position": {
@@ -193,5 +192,5 @@
     }
   ],
   "created": "2026-02-28T05:04:30.876Z",
-  "lastModified": "2026-02-28T05:45:25.004Z"
+  "lastModified": "2026-03-05T15:05:24.096Z"
 }

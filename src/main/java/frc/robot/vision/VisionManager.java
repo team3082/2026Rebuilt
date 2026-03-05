@@ -22,7 +22,8 @@ public class VisionManager {
 
         if (Robot.isReal()) {
             cameras = new Camera[] {
-                new Camera(new PhotonCamera("ApriltagCamera3"), new Vector2(11.0, 8.5), 0, Math.toRadians(15.0), -Math.PI/2)
+                new Camera(new PhotonCamera("ApriltagCamera3"), new Vector2(11.0, 8.5), 0, Math.toRadians(15.0), -Math.PI/2),
+                // new Camera(new PhotonCamera("ApriltagCameraFront"), new Vector2(-4.5, 12),  Math.toRadians(15.0), 0, -Math.toRadians(3.0))
             };
         }
 

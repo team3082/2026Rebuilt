@@ -40,7 +40,6 @@ public final class Tuning {
      public static final double ROT_DEADBAND = 0.005; // radians
     
     // Holonomic Drive Controller
-    public static final double holonomic_pos_kp = 0.045;
     public static final double holonomic_pos_kp = 0.05;
     public static final double holonomic_pos_ki = 0.0001;
     public static final double holonomic_pos_kd = 0;
@@ -154,5 +153,5 @@ public final class Tuning {
         public static final double PIVOT_JERK = 9000;
     }
 
-    public static double holonomic_lookahead_time = 0.01;
+    public static double holonomic_lookahead_time = 0;
 }

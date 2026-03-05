@@ -24,7 +24,7 @@ import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherPath.FeatherActionDescriptor;
 
 public class FeatherFlow {
-    private static Map<String, FeatherPath> trajectories = new HashMap<>();
+    private static Map<String, FeatherPath[]> trajectories = new HashMap<>();
 
     public static void init() {
         File directory = new File(Filesystem.getDeployDirectory(), "FeatherFlow");
@@ -38,7 +38,10 @@ public class FeatherFlow {
             for (File file : files) {
                 try {
                     String key = file.getName().replace(".ff", "");
-                    trajectories.put(key, loadFeatherFile(file));
+                    FeatherPath[] array = new FeatherPath[2];
+                    array[0] =  loadFeatherFile(file, false);
+                    array[1] = loadFeatherFile(file, true);
+                    trajectories.put(key, array);
                     System.out.println("[FeatherFlow] " + file.getName() + " loaded successfully");
                 } catch (Exception e) {
                     System.err.println("[FeatherFlow] Error loading " + file.getName());
@@ -49,7 +52,7 @@ public class FeatherFlow {
         }, "FeatherFlow Parser").start();
     }
 
-    private static FeatherPath loadFeatherFile(File file) throws IOException {
+    private static FeatherPath loadFeatherFile(File file, boolean flipped) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(file);
         
@@ -71,6 +74,13 @@ public class FeatherFlow {
             Vector2 p3 = parsePosition(next.get("position"));
             Vector2 p2 = p3.add(parseOffset(next.get("handleInOffset")));
             
+            if(flipped){
+                p0.y = -p0.y;
+                p1.y = -p1.y;
+                p2.y = -p2.y;
+                p3.y = -p3.y;
+            }
+
             beziers.add(new CubicBezierCurve(p0, p1, p2, p3));
         }
         
@@ -154,7 +164,11 @@ public class FeatherFlow {
         List<double[]> rotateKeyframes = new ArrayList<>();
         for (FeatherActionDescriptor action : actions) {
             if (action.type.equals("rotate")) {
-                rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading+90)});
+                if(!flipped){
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading + 90)});
+                } else {
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians((360-(action.heading+90))+180)});
+                }
             }
         }
         rotateKeyframes.sort((a, b) -> Double.compare(a[0], b[0]));
@@ -255,7 +269,7 @@ public class FeatherFlow {
             }
 
             profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
-                segPath, 160, 2, 160, 160, targetHeadings
+                segPath, 90, 2, 90, 160, targetHeadings
             ));
 
             segmentDistOffset += segDist[pointCount - 1];
@@ -292,12 +306,16 @@ public class FeatherFlow {
      * @return The FeatherPath object
      * @throws IllegalArgumentException if path doesn't exist
      */
-    public static FeatherPath getPath(String pathName) {
+    public static FeatherPath getPath(String pathName, boolean flipped) {
         if (!trajectories.containsKey(pathName)) {
             throw new IllegalArgumentException("Path '" + pathName + "' does not exist! " +
                 "Available paths: " + trajectories.keySet());
         }
-        return trajectories.get(pathName);
+        return trajectories.get(pathName)[flipped ? 1 : 0];
+    }
+
+    public static SequentialCommandGroup buildFeatherAuto(String pathName, Command... commands) {
+        return buildFeatherAuto(pathName, false, commands);
     }
     
     /**
@@ -306,9 +324,9 @@ public class FeatherFlow {
      * @param commands Commands to be associated with command-type actions in the path (in order)
      * @return SequentialCommandGroup containing the path following commands
      */
-    public static SequentialCommandGroup buildFeatherAuto(String pathName, Command... commands) {
+    public static SequentialCommandGroup buildFeatherAuto(String pathName, boolean flipped,  Command... commands) {
         System.out.println("[FeatherFlow] Building auto for path: " + pathName);
-        FeatherPath featherPath = getPath(pathName);
+        FeatherPath featherPath = getPath(pathName, flipped);
         
         SequentialCommandGroup group = new SequentialCommandGroup();
 

@@ -2,6 +2,8 @@ package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Tuning;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.states.ShooterState;
 import frc.robot.utils.RTime;
@@ -24,14 +26,17 @@ public class Shoot extends Command{
             reachedShooting = true;
         }
 
-        if (!reachedShooting || ShooterManager.getShooter().getVelocity() < ShooterManager.getShooter().getTargetSpeed() - Constants.Shooter.RPM_DROP) {
-            lastShotTime = RTime.now(); // resets time every time it shoots (rpm drops when a ball is shot)
-        }
+        Intake.startFeeding(.9);
+
+        // if (!reachedShooting || ShooterManager.getShooter().getVelocity() < ShooterManager.getShooter().getTargetSpeed() - Constants.Shooter.RPM_DROP) {
+        //     lastShotTime = RTime.now(); // resets time every time it shoots (rpm drops when a ball is shot)
+        // }
     }
 
     @Override
     public void end(boolean interrupted) {
         ShooterManager.stopShooting();
+        Intake.startIntaking();
     }
 
     @Override
