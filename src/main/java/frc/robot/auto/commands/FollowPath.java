@@ -1,14 +1,11 @@
 package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwerveManager;
-import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherEvent;
 import frc.robot.utils.trajectories.ProfiledPath;
-import frc.robot.utils.trajectories.ProfiledPoint;
 import frc.robot.utils.trajectories.RobotPath;
 
 /**

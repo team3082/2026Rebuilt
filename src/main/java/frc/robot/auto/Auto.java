@@ -2,19 +2,12 @@ package frc.robot.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
-import frc.robot.auto.commands.RotateAndDriveTo;
 import frc.robot.auto.commands.Shoot;
 import frc.robot.auto.commands.StartIntake;
-import frc.robot.auto.commands.TuneSpeed;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
-import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherFlow;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.sensors.Pigeon;
 
 /**
@@ -26,31 +19,6 @@ public class Auto {
     public static RoutineManager routineManager;
 
     @AutoRoutine()
-    public SequentialCommandGroup AutoSweep(){
-        System.out.println("Starting Test Path Auto Routine");
-
-        return new SequentialCommandGroup(
-            FeatherFlow.buildFeatherAuto(
-                "Auto Sweep", 
-                new InstantCommand(() -> {
-                    Intake.startIntaking();
-                }),
-                new InstantCommand(() -> {
-                    Intake.stopIntaking();
-                }),
-                new Shoot(),
-                new InstantCommand(() -> {
-                    Intake.startIntaking();
-                }),
-                new InstantCommand(() -> {
-                    Intake.stopIntaking();
-                }),
-                new Shoot()
-            )
-        );
-    }
-
-     @AutoRoutine()
     public SequentialCommandGroup Shoot(){
         return new SequentialCommandGroup(
            new StartIntake(),
@@ -106,6 +74,44 @@ public class Auto {
                 new Shoot(),
                 new Shoot()
             ));
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup MosesRight() {
+        Pigeon.setYaw(-90);
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Moses Right", 
+                new Shoot(),
+                new Shoot()
+            )
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup MosesLeft() {
+        Pigeon.setYaw(90);
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Moses Left", 
+                true,
+                new Shoot(),
+                new Shoot()
+            )
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup Example() {
+        Pigeon.setYaw(90);
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Example", 
+                true,
+                new Shoot(),
+                new Shoot()
+            )
+        );
     }
 
 

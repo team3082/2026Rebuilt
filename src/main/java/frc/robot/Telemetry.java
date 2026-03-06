@@ -79,6 +79,8 @@ public class Telemetry {
     private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", ShooterManager.getShooter().getAngle()).getEntry();
     private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", ShooterManager.getShooter().getTargetSpeed()).getEntry();
     private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", ShooterManager.getShooter().getVelocity()).getEntry();
+    private static final GenericEntry OI_MANUAL = shooterTab.add("Manual", OI.manualAim).getEntry();
+    private static final GenericEntry OI_SUPER_MANUAL = shooterTab.add("SUPER Manual", OI.superManualAim).getEntry();
 
     // Turret
     private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", ShooterManager.getTurret().getTurretState().name()).getEntry();
@@ -197,6 +199,8 @@ public class Telemetry {
         SHOOTER_CURRENT_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getAngle());
         SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getTargetSpeed());
         SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getVelocity());
+        OI_MANUAL.setBoolean(OI.manualAim);
+        OI_SUPER_MANUAL.setBoolean(OI.superManualAim);
 
         TURRET_STATE.setString(ShooterManager.getTurret().getTurretState().name());
         TURRET_TARGET_ANGLE.setDouble(ShooterManager.getTurret().getTargetAngle());

@@ -87,6 +87,17 @@
       "enabled": true,
       "locked": true,
       "id": "snap-1772322530506"
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "name": "Trench Moses",
+      "color": "blue",
+      "enabled": true,
+      "locked": true,
+      "id": "snap-1772774974899"
     }
   ],
   "snapSettings": {

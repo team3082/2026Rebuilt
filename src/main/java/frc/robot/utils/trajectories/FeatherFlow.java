@@ -269,7 +269,7 @@ public class FeatherFlow {
             }
 
             profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
-                segPath, 90, 2, 90, 160, targetHeadings
+                segPath, 90*1.5, 3, 90*1.5, 140, targetHeadings
             ));
 
             segmentDistOffset += segDist[pointCount - 1];
@@ -330,7 +330,9 @@ public class FeatherFlow {
         
         SequentialCommandGroup group = new SequentialCommandGroup();
 
-        group.addCommands(new RotateAndDriveTo(featherPath.paths.get(0).getStartHeading(), featherPath.paths.get(0).getStartPoint()));
+        group.addCommands(new InstantCommand(()->{
+            SwervePosition.setPosition(featherPath.paths.get(0).getStartPoint());
+        }));
         
         int commandIndex = 0;
         

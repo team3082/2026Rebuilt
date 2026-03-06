@@ -18,35 +18,36 @@ public final class Tuning {
     public static final double ROTVELDEAD = 0.05;
     public static final double ROTMAXSPEED = 0.3;
  
-     //Tune
-     public static final double SWERVE_TRJ_PPOS = 0.05;
-     public static final double SWERVE_TRJ_IPOS = 0.00;
-     public static final double SWERVE_TRJ_DPOS = 0.0002;
+    //Tune
+    public static final double SWERVE_TRJ_PPOS = 0.05;
+    public static final double SWERVE_TRJ_IPOS = 0.00;
+    public static final double SWERVE_TRJ_DPOS = 0.0002;
 
-     public static final double SWERVE_TRJ_PROT = 0.225;
-     public static final double SWERVE_TRJ_IROT = 0.0;
-     public static final double SWERVE_TRJ_DROT = 0.01;
+    public static final double SWERVE_TRJ_PROT = 0.225;
+    public static final double SWERVE_TRJ_IROT = 0.0;
+    public static final double SWERVE_TRJ_DROT = 0.01;
 
-     public static final double SWERVE_KSPOS = 0.00;
-     public static final double SWERVE_KVPOS = 0.85/160;
-     public static final double SWERVE_KAPOS = 0.0007;
+    public static final double SWERVE_KSPOS = 0.00;
+    public static final double SWERVE_KVPOS = 0.85/160;
+    public static final double SWERVE_KAPOS = 0.0007;
 
-     public static final double SWERVE_KSROT = 0.00;//0.005;
-     public static final double SWERVE_KVROT = 0.0;//0.55 / (3.0 * Math.PI);
-     public static final double SWERVE_KAROT = 0.0;
- 
-     public static final int CURVE_RESOLUTION = 100;
-     public static final double CURVE_DEADBAND = 0.5; // bro this is inches who had it at 0.001
-     public static final double ROT_DEADBAND = 0.005; // radians
+    public static final double SWERVE_KSROT = 0.00;//0.005;
+    public static final double SWERVE_KVROT = 0.0;//0.55 / (3.0 * Math.PI);
+    public static final double SWERVE_KAROT = 0.0;
+
+    public static final int CURVE_RESOLUTION = 100;
+    public static final double CURVE_DEADBAND = 0.5; // bro this is inches who had it at 0.001
+    public static final double ROT_DEADBAND = 0.005; // radians
     
     // Holonomic Drive Controller
     public static final double holonomic_pos_kp = 0.05;
     public static final double holonomic_pos_ki = 0.0001;
     public static final double holonomic_pos_kd = 0;
 
-    public static final double holonomic_rot_kp = 0.6;
-    public static final double holonomic_rot_ki = 0.05;
-    public static final double holonomic_rot_kd = 0.075;
+    public static final double holonomic_rot_kp = 0.45;
+    public static final double holonomic_rot_ki = 0.03;
+    public static final double holonomic_rot_kd = 0.06;
+
 
     public static final double holonomic_vel_kp = 0.05;
     public static final double holonomic_vel_ki = 0.0;
@@ -117,7 +118,7 @@ public final class Tuning {
             new ShooterTableValue(150.0, Math.toRadians(25.0), 1690), //perfection
             new ShooterTableValue(165.0, Math.toRadians(25.0), 1740), // perfect fr
             new ShooterTableValue(187.0, Math.toRadians(25.0), 1860),//
-            new ShooterTableValue(220.0, Math.toRadians(30.0), 1950)
+            new ShooterTableValue(220.0, Math.toRadians(30.0), 1950) 
         };
 
         public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = { //TODO tune
@@ -143,7 +144,7 @@ public final class Tuning {
         public static final double SPEED = -0.45;
         public static final double REVERSE_SPEED = 0.4;
         
-        public static final double PIVOT_P = 6.5;
+        public static final double PIVOT_P = 6.5; 
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
         public static final double PIVAT_KG = -0.5;

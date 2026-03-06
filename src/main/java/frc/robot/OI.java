@@ -87,7 +87,6 @@ public class OI {
         } else if (driverStick.getRawButton(toggleIntake)) {
             Intake.startIntaking();
         } else if (driverStick.getRawAxis(intakeFeed) > 0.10) {
-            System.out.println("it is");
             Intake.startFeeding(driverStick.getRawAxis(intakeFeed));
         } else {
             Intake.stopIntaking();
@@ -130,13 +129,10 @@ public class OI {
         // rumble feedback
         if (manualAim) {
             driverStick.setRumble(RumbleType.kLeftRumble, 0.9);
-            System.out.println("m");
         } else if (superManualAim) {
             driverStick.setRumble(RumbleType.kRightRumble, 0.9);
-            System.out.println("sm");
         } else {
             driverStick.setRumble(RumbleType.kBothRumble, 0);
-            System.out.println("n");
         }
     }
 

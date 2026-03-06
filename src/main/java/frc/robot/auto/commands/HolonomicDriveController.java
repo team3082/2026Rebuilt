@@ -83,11 +83,11 @@ public class HolonomicDriveController {
 
         // Log against the *current* desired position for error visibility
         Vector2 desiredPos = path.getPointAtTime(currentTime).getPosition();
-        SmartDashboard.putNumber("Holonomic/xPosError", desiredPos.x - currentPos.x);
-        SmartDashboard.putNumber("Holonomic/yPosError", desiredPos.y - currentPos.y);
-        SmartDashboard.putNumber("Holonomic/ffMag", desiredVelocity.mag());
-        SmartDashboard.putNumber("Holonomic/feedbackMag", feedbackVector.mag());
-        SmartDashboard.putNumber("Holonomic/combinedMag", combined.mag());
+        // SmartDashboard.putNumber("Holonomic/xPosError", desiredPos.x - currentPos.x);
+        // SmartDashboard.putNumber("Holonomic/yPosError", desiredPos.y - currentPos.y);
+        // SmartDashboard.putNumber("Holonomic/ffMag", desiredVelocity.mag());
+        // SmartDashboard.putNumber("Holonomic/feedbackMag", feedbackVector.mag());
+        // SmartDashboard.putNumber("Holonomic/combinedMag", combined.mag());
 
         return combined;
     }
@@ -107,12 +107,12 @@ public class HolonomicDriveController {
     public double calculateRotation() {
         double currentTime = RTime.now() - startTime;
 
-        if (currentTime >= path.getDuration()) {
+        if ((currentTime + 0.005) >= path.getDuration()) {
             isFinished = true;
             return 0.0;
         }
 
-        ProfiledPoint desiredPoint = path.getPointAtTime(currentTime + Tuning.holonomic_lookahead_time);
+        ProfiledPoint desiredPoint = path.getPointAtTime(currentTime + 0.005);
         double desiredHeading = desiredPoint.getHeading();
         double desiredRotVel  = desiredPoint.getRotationalVelocity();
         double currentHeading = Pigeon.getRotationRad();

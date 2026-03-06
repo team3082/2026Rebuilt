@@ -1,0 +1,290 @@
+{
+  "id": "1772806368805",
+  "name": "Moses Left",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": -14.929934800566109,
+        "y": -0.26465031046364107
+      },
+      "handleInOffset": {
+        "x": 10.055984708767483,
+        "y": 0.17825392479892344
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": -53.20575467904399,
+        "y": -2.8294892138061414
+      },
+      "handleInOffset": {
+        "x": 14.622607136365975,
+        "y": 0.7776322207937463
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 341.37322719469574,
+        "y": 167.9908535702421
+      },
+      "handleOutOffset": {
+        "x": -2.4979844253500167,
+        "y": -18.999417296273464
+      },
+      "handleInOffset": {
+        "x": 12.279422027222608,
+        "y": 93.39604398036406
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 24.150621240047606,
+        "y": 0.4582016221212255
+      },
+      "handleInOffset": {
+        "x": -90.15301275752313,
+        "y": -1.7104428194217007
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 6.684776549586331,
+        "y": 0.2884075449622401
+      },
+      "handleInOffset": {
+        "x": -13.787780685871462,
+        "y": -0.5948590724900227
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": -35.661940593514714,
+        "y": -2.8568170905104466
+      },
+      "handleInOffset": {
+        "x": 14.331161392387344,
+        "y": 1.148044837472503
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 401.3411847114374,
+        "y": 147.55759373075293
+      },
+      "handleOutOffset": {
+        "x": 3.092001972625174,
+        "y": -30.904347624668993
+      },
+      "handleInOffset": {
+        "x": -2.4080097846615445,
+        "y": 24.067892623497357
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 12.927416966363012,
+        "y": 0.8789313394070177
+      },
+      "handleInOffset": {
+        "x": -38.828355226212814,
+        "y": -2.6399286380833815
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": -5.216123991377982,
+        "y": -29.543054183793764
+      },
+      "handleInOffset": {
+        "x": 0.3880578930588854,
+        "y": 2.1978801462614115
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1772253851871,
+      "u": 1,
+      "color": "green",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 0
+        }
+      ],
+      "name": "Start Rotation One"
+    },
+    {
+      "id": 1772253964202,
+      "u": 1.45,
+      "color": "purple",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": "Intake Rotation One"
+    },
+    {
+      "id": 1772775494160,
+      "u": 2.4,
+      "color": "purple",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": "Intake Rotation One"
+    },
+    {
+      "id": 1772253830774,
+      "u": 3.01,
+      "color": "green",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": "Return Rotation One"
+    },
+    {
+      "id": 1772253609080,
+      "u": 4.09,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": "Shoot One"
+    },
+    {
+      "id": 1772775266967,
+      "u": 5,
+      "color": "green",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": "Start Rotation Two"
+    },
+    {
+      "id": 1772253861823,
+      "u": 5.42,
+      "color": "purple",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": "Intake Rotation Two"
+    },
+    {
+      "id": 1772805842921,
+      "u": 6.08,
+      "color": "purple",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772775200748,
+      "u": 7.01,
+      "color": "green",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": "Return Rotation Two"
+    },
+    {
+      "id": 1772775372686,
+      "u": 7.96,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": "Shoot Two"
+    }
+  ],
+  "created": "2026-03-06T14:12:48.805Z",
+  "lastModified": "2026-03-06T14:13:07.398Z"
+}

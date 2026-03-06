@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterState;
@@ -41,6 +42,8 @@ public class ShooterManager {
             case REVVING:
                 System.out.println(shooter.atAngle() + "s " + shooter.atRampedSpeed() + "t " + turret.atAngle());
                 if (shooter.atAngle() && shooter.atRampedSpeed() && turret.atAngle()) {
+                    shooterState = ShooterState.SHOOTING;
+                } else if (OI.superManualAim) {
                     shooterState = ShooterState.SHOOTING;
                 }
                 

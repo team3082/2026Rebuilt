@@ -132,7 +132,7 @@ public class Constants {
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
         // public static final double TURRET_ZERO_ANGLE = Math.toRadians(279.0);
-        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(6.5 + 3.0); // 3.0 is fudge factor
+        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(5.5 + 3.0); // 3.0 is fudge factor
         public static final double TURRET_MIN_ANGLE = Math.toRadians(22.0);
         public static final double TURRET_MAX_ANGLE = Math.toRadians(330.0);
 

@@ -115,7 +115,7 @@ public class Shooter {
         targetFlywheelSpeed = speed / 60.0;
 
         if (OI.superManualAim) {
-            targetFlywheelSpeed = Tuning.Shooter.SHOOTER_TABLE_HUB[2].getSpeed() / 60.0;
+            targetFlywheelSpeed = Tuning.Shooter.SHOOTER_TABLE_HUB[4].getSpeed() / 60.0;
         }
     }
 
