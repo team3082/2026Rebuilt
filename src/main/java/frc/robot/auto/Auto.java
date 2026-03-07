@@ -80,19 +80,35 @@ public class Auto {
     public SequentialCommandGroup MosesRight() {
         Pigeon.setYaw(-90);
         return new SequentialCommandGroup(
-            new StartIntake(),
+            // new StartIntake(),
+            new Shoot(),
             FeatherFlow.buildFeatherAuto("Moses Right", 
                 new Shoot(),
                 new Shoot()
             )
         );
     }
+    
+    @AutoRoutine()
+    public SequentialCommandGroup SilverLining(){
+        Pigeon.setYaw(-90);
+        return new SequentialCommandGroup(
+            // new StartIntake(),
+            new Shoot(),
+            FeatherFlow.buildFeatherAuto("Silver Lining", 
+                new Shoot(),
+                new Shoot()
+            )
+        );
+
+    }
 
     @AutoRoutine()
     public SequentialCommandGroup MosesLeft() {
         Pigeon.setYaw(90);
         return new SequentialCommandGroup(
-            new StartIntake(),
+            // new StartIntake(),
+            new Shoot(),
             FeatherFlow.buildFeatherAuto("Moses Left", 
                 true,
                 new Shoot(),
