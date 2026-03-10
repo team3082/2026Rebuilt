@@ -3,11 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.controllermaps.LogitechF310;
-import frc.robot.subsystems.AutoTarget;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
-import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.utils.Vector2;
 
@@ -24,15 +20,15 @@ public class OI {
     // zero is for Pigeon 
     private static final int zero = LogitechF310.BUTTON_Y;
 
-    private static final int toggleIntake = LogitechF310.BUTTON_LEFT_BUMPER;
-    private static final int reverseIntake = LogitechF310.AXIS_LEFT_TRIGGER;
+    // private static final int toggleIntake = LogitechF310.BUTTON_LEFT_BUMPER;
+    // private static final int reverseIntake = LogitechF310.AXIS_LEFT_TRIGGER;
 
-    private static final int shoot = LogitechF310.BUTTON_RIGHT_BUMPER;
+    // private static final int shoot = LogitechF310.BUTTON_RIGHT_BUMPER;
 
-    private static final int zeroTurret = LogitechF310.BUTTON_X;
-    private static final int zeroHood = LogitechF310.BUTTON_A;
+    // private static final int zeroTurret = LogitechF310.BUTTON_X;
+    // private static final int zeroHood = LogitechF310.BUTTON_A;
 
-    private static final int intakeFeed = LogitechF310.AXIS_RIGHT_TRIGGER;
+    // private static final int intakeFeed = LogitechF310.AXIS_RIGHT_TRIGGER;
 
     public static boolean manualAim = false; // keeps turret angle constant
     public static boolean superManualAim = false; // keeps turret angle constant and doesn't change flywheel velocity (for if vision breaks)
@@ -82,58 +78,58 @@ public class OI {
 
         // intake
 
-        if (driverStick.getRawAxis(reverseIntake) > 0.25) {
-            Intake.reverse();
-        } else if (driverStick.getRawButton(toggleIntake)) {
-            Intake.startIntaking();
-        } else if (driverStick.getRawAxis(intakeFeed) > 0.10) {
-            Intake.startFeeding(driverStick.getRawAxis(intakeFeed));
-        } else {
-            Intake.stopIntaking();
-        }
+        // if (driverStick.getRawAxis(reverseIntake) > 0.25) {
+        //     Intake.reverse();
+        // } else if (driverStick.getRawButton(toggleIntake)) {
+        //     Intake.startIntaking();
+        // } else if (driverStick.getRawAxis(intakeFeed) > 0.10) {
+        //     Intake.startFeeding(driverStick.getRawAxis(intakeFeed));
+        // } else {
+        //     Intake.stopIntaking();
+        // }
 
         // shooter
-        ShooterManager.setTarget(AutoTarget.getTarget());
+        // ShooterManager.setTarget(AutoTarget.getTarget());
         
-        if (AutoTarget.nearTrench() && ShooterManager.getTarget() != ShooterTarget.HUB) { // prevents us from decapitation under the trench
-            ShooterManager.stopShooting();
-        } else {
-            if (driverStick.getRawButton(shoot)) { // toggles shooting on and off when this button pressed
-                ShooterManager.shoot();
-            } else {
-                ShooterManager.stopShooting();
-            }
-        }
+        // if (AutoTarget.nearTrench() && ShooterManager.getTarget() != ShooterTarget.HUB) { // prevents us from decapitation under the trench
+        //     ShooterManager.stopShooting();
+        // } else {
+        //     if (driverStick.getRawButton(shoot)) { // toggles shooting on and off when this button pressed
+        //         ShooterManager.shoot();
+        //     } else {
+        //         ShooterManager.stopShooting();
+        //     }
+        // }
 
-        if (driverStick.getRawButtonPressed(zeroTurret)) {
-            ShooterManager.zeroTurret();
-        }
+        // if (driverStick.getRawButtonPressed(zeroTurret)) {
+        //     ShooterManager.zeroTurret();
+        // }
 
-        if (driverStick.getRawButtonPressed(zeroHood)) {
-            ShooterManager.zeroHood();
-        }
+        // if (driverStick.getRawButtonPressed(zeroHood)) {
+        //     ShooterManager.zeroHood();
+        // }
 
-        if (driverStick.getRawButtonPressed(toggleManual)) {
-            if (manualAim) {
-                superManualAim = true;
-                manualAim = false;
-            } else if (superManualAim) {
-                superManualAim = false;
-                manualAim = false;
-            } else {
-                manualAim = true;
-                superManualAim = false;
-            }
-        }
+        // if (driverStick.getRawButtonPressed(toggleManual)) {
+        //     if (manualAim) {
+        //         superManualAim = true;
+        //         manualAim = false;
+        //     } else if (superManualAim) {
+        //         superManualAim = false;
+        //         manualAim = false;
+        //     } else {
+        //         manualAim = true;
+        //         superManualAim = false;
+        //     }
+        // }
 
         // rumble feedback
-        if (manualAim) {
-            driverStick.setRumble(RumbleType.kLeftRumble, 0.9);
-        } else if (superManualAim) {
-            driverStick.setRumble(RumbleType.kRightRumble, 0.9);
-        } else {
-            driverStick.setRumble(RumbleType.kBothRumble, 0);
-        }
+        // if (manualAim) {
+        //     driverStick.setRumble(RumbleType.kLeftRumble, 0.9);
+        // } else if (superManualAim) {
+        //     driverStick.setRumble(RumbleType.kRightRumble, 0.9);
+        // } else {
+        //     driverStick.setRumble(RumbleType.kBothRumble, 0);
+        // }
     }
 
     private static void operatorInput() {}

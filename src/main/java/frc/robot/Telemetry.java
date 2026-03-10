@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.robot.auto.Auto;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
-import frc.robot.subsystems.states.ShooterTarget;
-import frc.robot.subsystems.visualizer.SubsystemVisualizer;
+// import frc.robot.subsystems.Indexer;
+// import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.ShooterManager;
+// import frc.robot.subsystems.sensors.Pigeon;
+// import frc.robot.subsystems.states.ShooterTarget;
+// import frc.robot.subsystems.visualizer.SubsystemVisualizer;
 import frc.robot.swerve.Odometry;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
@@ -32,16 +33,16 @@ import frc.robot.swerve.SwervePID;
 public class Telemetry {
     private static ShuffleboardTab robotTab = Shuffleboard.getTab("Robot Views");
     private static ShuffleboardTab swerveTab = Shuffleboard.getTab("Swerve");
-    private static ShuffleboardTab shooterManagerTab = Shuffleboard.getTab("Shooter Manager");
-    private static ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
-    private static ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
-    private static ShuffleboardTab intakeTab = Shuffleboard.getTab("Intake");
-    private static ShuffleboardTab indexerTab = Shuffleboard.getTab("Handoff");
+    // private static ShuffleboardTab shooterManagerTab = Shuffleboard.getTab("Shooter Manager");
+    // private static ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+    // private static ShuffleboardTab turretTab = Shuffleboard.getTab("Turret");
+    // private static ShuffleboardTab intakeTab = Shuffleboard.getTab("Intake");
+    // private static ShuffleboardTab indexerTab = Shuffleboard.getTab("Handoff");
 
     // Views
     private static Field2d fieldView = new Field2d();
-    public static Mechanism2d subsystemViewSide = new Mechanism2d(8.25, 5);
-    public static Mechanism2d subsystemViewTop = new Mechanism2d(4, 4);
+    // public static Mechanism2d subsystemViewSide = new Mechanism2d(8.25, 5);
+    // public static Mechanism2d subsystemViewTop = new Mechanism2d(4, 4);
 
     public static Mechanism2d swerveView = new Mechanism2d(60, 60);
 
@@ -70,46 +71,46 @@ public class Telemetry {
     private static final GenericEntry SWERVE_MOD_4_TARGET_SPEED = swerveTab.add("Swerve Module 4 Target Speed", SwerveManager.mods[3].targetSpeed).getEntry();
     private static final GenericEntry SWERVE_MOD_4_INVERTED = swerveTab.add("Swerve Module 4 Inverted", SwerveManager.mods[3].inverted).getEntry();
 
-    // Shooter Manager
-    private static final GenericEntry SHOOTER_TARGET = shooterManagerTab.add("Shooter target", ShooterManager.getTarget().name()).getEntry();
-    private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.getShooterState().name()).getEntry();
+    // // Shooter Manager
+    // private static final GenericEntry SHOOTER_TARGET = shooterManagerTab.add("Shooter target", ShooterManager.getTarget().name()).getEntry();
+    // private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.getShooterState().name()).getEntry();
 
     // Shooter
-    private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", ShooterManager.getShooter().getTargetAngle()).getEntry();
-    private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", ShooterManager.getShooter().getAngle()).getEntry();
-    private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", ShooterManager.getShooter().getTargetSpeed()).getEntry();
-    private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", ShooterManager.getShooter().getVelocity()).getEntry();
-    private static final GenericEntry OI_MANUAL = shooterTab.add("Manual", OI.manualAim).getEntry();
-    private static final GenericEntry OI_SUPER_MANUAL = shooterTab.add("SUPER Manual", OI.superManualAim).getEntry();
+    // private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", ShooterManager.getShooter().getTargetAngle()).getEntry();
+    // private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", ShooterManager.getShooter().getAngle()).getEntry();
+    // private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", ShooterManager.getShooter().getTargetSpeed()).getEntry();
+    // private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", ShooterManager.getShooter().getVelocity()).getEntry();
+    // private static final GenericEntry OI_MANUAL = shooterTab.add("Manual", OI.manualAim).getEntry();
+    // private static final GenericEntry OI_SUPER_MANUAL = shooterTab.add("SUPER Manual", OI.superManualAim).getEntry();
 
-    // Turret
-    private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", ShooterManager.getTurret().getTurretState().name()).getEntry();
-    private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", ShooterManager.getTurret().getTargetAngle()).getEntry();
-    private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", ShooterManager.getTurret().getAngle()).getEntry();
-    private static final GenericEntry TURRET_HUB_DIST = turretTab.add("Hub to turret dist", ShooterTarget.HUB.pos.sub(Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()))).mag()).getEntry();
-    // Intake
-    private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
-    private static final GenericEntry INTAKE_ANGLE = intakeTab.add("Intake angle", Intake.getAngle()).getEntry();
-    private static final GenericEntry INTAKE_SPEED = intakeTab.add("Intake speed", Intake.getSpeed()).getEntry();
+    // // Turret
+    // private static final GenericEntry TURRET_STATE = turretTab.add("Turret state", ShooterManager.getTurret().getTurretState().name()).getEntry();
+    // private static final GenericEntry TURRET_TARGET_ANGLE = turretTab.add("Target turret angle", ShooterManager.getTurret().getTargetAngle()).getEntry();
+    // private static final GenericEntry TURRET_CURRENT_ANGLE = turretTab.add("Current turret angle", ShooterManager.getTurret().getAngle()).getEntry();
+    // private static final GenericEntry TURRET_HUB_DIST = turretTab.add("Hub to turret dist", ShooterTarget.HUB.pos.sub(Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()))).mag()).getEntry();
+    // // Intake
+    // private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
+    // private static final GenericEntry INTAKE_ANGLE = intakeTab.add("Intake angle", Intake.getAngle()).getEntry();
+    // private static final GenericEntry INTAKE_SPEED = intakeTab.add("Intake speed", Intake.getSpeed()).getEntry();
 
-    // Spindexer and Handoff
-    private static final GenericEntry SPINDEXER_SPEED = indexerTab.add("Spindexer speed", Indexer.getSpindexerSpeed()).getEntry();
-    private static final GenericEntry HANDOFF_SPEED = indexerTab.add("Handoff speed", Indexer.getHandoffSpeed()).getEntry();
+    // // Spindexer and Handoff
+    // private static final GenericEntry SPINDEXER_SPEED = indexerTab.add("Spindexer speed", Indexer.getSpindexerSpeed()).getEntry();
+    // private static final GenericEntry HANDOFF_SPEED = indexerTab.add("Handoff speed", Indexer.getHandoffSpeed()).getEntry();
 
     public static void init() {
         robotTab.add("Field View", fieldView);
         robotTab.add("Swerve View", swerveView);
 
         SwerveBaseVisualizer.init();
-        SubsystemVisualizer.init();
+        // SubsystemVisualizer.init();
         robotTab.addString("Position", () -> SwervePosition.getPosition().toString());
         robotTab.addString("PID Dest Position", () -> SwervePID.getDest().toString());
         
 
         robotTab.add("Auto Selector", Auto.routineManager.autoSelector);
 
-        robotTab.add("Subsystem View Side", subsystemViewSide);
-        robotTab.add("Subsystem View Top", subsystemViewTop);
+        // robotTab.add("Subsystem View Side", subsystemViewSide);
+        // robotTab.add("Subsystem View Top", subsystemViewTop);
     }
 
     public static void update() {
@@ -192,29 +193,29 @@ public class Telemetry {
     }
 
     private static void updateSubsystems() {
-        SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
-        SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
+        // SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
+        // SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
 
-        SHOOTER_TARGET_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getTargetAngle());
-        SHOOTER_CURRENT_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getAngle());
-        SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getTargetSpeed());
-        SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getVelocity());
-        OI_MANUAL.setBoolean(OI.manualAim);
-        OI_SUPER_MANUAL.setBoolean(OI.superManualAim);
+        // SHOOTER_TARGET_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getTargetAngle());
+        // SHOOTER_CURRENT_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getAngle());
+        // SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getTargetSpeed());
+        // SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getVelocity());
+        // OI_MANUAL.setBoolean(OI.manualAim);
+        // OI_SUPER_MANUAL.setBoolean(OI.superManualAim);
 
-        TURRET_STATE.setString(ShooterManager.getTurret().getTurretState().name());
-        TURRET_TARGET_ANGLE.setDouble(ShooterManager.getTurret().getTargetAngle());
-        TURRET_CURRENT_ANGLE.setDouble(ShooterManager.getTurret().getAngle());
-                TURRET_HUB_DIST.setDouble(ShooterTarget.HUB.pos.sub(Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()))).mag());
+        // TURRET_STATE.setString(ShooterManager.getTurret().getTurretState().name());
+        // TURRET_TARGET_ANGLE.setDouble(ShooterManager.getTurret().getTargetAngle());
+        // TURRET_CURRENT_ANGLE.setDouble(ShooterManager.getTurret().getAngle());
+        //         TURRET_HUB_DIST.setDouble(ShooterTarget.HUB.pos.sub(Odometry.getPosition().add(Constants.Shooter.TURRET_POS_OFFSET.rotate(Pigeon.getRotationRad()))).mag());
 
-        INTAKE_STATE.setString(Intake.getIntakeState().name());
-        INTAKE_ANGLE.setDouble(Intake.getAngle());
-        INTAKE_SPEED.setDouble(Intake.getSpeed());
+        // INTAKE_STATE.setString(Intake.getIntakeState().name());
+        // INTAKE_ANGLE.setDouble(Intake.getAngle());
+        // INTAKE_SPEED.setDouble(Intake.getSpeed());
 
-        SPINDEXER_SPEED.setDouble(Indexer.getSpindexerSpeed());
-        HANDOFF_SPEED.setDouble(Indexer.getHandoffSpeed());
+        // SPINDEXER_SPEED.setDouble(Indexer.getSpindexerSpeed());
+        // HANDOFF_SPEED.setDouble(Indexer.getHandoffSpeed());
 
-        SubsystemVisualizer.update();
+        // SubsystemVisualizer.update();
     }
     
 }

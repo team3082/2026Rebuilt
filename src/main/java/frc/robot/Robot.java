@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 // AUTO
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterManager;
-import frc.robot.subsystems.LEDs.LEDManager;
-import frc.robot.subsystems.LEDs.LEDMech2D;
+// import frc.robot.subsystems.Indexer;
+// import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.ShooterManager;
+// import frc.robot.subsystems.LEDs.LEDManager;
+// import frc.robot.subsystems.LEDs.LEDMech2D;
 import frc.robot.auto.Auto;
     
 // SUBSYSTEMS
@@ -50,16 +50,16 @@ public class Robot extends LoggedRobot {
     SwervePosition.setPosition(new Vector2());
 
     // Subsystems
-    ShooterManager.init();
-    Indexer.init();
-    Intake.init();
+    // ShooterManager.init();
+    // Indexer.init();
+    // Intake.init();
 
     // Logging
     Telemetry.init();
 
     //LEDs
-    LEDManager.init();
-    LEDMech2D.init();
+    // LEDManager.init();
+    // LEDMech2D.init();
     
     // Controls
     OI.init();
@@ -84,16 +84,16 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    LEDMech2D.update();
+    // LEDMech2D.update();
     RTime.update();
     Pigeon.update();
-    ShooterManager.update();
-    Indexer.update();
-    Intake.update();
+    // ShooterManager.update();
+    // Indexer.update();
+    // Intake.update();
     Telemetry.update();
     SwervePosition.update();
     SwerveManager.update();
-    LEDManager.update();
+    // LEDManager.update();
     
 
   }
@@ -110,7 +110,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopInit() {
-    Intake.stopIntaking();
+    // Intake.stopIntaking();
   }
 
   @Override

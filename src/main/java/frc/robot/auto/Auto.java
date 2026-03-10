@@ -21,7 +21,7 @@ public class Auto {
     @AutoRoutine()
     public SequentialCommandGroup Shoot(){
         return new SequentialCommandGroup(
-           new StartIntake(),
+        //    new StartIntake(),
            new Shoot()
         );
     }
@@ -38,6 +38,13 @@ public class Auto {
                 new Shoot(),
                 new Shoot()
             )
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup ShootNoMove() {
+        return new SequentialCommandGroup(
+            new Shoot()
         );
     }
 

@@ -3,30 +3,30 @@ package frc.robot.auto.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Tuning;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterManager;
-import frc.robot.subsystems.states.ShooterState;
+// import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.ShooterManager;
+// import frc.robot.subsystems.states.ShooterState;
 import frc.robot.utils.RTime;
 
 public class Shoot extends Command{
 
     private double lastShotTime;
-    private boolean reachedShooting; // starts detection of balls leaving once shooter starts
+    // private boolean reachedShooting; // starts detection of balls leaving once shooter starts
     
     @Override
     public void initialize() {
         System.out.println("shooting");
         lastShotTime = RTime.now();
-        ShooterManager.shoot();
+        // ShooterManager.shoot();
     }
 
     @Override
     public void execute() {
-        if (ShooterManager.getShooterState() == ShooterState.SHOOTING) {
-            reachedShooting = true;
-        }
+        // if (ShooterManager.getShooterState() == ShooterState.SHOOTING) {
+        //     reachedShooting = true;
+        // }
 
-        Intake.startFeeding(.9);
+        // Intake.startFeeding(.9);
 
         // if (!reachedShooting || ShooterManager.getShooter().getVelocity() < ShooterManager.getShooter().getTargetSpeed() - Constants.Shooter.RPM_DROP) {
         //     lastShotTime = RTime.now(); // resets time every time it shoots (rpm drops when a ball is shot)
@@ -35,13 +35,14 @@ public class Shoot extends Command{
 
     @Override
     public void end(boolean interrupted) {
-        ShooterManager.stopShooting();
-        Intake.startIntaking();
+        // ShooterManager.stopShooting();
+        // Intake.startIntaking();
     }
 
     @Override
     public boolean isFinished() {
-        return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; // checks if time since last shot is high enough to end
+        return true;
+        // return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; // checks if time since last shot is high enough to end
     }
 
 }
