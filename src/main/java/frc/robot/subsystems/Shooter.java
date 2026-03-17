@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.naming.InitialContext;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -13,16 +15,16 @@ import frc.robot.Robot;
 import frc.robot.Tuning;
 
 public class Shooter {
-    private TalonFX flywheelMotor;
-    private TalonFX hoodMotor;
+    private static TalonFX flywheelMotor;
+    private static TalonFX hoodMotor;
     
-    private double targetFlywheelSpeed = 0.0; // rotations per second
-    private double targetHoodAngle = 0.0; // radians
+    private static double targetFlywheelSpeed = 0.0;
+    private static double targetHoodAngle = 0.0;
 
     /**
      * Initializes the flywheel motors and controllers.
      */
-    public Shooter() {
+    public static void init() {
         flywheelMotor = new TalonFX(Constants.Shooter.FLYWHEEL_MOTOR_ID);
         hoodMotor = new TalonFX(Constants.Shooter.HOOD_MOTOR_ID);
         
@@ -36,7 +38,6 @@ public class Shooter {
         flywheelConfiguration.Slot0.kV = Tuning.Shooter.FLYWHEEL_KV;
 
         flywheelConfiguration.CurrentLimits.StatorCurrentLimit = 120;
-        // flywheelConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         flywheelMotor.getConfigurator().apply(flywheelConfiguration);
 
         hoodMotor.getConfigurator().apply(new TalonFXConfiguration());
@@ -57,7 +58,7 @@ public class Shooter {
     /**
      * Updates the shooter
      */
-    public void update() {
+    public static void update() {
         if (AutoTarget.nearTrench()) { // final safety check to override other potential errors
             targetHoodAngle = 0;
         }
@@ -94,11 +95,11 @@ public class Shooter {
      * Sets the target hood angle.
      * @param angle Target angle in radians
      */
-    public void setTargetAngle(double angle) {
+    public static void setTargetAngle(double angle) {
         targetHoodAngle = angle;
     }
 
-    public double getTargetAngle() {
+    public static double getTargetAngle() {
         return targetHoodAngle;
     }
 
@@ -106,7 +107,7 @@ public class Shooter {
      * Sets the target flywheel speed.
      * @param speed Target speed in rotations per minute
      */
-    public void setTargetSpeed(double speed) {
+    public static void setTargetSpeed(double speed) {
         targetFlywheelSpeed = speed / 60.0;
     }
 
@@ -114,7 +115,7 @@ public class Shooter {
      * Returns target flywheel speed
      * @return target flywheel speed in rotations per minute
      */
-    public double getTargetSpeed() {
+    public static double getTargetSpeed() {
         return targetFlywheelSpeed * 60.0;
     }
 
@@ -122,7 +123,7 @@ public class Shooter {
      * Gets the current hood angle.
      * @return Current angle in radians
      */
-    public double getAngle() {
+    public static double getAngle() {
         if (Robot.isReal()) {
             return rotToHoodAngle(hoodMotor.getPosition().getValueAsDouble());
         } else {
@@ -134,7 +135,7 @@ public class Shooter {
      * Gets the current flywheel velocity.
      * @return Current velocity in rotations per minute
      */
-    public double getVelocity() {
+    public static double getVelocity() {
         if (Robot.isReal()) {
             return flywheelMotor.getVelocity().getValueAsDouble() * 60.0;
         } else {
@@ -146,7 +147,7 @@ public class Shooter {
      * Checks if the hood is at the target angle.
      * @return True if at target angle within tolerance
      */
-    public boolean atAngle() {
+    public static boolean atAngle() {
         return Math.abs(getAngle() - targetHoodAngle) < Tuning.Shooter.HOOD_DEADBAND;
     }
 
@@ -154,7 +155,7 @@ public class Shooter {
      * Checks if the flywheel is at the target speed.
      * @return if it is at target speed
      */
-    public boolean atRampedSpeed() {
+    public static boolean atRampedSpeed() {
         return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND;
     }
 
@@ -163,7 +164,7 @@ public class Shooter {
      * @param radians angle that hood that rotated
      * @return motor rotations for hood to be at given angle
      */
-    private double hoodAngleToRot(double radians) {
+    private static double hoodAngleToRot(double radians) {
         return radians / 2.0 / Math.PI * Constants.Shooter.HOOD_GEAR_RATIO;
     }
 
@@ -172,7 +173,7 @@ public class Shooter {
      * @param rot motor rotations
      * @return hood angle that will be at given motor rotations
      */
-    private double rotToHoodAngle(double rot) {
+    private static double rotToHoodAngle(double rot) {
         return rot * 2.0 * Math.PI / Constants.Shooter.HOOD_GEAR_RATIO;
     }
 

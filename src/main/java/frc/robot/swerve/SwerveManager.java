@@ -156,7 +156,7 @@ public final class SwerveManager {
     //https://shorturl.at/c6t3v
     public static void plant() {
         for (SwerveModule mod : mods) {
-            mod.drive(0.5);
+            mod.drive(0);
             mod.rotateToRad(mod.pos.atan2());
         }
     }

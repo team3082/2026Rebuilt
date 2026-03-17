@@ -8,7 +8,6 @@ import frc.robot.swerve.Odometry;
 import frc.robot.utils.Vector2;
 
 public class ShooterManager {
-
     // default to safe values so Telemetry static init can't NPE before init() is called
     public static ShooterState shooterState = ShooterState.IDLE;
     private static ShooterTarget target = ShooterTarget.HUB;
@@ -16,7 +15,7 @@ public class ShooterManager {
     public static boolean inRange = true; // for LEDs, to track and display if we are in range to shoot at the Hub
     
     public static void init() {
-        shooter = new Shooter();
+        Shooter.init();
         shooterState = ShooterState.IDLE;
         target = ShooterTarget.HUB;
     }
@@ -25,8 +24,7 @@ public class ShooterManager {
 
         switch (shooterState) {
             case IDLE:
-                // When idle, hood goes down to fit under trench
-                shooter.setTargetAngle(0);
+                Shooter.setTargetAngle(0);
                 
                 break;
 
@@ -34,7 +32,7 @@ public class ShooterManager {
                 break;
 
             case REVVING:
-                if (shooter.atAngle() && shooter.atRampedSpeed()) {
+                if (Shooter.atAngle() && Shooter.atRampedSpeed()) {
                     shooterState = ShooterState.SHOOTING;
                 }
                 
@@ -47,7 +45,7 @@ public class ShooterManager {
 
                 break;
         }
-        shooter.update();
+        Shooter.update();
 
     }
 
@@ -82,7 +80,6 @@ public class ShooterManager {
     }
 
     private static void setShooterAngleAndSpeed() {
-        
         switch (target) {
             case HUB:
                 aimAtHub();
@@ -92,7 +89,6 @@ public class ShooterManager {
                 aimPass();
                 break;
         }
-
     }
 
     private static void aimPass() {
@@ -104,14 +100,14 @@ public class ShooterManager {
         // based on distance, uses shooter table to set flywheel speeds for different ranges of distances
         for (int i = Tuning.Shooter.SHOOTER_TABLE_PASSING.length - 1; i >= 0; i--) {
             if (Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getDist() < distance) {
-                shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getSpeed());
-                shooter.setTargetAngle(Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getAngle() - Constants.Shooter.HOOD_ANGLE_OFFSET);
+                Shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getSpeed());
+                Shooter.setTargetAngle(Tuning.Shooter.SHOOTER_TABLE_PASSING[i].getAngle() - Constants.Shooter.HOOD_ANGLE_OFFSET);
                 return;
             }
         }
 
-        shooter.setTargetAngle(0);
-        shooter.setTargetSpeed(1000);
+        Shooter.setTargetAngle(0);
+        Shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
         inRange = false; // see variable creation before impulse deleting
 
@@ -125,8 +121,8 @@ public class ShooterManager {
         double distance = target.pos.sub(shooterPos).mag();
 
         if (distance < Tuning.Shooter.SHOOTER_TABLE_HUB[0].getDist()) { // defaults to lowest value if too close, does this because if it interpolates to lower flywheel speed the shot won't go high enough
-            shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getSpeed());
-            shooter.setTargetAngle(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getAngle() - Constants.Shooter.HOOD_ANGLE_OFFSET);
+            Shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getSpeed());
+            Shooter.setTargetAngle(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getAngle() - Constants.Shooter.HOOD_ANGLE_OFFSET);
             return;
         }
 
@@ -144,15 +140,15 @@ public class ShooterManager {
                 double baseAngle = Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle();
                 double angle = baseAngle + (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getAngle() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getAngle()) * t;
                 
-                shooter.setTargetSpeed(speed);
-                shooter.setTargetAngle(angle - Constants.Shooter.HOOD_ANGLE_OFFSET);
+                Shooter.setTargetSpeed(speed);
+                Shooter.setTargetAngle(angle - Constants.Shooter.HOOD_ANGLE_OFFSET);
                 return;
             }
         }
 
         // if not in range, sets angle to 0 and default flywheel speed
-        shooter.setTargetAngle(0);
-        shooter.setTargetSpeed(1000);
+        Shooter.setTargetAngle(0);
+        Shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
         inRange = false;
     }

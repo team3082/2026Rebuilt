@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import frc.robot.Constants.Swerve;
 import frc.robot.controllermaps.LogitechF310;
 import frc.robot.subsystems.AutoTarget;
 import frc.robot.subsystems.ShooterManager;
@@ -40,7 +41,6 @@ public class OI {
 
     public static void userInput() {
         driverInput();
-        operatorInput();
     }
 
     /**
@@ -50,8 +50,6 @@ public class OI {
      * so this lives in the teleopPeriodic() function.
      */
     private static void driverInput() {
-        // INPUT
-
         // Reset pigeon
         if (driverStick.getRawButton(zero)) Pigeon.reset();
 
@@ -60,40 +58,17 @@ public class OI {
         }
 
         if (driverStick.getRawButton(shoot)) {
-            System.out.println("Shoot button pressed");
-            double rawMoveX = driverStick.getRawAxis(moveX) * Math.abs(driverStick.getRawAxis(moveX));
-            double rawMoveY = driverStick.getRawAxis(moveY) * Math.abs(driverStick.getRawAxis(moveY));
-            Vector2 drive = new Vector2(rawMoveX, -rawMoveY);
+            Vector2 drive = getJoyVector();
+            
+            // Get the angle to the target and set it as the destination for the SwervePID
+            Vector2 targetPos = ShooterManager.getTarget().pos;
+            double targetAngle = Math.atan2(targetPos.y - SwervePosition.getPosition().y, targetPos.x - SwervePosition.getPosition().x);
+            SwervePID.setDestState(SwervePosition.getPosition(), targetAngle);
             
             if (drive.mag() > 0.05) {
-                System.out.println("Shoot and move");
-                drive = drive.mul(0.3);
-
-                Vector2 targetPos = ShooterManager.getTarget().pos;
-                double targetAngle = Math.atan2(targetPos.y - SwervePosition.getPosition().y, targetPos.x - SwervePosition.getPosition().x);
-                SwervePID.setDestState(SwervePosition.getPosition(), targetAngle);
-                SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), drive);
-                ShooterManager.shoot();
-
+                shootAndMove(drive);
             } else {
-                //Planting
-                System.out.println("Shoot and plant");
-                
-           
-                Vector2 targetPos = ShooterManager.getTarget().pos;
-                double targetAngle = Math.atan2(targetPos.y - SwervePosition.getPosition().y, targetPos.x - SwervePosition.getPosition().x);
-                SwervePID.setDestState(SwervePosition.getPosition(), targetAngle);
-                double angleError = Math.atan2(Math.sin(targetAngle - Pigeon.getRotationRad()), Math.cos(targetAngle - Pigeon.getRotationRad()));
-
-                if (Math.abs(angleError) < 0.2) {
-                    System.out.println("At target angle, planting");
-                    SwerveManager.plant();
-                } else {
-                    SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), new Vector2());
-                }
-                
-                ShooterManager.shoot();
-
+               plantAndShoot();
             }
 
         } else {
@@ -103,11 +78,28 @@ public class OI {
        
     }
 
-    private static void normalDrive() {
-        double rawMoveX = driverStick.getRawAxis(moveX) * Math.abs(driverStick.getRawAxis(moveX));
-        double rawMoveY = driverStick.getRawAxis(moveY) * Math.abs(driverStick.getRawAxis(moveY));
-        Vector2 drive = new Vector2(rawMoveX, -rawMoveY);
+    private static void shootAndMove(Vector2 drive) {
+        drive = drive.mul(0.3);
+
+        SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), drive);
+        ShooterManager.shoot();
+    }
+
+    private static void plantAndShoot(){
+        System.out.println("Shoot and plant");
+                
+        if (SwervePID.atRot()) {
+            System.out.println("At target angle, planting");
+            SwerveManager.plant();
+        } else {
+            SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), new Vector2());
+        }
         
+        ShooterManager.shoot();
+    }
+
+    private static void normalDrive() {
+        Vector2 drive = getJoyVector();
         double rotate =  driverStick.getRawAxis(rotateX) * -.3;
         
         if (drive.mag() < 0.05) {
@@ -121,6 +113,10 @@ public class OI {
         SwerveManager.rotateAndDrive(rotate, drive);
     }
 
-    private static void operatorInput() {}
+    private static Vector2 getJoyVector() {
+        double rawMoveX = driverStick.getRawAxis(moveX) * Math.abs(driverStick.getRawAxis(moveX));
+        double rawMoveY = driverStick.getRawAxis(moveY) * Math.abs(driverStick.getRawAxis(moveY));
+        return new Vector2(rawMoveX, -rawMoveY);
+    }
 
 }
