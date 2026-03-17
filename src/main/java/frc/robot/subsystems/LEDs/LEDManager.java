@@ -29,6 +29,7 @@ import frc.robot.subsystems.states.ShooterState;
 public class LEDManager {
     public static AddressableLED m_led;
     public static AddressableLEDBuffer m_ledBuffer;
+    public static AddressableLEDBuffer m_displayBuffer;
     public static LEDPattern currentPattern;
     public static Distance kLedSpacing = Distance.ofBaseUnits(1.0 / 47.0, Meters);
 
@@ -39,8 +40,9 @@ public class LEDManager {
 /* */
     public static void init() {
         m_led = new AddressableLED(0);
-        m_ledBuffer = new AddressableLEDBuffer(47);
-        m_led.setLength(m_ledBuffer.getLength());
+        m_ledBuffer = new AddressableLEDBuffer(24);
+        m_displayBuffer = new AddressableLEDBuffer(47);
+        m_led.setLength(m_displayBuffer.getLength());
         m_led.start();
         setColor(Colors.BLUE);
         GameState();
@@ -81,8 +83,11 @@ public class LEDManager {
         //animations
         RED_SCROLL,
         YELLOW_SCROLL,
+        GREEN_SCROLL,
         RED_CYAN_SCROLL,
         YELLOW_CYAN_SCROLL,
+        GREEN_CYAN_SCROLL,
+
         RAINBOW
     }
     
@@ -109,7 +114,7 @@ public class LEDManager {
                 break;
 
             case YELLOW:
-                set_color = new Color(255, 255, 0);
+                set_color = new Color(255, 200, 0);
                 currentPattern = LEDPattern.solid(set_color);
 
                 break;
@@ -135,36 +140,36 @@ public class LEDManager {
             case RED_CYAN:
                 Color set_color1 = new Color(255, 0, 0);
                 Color set_color2 = new Color(0, 255, 255);
-                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2)).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2));//.scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
                 
                 break;
             case GREEN_CYAN:
                 set_color1 = new Color(0, 255, 0);
                 set_color2 = new Color(0, 255, 255);
-                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2)).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2));//.scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
                 
                 break;
             case BLUE_CYAN:
                 set_color1 = new Color(0, 0, 255);
                 set_color2 = new Color(0, 255, 255);
-                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2)).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2));//.scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
                 
                 break;
             case YELLOW_CYAN:
-                set_color1 = new Color(255, 255, 0);
+                set_color1 = new Color(255, 200, 0);
                 set_color2 = new Color(0, 255, 255);
-                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2)).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2));//.scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
                 break;
             case MAGENTA_CYAN:
                 set_color1 = new Color(255, 0, 255);
                 set_color2 = new Color(0, 255, 255);
-                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2)).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2));//.scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
 
                 break;
             case WHITE_CYAN:
                 set_color1 = new Color(255, 255, 255);
                 set_color2 = new Color(0, 255, 255);
-                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2)).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                currentPattern = LEDPattern.steps(Map.of(0, set_color1, 0.125, set_color2, 0.25, set_color1, 0.375, set_color2, 0.5, set_color1, 0.625, set_color2, 0.75, set_color1, 0.875, set_color2));//.scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
                 
                 break;
             case RED_SCROLL:
@@ -173,8 +178,40 @@ public class LEDManager {
                 currentPattern = LEDPattern.gradient(GradientType.kContinuous, set_color1, set_color2, set_color1, set_color2, set_color1, set_color2).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
                 
                 break;
+            case YELLOW_SCROLL:
+                set_color1 = new Color(255, 200, 0);
+                set_color2 = new Color(0, 0, 0);
+                currentPattern = LEDPattern.gradient(GradientType.kContinuous, set_color1, set_color2, set_color1, set_color2, set_color1, set_color2).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                
+                break;
+                
+            case GREEN_SCROLL:
+                set_color1 = new Color(0, 255, 0);
+                set_color2 = new Color(0, 0, 0);
+                currentPattern = LEDPattern.gradient(GradientType.kContinuous, set_color1, set_color2, set_color1, set_color2, set_color1, set_color2).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                
+                break;
+            case RED_CYAN_SCROLL:
+                set_color1 = new Color(255, 0, 0);
+                set_color2 = new Color(0, 255, 255);
+                currentPattern = LEDPattern.gradient(GradientType.kContinuous, set_color1, set_color2, set_color1, set_color2, set_color1, set_color2).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                
+                break;
+            case YELLOW_CYAN_SCROLL:
+                set_color1 = new Color(255, 200, 0);
+                set_color2 = new Color(0, 255, 255);
+                currentPattern = LEDPattern.gradient(GradientType.kContinuous, set_color1, set_color2, set_color1, set_color2, set_color1, set_color2).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                
+                break;
+            case GREEN_CYAN_SCROLL:
+                set_color1 = new Color(0, 255, 0);
+                set_color2 = new Color(0, 255, 255);
+                currentPattern = LEDPattern.gradient(GradientType.kContinuous, set_color1, set_color2, set_color1, set_color2, set_color1, set_color2).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.15,MetersPerSecond),kLedSpacing);
+                
+                break;
+            
             case RAINBOW:
-                currentPattern = LEDPattern.rainbow(255, 200);
+                currentPattern = LEDPattern.rainbow(255, 200).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.5,MetersPerSecond),kLedSpacing);
                 
             default:
                 break;
@@ -199,14 +236,17 @@ public class LEDManager {
         if (DriverStation.isTest()){
             currGameState = GameState.PREGAME;
         }
+        System.out.println(currGameState);
     }
     public static void update(){
         GameState();
+        double dimmer = 0.3;
         currentPattern.applyTo(m_ledBuffer);
         for (int i = 0; i < m_ledBuffer.getLength(); i++){
-            m_ledBuffer.setRGB(i, m_ledBuffer.getRed(i), m_ledBuffer.getBlue(i), m_ledBuffer.getGreen(i));
+            m_displayBuffer.setRGB(i, (int) (m_ledBuffer.getRed(i) * dimmer), (int) (m_ledBuffer.getBlue(i) * dimmer), (int) (m_ledBuffer.getGreen(i) * dimmer));
+            m_displayBuffer.setRGB(m_displayBuffer.getLength()-1-i, (int) (m_ledBuffer.getRed(i) * dimmer), (int) (m_ledBuffer.getBlue(i) * dimmer), (int) (m_ledBuffer.getGreen(i) * dimmer));
         }
-        m_led.setData(m_ledBuffer);
+        m_led.setData(m_displayBuffer);
     }
  
 }

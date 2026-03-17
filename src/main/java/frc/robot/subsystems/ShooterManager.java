@@ -118,7 +118,13 @@ public class ShooterManager {
         if (AutoTarget.nearTrench()) {
             return LEDCheckReturn.TRENCH; //near trench return
         }
-        if (Tuning.Shooter.SHOOTER_TABLE_PASSING[0].getDist() < distance) {
+        if (Tuning.Shooter.SHOOTER_TABLE_HUB[0].getDist() > distance && target == ShooterTarget.HUB) {
+            return LEDCheckReturn.TOO_CLOSE; //too close return
+        }
+        if (Tuning.Shooter.SHOOTER_TABLE_PASSING[0].getDist() > distance && target == ShooterTarget.PASS_LEFT) {
+            return LEDCheckReturn.TOO_CLOSE; //too close return
+        }
+        if (Tuning.Shooter.SHOOTER_TABLE_PASSING[0].getDist() > distance && target == ShooterTarget.PASS_RIGHT) {
             return LEDCheckReturn.TOO_CLOSE; //too close return
         }
         if (targetTurretAngle == -10) {

@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 public class LEDMech2D {
     private static Mechanism2d mech2dLED = new Mechanism2d(60, 10);
     private static MechanismRoot2d root = mech2dLED.getRoot("root1", 5, 5);
-    private static MechanismLigament2d ligs[] = new MechanismLigament2d[LEDManager.m_ledBuffer.getLength()];
+    private static MechanismLigament2d ligs[] = new MechanismLigament2d[LEDManager.m_displayBuffer.getLength()];
 
     public static void init(){
         for (int i = 0; i<ligs.length; i++){
@@ -25,8 +25,9 @@ public class LEDMech2D {
     }
 
     public static void update(){
+        double dimmer = 0.3;
         for (int i = 0; i<ligs.length; i++){
-            ligs[i].setColor(new Color8Bit(LEDManager.m_ledBuffer.getRed(i),LEDManager.m_ledBuffer.getBlue(i),LEDManager.m_ledBuffer.getGreen(i)));
+            ligs[i].setColor(new Color8Bit((int) (LEDManager.m_displayBuffer.getRed(i) / dimmer),(int) (LEDManager.m_displayBuffer.getBlue(i) / dimmer), (int) (LEDManager.m_displayBuffer.getGreen(i) / dimmer)));
         }
     }
 }

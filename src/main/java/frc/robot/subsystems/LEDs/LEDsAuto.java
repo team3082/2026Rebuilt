@@ -5,9 +5,9 @@ import frc.robot.subsystems.LEDs.LEDManager.Colors;
 public class LEDsAuto {
     public static void update(){
     
-        if (LEDManager.currGameState == LEDManager.GameState.AUTO || true){
+        if (LEDManager.currGameState == LEDManager.GameState.AUTO){
             
-            LEDManager.setColor(Colors.RED_SCROLL);
+            LEDManager.setColor(Colors.RAINBOW);
             
         }
     
