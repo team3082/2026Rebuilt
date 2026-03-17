@@ -1,49 +1,53 @@
 package frc.robot;
 
-import frc.robot.subsystems.ShooterTableValue;
-import frc.robot.utils.Vector2;
+// import frc.robot.subsystems.ShooterTableValue;
 
 public final class Tuning {
     //Swerve
     public static final double MOVEP = 0.0375;
     public static final double MOVEI = 0.0001;
     public static final double MOVED = 0.004;
-    public static final double MOVEDEAD = 0.5;
+    public static final double MOVEDEAD = 1;
     public static final double MOVEVELDEAD = 0.05;
     public static final double MOVEMAXSPEED = 0.3;
     
     public static final double ROTP = 0.4;
     public static final double ROTI = 0.05;
     public static final double ROTD = 0.075;
-    public static final double ROTDEAD = 0.02;
+    public static final double ROTDEAD = 0.5;
     public static final double ROTVELDEAD = 0.05;
     public static final double ROTMAXSPEED = 0.3;
  
-     //Tune
-     public static final double SWERVE_TRJ_PPOS = 0.05;
-     public static final double SWERVE_TRJ_IPOS = 0.00;
-     public static final double SWERVE_TRJ_DPOS = 0.0002;
+    //Tune
+    public static final double SWERVE_TRJ_PPOS = 0.05;
+    public static final double SWERVE_TRJ_IPOS = 0.00;
+    public static final double SWERVE_TRJ_DPOS = 0.0002;
 
-     public static final double SWERVE_TRJ_PROT = 0.225;
-     public static final double SWERVE_TRJ_IROT = 0.0;
-     public static final double SWERVE_TRJ_DROT = 0.01;
+    public static final double SWERVE_TRJ_PROT = 0.225;
+    public static final double SWERVE_TRJ_IROT = 0.0;
+    public static final double SWERVE_TRJ_DROT = 0.01;
 
-     public static final double SWERVE_KSPOS = 0.00;
-     public static final double SWERVE_KVPOS = 0.85/160;
-     public static final double SWERVE_KAPOS = 0.0007;
+    public static final double SWERVE_KSPOS = 0.00;
+    public static final double SWERVE_KVPOS = 0.85/160;
+    public static final double SWERVE_KAPOS = 0.0007;
 
-     public static final double SWERVE_KSROT = 0.00;//0.005;
-     public static final double SWERVE_KVROT = 0.0;//0.55 / (3.0 * Math.PI);
-     public static final double SWERVE_KAROT = 0.0;
- 
-     public static final int CURVE_RESOLUTION = 100;
-     public static final double CURVE_DEADBAND = 0.5; // bro this is inches who had it at 0.001
-     public static final double ROT_DEADBAND = 0.03; // radians
+    public static final double SWERVE_KSROT = 0.00;//0.005;
+    public static final double SWERVE_KVROT = 0.0;//0.55 / (3.0 * Math.PI);
+    public static final double SWERVE_KAROT = 0.0;
+
+    public static final int CURVE_RESOLUTION = 100;
+    public static final double CURVE_DEADBAND = 0.5; // bro this is inches who had it at 0.001
+    public static final double ROT_DEADBAND = 0.005; // radians
     
     // Holonomic Drive Controller
-    public static final double holonomic_pos_kp = 0.5;
-    public static final double holonomic_pos_ki = 0.0;
-    public static final double holonomic_pos_kd = 0.0;
+    public static final double holonomic_pos_kp = 0.05;
+    public static final double holonomic_pos_ki = 0.0001;
+    public static final double holonomic_pos_kd = 0;
+
+    public static final double holonomic_rot_kp = 0.45;
+    public static final double holonomic_rot_ki = 0.03;
+    public static final double holonomic_rot_kd = 0.06;
+
 
     public static final double holonomic_vel_kp = 0.05;
     public static final double holonomic_vel_ki = 0.0;
@@ -78,50 +82,57 @@ public final class Tuning {
 
     public static final class Shooter {
         // Hood PID Constants
-        public static final double HOOD_KP = 0.03;
+        public static final double HOOD_KP = 0.05;
         public static final double HOOD_KD = 0;
-        public static final double HOOD_KI = 0.005;
+        public static final double HOOD_KI = 0.000;
         public static final double HOOD_DEADBAND = 0.2;
 
-        public static final double FLYWHEEL_P = 0.2;
-        public static final double FLYWHEEL_I = 0.05;
-        public static final double FLYWHEEL_D = 0.001;
+        public static final double FLYWHEEL_P = 0.05;
+        public static final double FLYWHEEL_I = 0.0;
+        public static final double FLYWHEEL_D = 0.0;
+        public static final double FLYWHEEL_KV = 0.21;
 
         public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
         
         // Turret PID Constants
-        public static final double TURRET_KP = 0.2;
-        public static final double TURRET_KI = 0.05;
-        public static final double TURRET_KD = 0.01;
+        public static final double TURRET_KP = 7.5;
+        public static final double TURRET_KI = 0.0;
+        public static final double TURRET_KD = 0.0;
+        public static final double TURRET_KS = 0.25;
         public static final double TURRET_DEADBAND = 0.02;
         
+        public static final double TURRET_VEL = 5000;
+        public static final double TURRET_ACCEL = 7500;
+        public static final double TURRET_JERK = 7500;
+
         // zeroing
-        public static final double TURRET_ZEROING_SPEED = 0.1;
-        public static final double HOOD_ZEROING_SPEED = -0.1;
+        public static final double TURRET_ZEROING_SPEED = -0.07;
+        public static final double HOOD_ZEROING_SPEED = -0.2;
 
-        public static final ShooterTableValue[] SHOOTER_TABLE_HUB = { //TODO tune
-            new ShooterTableValue(48.0, Math.toRadians(25.0), 1000),
-            new ShooterTableValue(60.0, Math.toRadians(25.0), 1200),
-            new ShooterTableValue(72.0, Math.toRadians(25.0), 1300),
-            new ShooterTableValue(84.0, Math.toRadians(25.0), 1500),
-            new ShooterTableValue(96.0, Math.toRadians(25.0), 1700),
-            new ShooterTableValue(108.0, Math.toRadians(28.0), 1900),
-            new ShooterTableValue(120.0, Math.toRadians(30.0), 3100),
-            new ShooterTableValue(132.0, Math.toRadians(32.0), 3300)
-        };
+        // public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
+        //     new ShooterTableValue(75.0, Math.toRadians(25.0), 1250), // idc
+        //     new ShooterTableValue(90.0, Math.toRadians(25.0), 1390),//good
+        //     new ShooterTableValue(106.0, Math.toRadians(25.0), 1470),  //g
+        //     new ShooterTableValue(120.0, Math.toRadians(25.0), 1540), //great
+        //     new ShooterTableValue(136.0, Math.toRadians(25.0), 1625),//g
+        //     new ShooterTableValue(150.0, Math.toRadians(25.0), 1690), //perfection
+        //     new ShooterTableValue(165.0, Math.toRadians(25.0), 1740), // perfect fr
+        //     new ShooterTableValue(187.0, Math.toRadians(25.0), 1860),//
+        //     new ShooterTableValue(220.0, Math.toRadians(30.0), 1950) 
+        // };
 
-        public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = { //TODO tune
-            new ShooterTableValue(0.0, Math.toRadians(60.0), 1000),
-            new ShooterTableValue(60.0, Math.toRadians(60.0), 2800),
-            new ShooterTableValue(120.0, Math.toRadians(60.0), 3000),
-            new ShooterTableValue(180.0, Math.toRadians(60.0), 3200),
-            new ShooterTableValue(240.0, Math.toRadians(60.0), 3500),
-            new ShooterTableValue(300.0, Math.toRadians(60.0), 3700),
-            new ShooterTableValue(360.0, Math.toRadians(60.0), 3900),
-            new ShooterTableValue(420.0, Math.toRadians(60.0), 4000),
-            new ShooterTableValue(480.0, Math.toRadians(60.0), 4300),
-            new ShooterTableValue(540.0, Math.toRadians(60.0), 4600)
-        };
+        // public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = { //TODO tune
+        //     new ShooterTableValue(0.0, Math.toRadians(50.0), 800),
+        //     new ShooterTableValue(60.0, Math.toRadians(50.0), 1000),
+        //     new ShooterTableValue(120.0, Math.toRadians(50.0), 1300),
+        //     new ShooterTableValue(180.0, Math.toRadians(50.0), 1600),
+        //     new ShooterTableValue(240.0, Math.toRadians(50.0), 2000),
+        //     new ShooterTableValue(300.0, Math.toRadians(50.0), 2300),
+        //     new ShooterTableValue(360.0, Math.toRadians(50.0), 2600),
+        //     new ShooterTableValue(420.0, Math.toRadians(50.0), 3000),
+        //     new ShooterTableValue(480.0, Math.toRadians(50.0), 3300),
+        //     new ShooterTableValue(540.0, Math.toRadians(50.0), 3600)
+        // };
     }
 
     public static final class Indexer {
@@ -130,15 +141,18 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double SPEED = 0.7;
-        public static final double REVERSE_SPEED = -0.5;
+        public static final double SPEED = -0.45;
+        public static final double REVERSE_SPEED = 0.4;
         
-        public static final double PIVOT_P = 0.0;
+        public static final double PIVOT_P = 6.5; 
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
+        public static final double PIVAT_KG = -0.5;
+
+        public static final double PIVOT_VEL = 5000;
+        public static final double PIVOT_ACCEL = 9000;
+        public static final double PIVOT_JERK = 9000;
     }
 
-    public static final class AutoPaths {
-      
-    }
+    public static double holonomic_lookahead_time = 0;
 }

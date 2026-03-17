@@ -1,22 +1,15 @@
 package frc.robot.auto;
 
-import java.util.List;
-import java.util.Vector;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
-import frc.robot.auto.commands.FollowPath;
+import frc.robot.auto.commands.Shoot;
+import frc.robot.auto.commands.StartIntake;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
-import frc.robot.swerve.SwervePosition;
-import frc.robot.utils.Vector2;
-import frc.robot.utils.trajectories.CubicBezierCurve;
-import frc.robot.utils.trajectories.FeatherEvent;
 import frc.robot.utils.trajectories.FeatherFlow;
-import frc.robot.utils.trajectories.RobotPath;
+import frc.robot.subsystems.sensors.Pigeon;
+
 /**
  * Manages autonomous routines for the robot.
  * Uses {@link RoutineManager} to automatically detect and handle routines
@@ -24,6 +17,125 @@ import frc.robot.utils.trajectories.RobotPath;
  */
 public class Auto {
     public static RoutineManager routineManager;
+
+    @AutoRoutine()
+    public SequentialCommandGroup Shoot(){
+        return new SequentialCommandGroup(
+        //    new StartIntake(),
+           new Shoot()
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup Left3Piece() {
+        Pigeon.setYaw(90);
+        return new SequentialCommandGroup(
+            new Shoot(),
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("3 Piece Left",
+                true, 
+                new Shoot(),
+                new Shoot(),
+                new Shoot()
+            )
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup ShootNoMove() {
+        return new SequentialCommandGroup(
+            new Shoot()
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup Right3Piece() {
+        Pigeon.setYaw(-90);
+        return new SequentialCommandGroup(
+            new Shoot(),
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("3 Piece Right", 
+                new Shoot(),
+                new Shoot(),
+                new Shoot()
+            )
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup DepotToCenter() {
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Depot to Center", 
+                new Shoot(),
+                new Shoot(),
+                new Shoot()
+            ));
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup CenterToDepot() {
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Center to Depot", 
+                new Shoot(),
+                new Shoot()
+            ));
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup MosesRight() {
+        Pigeon.setYaw(-90);
+        return new SequentialCommandGroup(
+            // new StartIntake(),
+            new Shoot(),
+            FeatherFlow.buildFeatherAuto("Moses Right", 
+                new Shoot(),
+                new Shoot()
+            )
+        );
+    }
+    
+    @AutoRoutine()
+    public SequentialCommandGroup SilverLining(){
+        Pigeon.setYaw(-90);
+        return new SequentialCommandGroup(
+            // new StartIntake(),
+            new Shoot(),
+            FeatherFlow.buildFeatherAuto("Silver Lining", 
+                new Shoot(),
+                new Shoot()
+            )
+        );
+
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup MosesLeft() {
+        Pigeon.setYaw(90);
+        return new SequentialCommandGroup(
+            // new StartIntake(),
+            new Shoot(),
+            FeatherFlow.buildFeatherAuto("Moses Left", 
+                true,
+                new Shoot(),
+                new Shoot()
+            )
+        );
+    }
+
+    @AutoRoutine()
+    public SequentialCommandGroup Example() {
+        Pigeon.setYaw(90);
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Example", 
+                true,
+                new Shoot(),
+                new Shoot()
+            )
+        );
+    }
 
 
     /**

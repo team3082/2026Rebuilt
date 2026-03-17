@@ -17,12 +17,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
+import frc.robot.auto.commands.RotateAndDriveTo;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherPath.FeatherActionDescriptor;
 
 public class FeatherFlow {
-    private static Map<String, FeatherPath> trajectories = new HashMap<>();
+    private static Map<String, FeatherPath[]> trajectories = new HashMap<>();
 
     public static void init() {
         File directory = new File(Filesystem.getDeployDirectory(), "FeatherFlow");
@@ -36,7 +38,10 @@ public class FeatherFlow {
             for (File file : files) {
                 try {
                     String key = file.getName().replace(".ff", "");
-                    trajectories.put(key, loadFeatherFile(file));
+                    FeatherPath[] array = new FeatherPath[2];
+                    array[0] =  loadFeatherFile(file, false);
+                    array[1] = loadFeatherFile(file, true);
+                    trajectories.put(key, array);
                     System.out.println("[FeatherFlow] " + file.getName() + " loaded successfully");
                 } catch (Exception e) {
                     System.err.println("[FeatherFlow] Error loading " + file.getName());
@@ -47,7 +52,7 @@ public class FeatherFlow {
         }, "FeatherFlow Parser").start();
     }
 
-    private static FeatherPath loadFeatherFile(File file) throws IOException {
+    private static FeatherPath loadFeatherFile(File file, boolean flipped) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(file);
         
@@ -69,16 +74,30 @@ public class FeatherFlow {
             Vector2 p3 = parsePosition(next.get("position"));
             Vector2 p2 = p3.add(parseOffset(next.get("handleInOffset")));
             
+            if(flipped){
+                p0.y = -p0.y;
+                p1.y = -p1.y;
+                p2.y = -p2.y;
+                p3.y = -p3.y;
+            }
+
             beziers.add(new CubicBezierCurve(p0, p1, p2, p3));
         }
         
         List<Vector2> allPoints = new ArrayList<>();
         List<Double> allCurvatures = new ArrayList<>();
         
-        for (CubicBezierCurve bezier : beziers) {
-            allPoints.addAll(List.of(bezier.getPoints()));
-            for (double curvature : bezier.getCurvatures()) {
-                allCurvatures.add(curvature);
+        for (int i = 0; i < beziers.size(); i++) {
+            CubicBezierCurve bezier = beziers.get(i);
+            Vector2[] pts = bezier.getPoints();
+            double[] curvs = bezier.getCurvatures();
+
+            // Skip the first point of every curve except the first —
+            // it is identical to the last point of the previous curve.
+            int start = (i == 0) ? 0 : 1;
+            for (int j = start; j < pts.length; j++) {
+                allPoints.add(pts[j]);
+                allCurvatures.add(curvs[j]);
             }
         }
         
@@ -141,14 +160,119 @@ public class FeatherFlow {
             paths = List.of(fullPath);
         }
 
+        // Build a sorted list of (globalT, heading) pairs from "rotate" descriptors
+        List<double[]> rotateKeyframes = new ArrayList<>();
+        for (FeatherActionDescriptor action : actions) {
+            if (action.type.equals("rotate")) {
+                if(!flipped){
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading + 90)});
+                } else {
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians((360-(action.heading+90))+180)});
+                }
+            }
+        }
+        rotateKeyframes.sort((a, b) -> Double.compare(a[0], b[0]));
+
+        // Compute full path arc-length distances once
+        List<Vector2> allPts = fullPath.getPoints();
+        double[] fullDist = new double[allPts.size()];
+        fullDist[0] = 0.0;
+        for (int i = 1; i < allPts.size(); i++) {
+            fullDist[i] = fullDist[i - 1] + allPts.get(i - 1).dist(allPts.get(i));
+        }
+        double totalPathDist = fullDist[allPts.size() - 1];
+
+        // Convert rotate keyframes from globalT → true arc-length distance
+        // by walking the precomputed fullDist array
+        List<double[]> rotateByDist = new ArrayList<>();
+        for (double[] kf : rotateKeyframes) {
+            double globalT = kf[0];
+            // fullDist is indexed by point, fullPath has N points sampled uniformly
+            // across all bezier segments — map globalT to a point index and interpolate
+            double pointIndex = globalT * (allPts.size() - 1);
+            int lo = (int) Math.floor(pointIndex);
+            int hi = Math.min(lo + 1, allPts.size() - 1);
+            double frac = pointIndex - lo;
+            double dist = fullDist[lo] + frac * (fullDist[hi] - fullDist[lo]);
+            rotateByDist.add(new double[]{dist, kf[1]});
+        }
+        // rotateByDist is already sorted since rotateKeyframes was sorted by t
+
+        // Starting heading = first keyframe heading (path-planning convention).
+        // Ending heading   = last keyframe heading.
+        // If no keyframes, both default to 0.
+        double startRotation = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(0)[1];
+        double endRotation   = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(rotateByDist.size() - 1)[1];
+
         List<ProfiledPath> profiledPaths = new ArrayList<>();
-        for (RobotPath path : paths) {
-            profiledPaths.add(ProfiledPath.generateProfiledPath(
-                path,
-                Constants.MAX_PATH_VELOCITY,
-                Constants.MAX_PATH_ACCELERATION,
-                79.0
+        List<Double> sortedSplits = new ArrayList<>(splitValues);
+        sortedSplits.sort(Double::compareTo);
+        double segmentDistOffset = 0.0;
+
+        for (int segIdx = 0; segIdx < paths.size(); segIdx++) {
+            RobotPath segPath = paths.get(segIdx);
+            List<Vector2> segPts = segPath.getPoints();
+            int pointCount = segPts.size();
+
+            // Compute cumulative arc-length within this segment
+            double[] segDist = new double[pointCount];
+            segDist[0] = 0.0;
+            for (int i = 1; i < pointCount; i++) {
+                segDist[i] = segDist[i - 1] + segPts.get(i - 1).dist(segPts.get(i));
+            }
+
+            double[] targetHeadings = new double[pointCount];
+
+            for (int i = 0; i < pointCount; i++) {
+                // True arc-length distance of this point along the full path
+                double d = segmentDistOffset + segDist[i];
+
+                if (rotateByDist.isEmpty()) {
+                    targetHeadings[i] = 0.0;
+                    continue;
+                }
+
+                // Before first keyframe → hold first keyframe heading
+                if (d <= rotateByDist.get(0)[0]) {
+                    targetHeadings[i] = rotateByDist.get(0)[1];
+                    continue;
+                }
+
+                // After last keyframe → hold last keyframe heading
+                if (d >= rotateByDist.get(rotateByDist.size() - 1)[0]) {
+                    targetHeadings[i] = rotateByDist.get(rotateByDist.size() - 1)[1];
+                    continue;
+                }
+
+                // Between two keyframes → find them and interpolate shortest-path
+                double prevD = rotateByDist.get(0)[0];
+                double prevH = rotateByDist.get(0)[1];
+                double nextD = rotateByDist.get(rotateByDist.size() - 1)[0];
+                double nextH = rotateByDist.get(rotateByDist.size() - 1)[1];
+
+                for (int k = 0; k < rotateByDist.size() - 1; k++) {
+                    if (rotateByDist.get(k)[0] <= d && rotateByDist.get(k + 1)[0] > d) {
+                        prevD = rotateByDist.get(k)[0];
+                        prevH = rotateByDist.get(k)[1];
+                        nextD = rotateByDist.get(k + 1)[0];
+                        nextH = rotateByDist.get(k + 1)[1];
+                        break;
+                    }
+                }
+
+                double span  = nextD - prevD;
+                double alpha = (span > 1e-9) ? (d - prevD) / span : 0.0;
+                double delta = nextH - prevH;
+                while (delta >  Math.PI) delta -= 2 * Math.PI;
+                while (delta < -Math.PI) delta += 2 * Math.PI;
+                targetHeadings[i] = prevH + alpha * delta;
+            }
+
+            profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
+                segPath, 90*1.5, 3, 90*1.5, 140, targetHeadings
             ));
+
+            segmentDistOffset += segDist[pointCount - 1];
         }
         
         return new FeatherPath(profiledPaths, actions);
@@ -182,12 +306,16 @@ public class FeatherFlow {
      * @return The FeatherPath object
      * @throws IllegalArgumentException if path doesn't exist
      */
-    public static FeatherPath getPath(String pathName) {
+    public static FeatherPath getPath(String pathName, boolean flipped) {
         if (!trajectories.containsKey(pathName)) {
             throw new IllegalArgumentException("Path '" + pathName + "' does not exist! " +
                 "Available paths: " + trajectories.keySet());
         }
-        return trajectories.get(pathName);
+        return trajectories.get(pathName)[flipped ? 1 : 0];
+    }
+
+    public static SequentialCommandGroup buildFeatherAuto(String pathName, Command... commands) {
+        return buildFeatherAuto(pathName, false, commands);
     }
     
     /**
@@ -196,13 +324,13 @@ public class FeatherFlow {
      * @param commands Commands to be associated with command-type actions in the path (in order)
      * @return SequentialCommandGroup containing the path following commands
      */
-    public static SequentialCommandGroup buildFeatherAuto(String pathName, Command... commands) {
+    public static SequentialCommandGroup buildFeatherAuto(String pathName, boolean flipped,  Command... commands) {
         System.out.println("[FeatherFlow] Building auto for path: " + pathName);
-        FeatherPath featherPath = getPath(pathName);
+        FeatherPath featherPath = getPath(pathName, flipped);
         
         SequentialCommandGroup group = new SequentialCommandGroup();
 
-        group.addCommands(new InstantCommand(() -> {
+        group.addCommands(new InstantCommand(()->{
             SwervePosition.setPosition(featherPath.paths.get(0).getStartPoint());
         }));
         
@@ -232,6 +360,9 @@ public class FeatherFlow {
             }
             
             FeatherEvent[] events = eventsForSegment.toArray(new FeatherEvent[0]);
+            group.addCommands(new InstantCommand(() -> {
+                System.out.println("Following Path Segment");
+            }));
             group.addCommands(new FollowPath(currentPath, events));
             
             for (FeatherActionDescriptor action : featherPath.actions) {

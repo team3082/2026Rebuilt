@@ -4,6 +4,16 @@
       "visible": true
     }
   },
+  "Keyboard 1 Settings": {
+    "window": {
+      "visible": true
+    }
+  },
+  "System Joysticks": {
+    "window": {
+      "enabled": false
+    }
+  },
   "keyboardJoysticks": [
     {
       "axisConfig": [
@@ -21,7 +31,9 @@
           "incKey": 82,
           "keyRate": 0.009999999776482582
         },
+        {},
         {
+          "decKey": 264,
           "incKey": 265
         }
       ],
@@ -69,9 +81,6 @@
         {
           "decKey": 263,
           "incKey": 262
-        },
-        {
-          "incKey": 264
         }
       ],
       "axisCount": 2,
@@ -97,7 +106,7 @@
       "guid": "Keyboard0"
     },
     {
-      "useGamepad": true
+      "guid": "Keyboard1"
     },
     {},
     {

@@ -1,8 +1,8 @@
-package frc.robot.subsystems.states;
+// package frc.robot.subsystems.states;
 
-public enum ShooterState {
-    IDLE,
-    REVVING,
-    SHOOTING,
-    ZEROING
-}
+// public enum ShooterState {
+//     IDLE,
+//     REVVING,
+//     SHOOTING,
+//     ZEROING
+// }

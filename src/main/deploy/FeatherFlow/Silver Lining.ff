@@ -1,0 +1,143 @@
+{
+  "id": "1772840104942",
+  "name": "Silver Lining",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 525.5646897116394,
+        "y": 99.40085085229259
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 635.904446930314,
+        "y": 83.72342181189123
+      },
+      "handleOutOffset": {
+        "x": 1.8964236601390212,
+        "y": -8.88536582823977
+      },
+      "handleInOffset": {
+        "x": -4.174620036355754,
+        "y": 19.559461842087
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 556.9512632763538,
+        "y": 33.246088896678884
+      },
+      "handleInOffset": {
+        "x": 61.50233553466978,
+        "y": 15.278252639555426
+      },
+      "handleOutOffset": {
+        "x": -52.3908784184224,
+        "y": -13.014807804065725
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 398.4092941304453,
+        "y": 23.104686060096412
+      },
+      "handleOutOffset": {
+        "x": -40.31410822739298,
+        "y": 1.4390598087167632
+      },
+      "handleInOffset": {
+        "x": 9.194144194976502,
+        "y": -0.32819585917435745
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 323.38252988606797,
+        "y": 167.28369735430033
+      },
+      "handleOutOffset": {
+        "x": 6.4790531079738685,
+        "y": 27.342136365618785
+      },
+      "handleInOffset": {
+        "x": -4.611540899903529,
+        "y": -19.461081432657277
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1772841613692,
+      "u": 0.11,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": "shoot"
+    },
+    {
+      "id": 1761525063428,
+      "u": 1.02,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1772841676337,
+      "u": 2.9699999999999998,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": "rotate"
+    },
+    {
+      "id": 1772841745632,
+      "u": 3.92,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 90
+        }
+      ],
+      "name": "rotateFuel"
+    }
+  ],
+  "created": "2026-03-06T23:35:04.942Z",
+  "lastModified": "2026-03-07T00:04:05.163Z"
+}

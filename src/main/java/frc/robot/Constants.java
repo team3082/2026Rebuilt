@@ -21,7 +21,7 @@ public class Constants {
         public static final int STEERID2 = 1;
         public static final int STEERID3 = 3;
 
-        public static final double MODOFFSET0 = 0.801514;
+        public static final double MODOFFSET0 = -0.195312;
         public static final double MODOFFSET1 = 0.221191;
         public static final double MODOFFSET2 = 0.127197;
         public static final double MODOFFSET3 = 0.115479;
@@ -131,8 +131,8 @@ public class Constants {
 
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
-        public static final double TURRET_ZERO_ANGLE = Math.toRadians(288.0);
-        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(12.0); // used only when hall sensor is broken
+        // public static final double TURRET_ZERO_ANGLE = Math.toRadians(279.0);
+        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(5.5 + 3.0); // 3.0 is fudge factor
         public static final double TURRET_MIN_ANGLE = Math.toRadians(22.0);
         public static final double TURRET_MAX_ANGLE = Math.toRadians(330.0);
 
@@ -141,13 +141,18 @@ public class Constants {
 
         public static final Vector2 TURRET_POS_OFFSET = new Vector2(3.75, 4.25);
 
+        public static final double RPM_DROP = 50; // amount that rpm drops when ball is shot
+        public static final double BALL_TIMEOUT = 4.5; // seconds without shots to assume hopper is empty
+
     }
 
     public static final class Intake {
-        public static final int PIVOT_MOTOR_ID = 0;
-        public static final int ROLLER_MOTOR_ID = 0;
+        public static final int PIVOT_MOTOR_ID = 10;
+        public static final int ROLLER_MOTOR_ID = 9;
 
-        public static final double INTAKE_DOWN_ANGLE = 0.0;
+        public static final double INTAKE_DOWN_ANGLE = 5.5;
+        public static final double INTAKE_UP_ANGLE = 1.75;
+        public static final double INTAKE_SAFE_ANGLE = 1.3; // andle where turret won't hit intake
     }
 
     public static final class Indexer {
@@ -196,7 +201,11 @@ public class Constants {
     public static final double MAX_PATH_VELOCITY = 181;
     public static final double MAX_PATH_ACCELERATION = 181;
 
+    // Maximum rotational speed (rad/s) and acceleration (rad/s²) for heading profiling
+    public static final double MAX_ROT_VELOCITY = Math.PI * 2;     // 360 deg/s
+    public static final double MAX_ROT_ACCELERATION = Math.PI * 4; // 720 deg/s²
+
     public static class TrajectoryConstants{
-        public static final int CURVE_RESOLUTION = 2000;
+        public static final int CURVE_RESOLUTION = 3000;
     }
 }

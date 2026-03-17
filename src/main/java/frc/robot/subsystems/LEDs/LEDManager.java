@@ -1,4 +1,4 @@
-package frc.robot.subsystems.LEDs;
+// package frc.robot.subsystems.LEDs;
 
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meters;
@@ -47,23 +47,23 @@ public class LEDManager {
         setColor(Colors.BLUE);
         GameState();
 
-    }
+//     }
 
-        // kGreen = blue, kBue = green
+//         // kGreen = blue, kBue = green
         
-   /* // Set the data
-        currentPattern.applyTo(m_ledBuffer);
-        m_led.setData(m_ledBuffer);
-        m_led.start();
-    }
+//    /* // Set the data
+//         currentPattern.applyTo(m_ledBuffer);
+//         m_led.setData(m_ledBuffer);
+//         m_led.start();
+//     }
 
-    public static void update() {
-        currentPattern.applyTo(m_ledBuffer);
-        // Set the LEDs
-        m_led.setData(m_ledBuffer);
+//     public static void update() {
+//         currentPattern.applyTo(m_ledBuffer);
+//         // Set the LEDs
+//         m_led.setData(m_ledBuffer);
         
-    }
-*/
+//     }
+// */
    
 
     public enum Colors{
@@ -98,20 +98,20 @@ public class LEDManager {
                 currentPattern = LEDPattern.solid(set_color);
                 
                 
-                break;
+//                 break;
 
             case GREEN:
                 set_color = new Color(0, 255, 0);
                 currentPattern = LEDPattern.solid(set_color);
                 
-                break;
+//                 break;
 
             case BLUE:
                 set_color = new Color(0, 0, 255);
                 currentPattern = LEDPattern.solid(set_color);
                 
                 
-                break;
+//                 break;
 
             case YELLOW:
                 set_color = new Color(255, 200, 0);
@@ -213,10 +213,10 @@ public class LEDManager {
             case RAINBOW:
                 currentPattern = LEDPattern.rainbow(255, 200).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.5,MetersPerSecond),kLedSpacing);
                 
-            default:
-                break;
-        }
-    }
+//             default:
+//                 break;
+//         }
+//     }
 
     public enum GameState{
         PREGAME,
@@ -249,5 +249,5 @@ public class LEDManager {
         m_led.setData(m_displayBuffer);
     }
  
-}
+// }
 

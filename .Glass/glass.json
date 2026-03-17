@@ -1,5 +1,16 @@
 {
   "NetworkTables": {
+    "Transitory Values": {
+      "open": false
+    },
+    "retained": {
+      "Shuffleboard": {
+        "Robot Views": {
+          "open": true
+        },
+        "open": true
+      }
+    },
     "transitory": {
       "Shuffleboard": {
         "Shooter Manager": {
@@ -19,9 +30,15 @@
       "/Shuffleboard/Robot Views/Subsystem View Side": "Mechanism2d",
       "/Shuffleboard/Robot Views/Subsystem View Top": "Mechanism2d",
       "/Shuffleboard/Robot Views/Swerve View": "Mechanism2d",
+      "/SmartDashboard/LEDs": "Mechanism2d",
       "/SmartDashboard/PhotonAlerts": "Alerts"
     },
     "windows": {
+      "/Shuffleboard/Robot Views/Auto Selector": {
+        "window": {
+          "visible": true
+        }
+      },
       "/Shuffleboard/Robot Views/Field View": {
         "bottom": 1914,
         "height": 8.069275856018066,

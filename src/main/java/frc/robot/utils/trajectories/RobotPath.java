@@ -13,6 +13,7 @@ public class RobotPath {
     private List<Vector2> points;
     private List<Double> curvatures;
     private List<Double> lengths;
+    private List<Double> rotations;
     
     private double totalLength;
     
