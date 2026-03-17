@@ -3,7 +3,6 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import frc.robot.vision.AprilTag;
-import frc.robot.utils.Vector2;
 
 public class Constants {
     
@@ -121,25 +120,15 @@ public class Constants {
 
     public static final class Shooter {
 
-        public static final int TURRET_MOTOR_ID = 12; // 12
         public static final int FLYWHEEL_MOTOR_ID = 15;
         public static final int HOOD_MOTOR_ID = 14;
-        public static final int HALL_EFFECT_SENSOR_ID = 0;
         
-        public static final double TURRET_GEAR_RATIO = 200.0 / 20.0; 
         public static final double HOOD_GEAR_RATIO = 380.0 / 20.0 * 24.0 / 15.0 * 4.0;
 
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
-        // public static final double TURRET_ZERO_ANGLE = Math.toRadians(279.0);
-        public static final double TURRET_HARDSTOP_ZERO_ANGLE = Math.toRadians(5.5 + 3.0); // 3.0 is fudge factor
-        public static final double TURRET_MIN_ANGLE = Math.toRadians(22.0);
-        public static final double TURRET_MAX_ANGLE = Math.toRadians(330.0);
-
         public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
         public static final double HOOD_ANGLE_OFFSET = Math.toRadians(25.0);
-
-        public static final Vector2 TURRET_POS_OFFSET = new Vector2(3.75, 4.25);
 
         public static final double RPM_DROP = 50; // amount that rpm drops when ball is shot
         public static final double BALL_TIMEOUT = 4.5; // seconds without shots to assume hopper is empty
@@ -152,7 +141,7 @@ public class Constants {
 
         public static final double INTAKE_DOWN_ANGLE = 5.5;
         public static final double INTAKE_UP_ANGLE = 1.75;
-        public static final double INTAKE_SAFE_ANGLE = 1.3; // andle where turret won't hit intake
+        public static final double INTAKE_SAFE_ANGLE = 1.3;
     }
 
     public static final class Indexer {

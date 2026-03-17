@@ -1,6 +1,6 @@
 package frc.robot;
 
-// import frc.robot.subsystems.ShooterTableValue;
+import frc.robot.subsystems.ShooterTableValue;
 
 public final class Tuning {
     //Swerve
@@ -94,45 +94,33 @@ public final class Tuning {
 
         public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
         
-        // Turret PID Constants
-        public static final double TURRET_KP = 7.5;
-        public static final double TURRET_KI = 0.0;
-        public static final double TURRET_KD = 0.0;
-        public static final double TURRET_KS = 0.25;
-        public static final double TURRET_DEADBAND = 0.02;
-        
-        public static final double TURRET_VEL = 5000;
-        public static final double TURRET_ACCEL = 7500;
-        public static final double TURRET_JERK = 7500;
-
         // zeroing
-        public static final double TURRET_ZEROING_SPEED = -0.07;
         public static final double HOOD_ZEROING_SPEED = -0.2;
 
-        // public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
-        //     new ShooterTableValue(75.0, Math.toRadians(25.0), 1250), // idc
-        //     new ShooterTableValue(90.0, Math.toRadians(25.0), 1390),//good
-        //     new ShooterTableValue(106.0, Math.toRadians(25.0), 1470),  //g
-        //     new ShooterTableValue(120.0, Math.toRadians(25.0), 1540), //great
-        //     new ShooterTableValue(136.0, Math.toRadians(25.0), 1625),//g
-        //     new ShooterTableValue(150.0, Math.toRadians(25.0), 1690), //perfection
-        //     new ShooterTableValue(165.0, Math.toRadians(25.0), 1740), // perfect fr
-        //     new ShooterTableValue(187.0, Math.toRadians(25.0), 1860),//
-        //     new ShooterTableValue(220.0, Math.toRadians(30.0), 1950) 
-        // };
+        public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
+            new ShooterTableValue(75.0, Math.toRadians(25.0), 1250), // idc
+            new ShooterTableValue(90.0, Math.toRadians(25.0), 1390),//good
+            new ShooterTableValue(106.0, Math.toRadians(25.0), 1470),  //g
+            new ShooterTableValue(120.0, Math.toRadians(25.0), 1540), //great
+            new ShooterTableValue(136.0, Math.toRadians(25.0), 1625),//g
+            new ShooterTableValue(150.0, Math.toRadians(25.0), 1690), //perfection
+            new ShooterTableValue(165.0, Math.toRadians(25.0), 1740), // perfect fr
+            new ShooterTableValue(187.0, Math.toRadians(25.0), 1860),//
+            new ShooterTableValue(220.0, Math.toRadians(30.0), 1950) 
+        };
 
-        // public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = { //TODO tune
-        //     new ShooterTableValue(0.0, Math.toRadians(50.0), 800),
-        //     new ShooterTableValue(60.0, Math.toRadians(50.0), 1000),
-        //     new ShooterTableValue(120.0, Math.toRadians(50.0), 1300),
-        //     new ShooterTableValue(180.0, Math.toRadians(50.0), 1600),
-        //     new ShooterTableValue(240.0, Math.toRadians(50.0), 2000),
-        //     new ShooterTableValue(300.0, Math.toRadians(50.0), 2300),
-        //     new ShooterTableValue(360.0, Math.toRadians(50.0), 2600),
-        //     new ShooterTableValue(420.0, Math.toRadians(50.0), 3000),
-        //     new ShooterTableValue(480.0, Math.toRadians(50.0), 3300),
-        //     new ShooterTableValue(540.0, Math.toRadians(50.0), 3600)
-        // };
+        public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = {
+            new ShooterTableValue(0.0, Math.toRadians(50.0), 800),
+            new ShooterTableValue(60.0, Math.toRadians(50.0), 1000),
+            new ShooterTableValue(120.0, Math.toRadians(50.0), 1300),
+            new ShooterTableValue(180.0, Math.toRadians(50.0), 1600),
+            new ShooterTableValue(240.0, Math.toRadians(50.0), 2000),
+            new ShooterTableValue(300.0, Math.toRadians(50.0), 2300),
+            new ShooterTableValue(360.0, Math.toRadians(50.0), 2600),
+            new ShooterTableValue(420.0, Math.toRadians(50.0), 3000),
+            new ShooterTableValue(480.0, Math.toRadians(50.0), 3300),
+            new ShooterTableValue(540.0, Math.toRadians(50.0), 3600)
+        };
     }
 
     public static final class Indexer {

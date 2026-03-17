@@ -25,11 +25,6 @@ public class SwervePID {
     }
 
     public static void setDestState(Vector2 dest, double destRot) {
-        try {
-            Logger.recordOutput("Robot/SwervePID/Destination", new Pose2d(dest.convertToFieldCoords().x,
-                                                                              dest.convertToFieldCoords().y,
-                                                                              Rotation2d.fromRadians(destRot + Math.PI/2)));
-        } catch (Exception e) {}
         moveDest = dest;
         startPos = SwervePosition.getPosition();
         totalDist = dest.sub(startPos).mag();

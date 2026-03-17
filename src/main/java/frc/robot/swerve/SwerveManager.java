@@ -153,6 +153,14 @@ public final class SwerveManager {
         }
     }
 
+    //https://shorturl.at/c6t3v
+    public static void plant() {
+        for (SwerveModule mod : mods) {
+            mod.drive(0.5);
+            mod.rotateToRad(mod.pos.atan2());
+        }
+    }
+
     /**
      * Gets the velocity a given SwerveModule is driving at
      * @param id the ID of the SwerveModule to check
