@@ -1,4 +1,4 @@
-// package frc.robot.subsystems.LEDs;
+ package frc.robot.subsystems.LEDs;
 
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Meters;
@@ -47,7 +47,7 @@ public class LEDManager {
         setColor(Colors.BLUE);
         GameState();
 
-//     }
+     }
 
 //         // kGreen = blue, kBue = green
         
@@ -87,9 +87,9 @@ public class LEDManager {
         RED_CYAN_SCROLL,
         YELLOW_CYAN_SCROLL,
         GREEN_CYAN_SCROLL,
-
         RAINBOW
     }
+    
     
     public static void setColor(Colors color){
         switch (color) {
@@ -213,10 +213,10 @@ public class LEDManager {
             case RAINBOW:
                 currentPattern = LEDPattern.rainbow(255, 200).scrollAtAbsoluteSpeed(LinearVelocity.ofBaseUnits(0.5,MetersPerSecond),kLedSpacing);
                 
-//             default:
-//                 break;
-//         }
-//     }
+             default:
+                 break;
+         }
+     }
 
     public enum GameState{
         PREGAME,
@@ -249,5 +249,5 @@ public class LEDManager {
         m_led.setData(m_displayBuffer);
     }
  
-// }
+ }
 
