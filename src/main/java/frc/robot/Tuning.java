@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.ShooterTableValue;
+import frc.robot.utils.Vector2;
 
 public final class Tuning {
     //Swerve
@@ -121,6 +122,9 @@ public final class Tuning {
             new ShooterTableValue(480.0, Math.toRadians(50.0), 3300),
             new ShooterTableValue(540.0, Math.toRadians(50.0), 3600)
         };
+
+        public static final double LOOK_AHEAD_TIME_K = 0.02;
+        public static final Vector2 TURRET_POS_OFFSET = new Vector2(3.75, 4.25);
     }
 
     public static final class Indexer {

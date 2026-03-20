@@ -115,10 +115,17 @@ public class ShooterManager {
 
     private static void aimAtHub() {
 
-        Vector2 shooterPos = Odometry.getPosition();
+        Vector2 robotPosition = Odometry.getPosition();
+        double distance = target.pos.sub(robotPosition).mag();
+    
+        double lookAhead = distance * Tuning.Shooter.LOOK_AHEAD_TIME_K;
 
-        // gets distance between shooter and hub
-        double distance = target.pos.sub(shooterPos).mag();
+        Vector2 velocity = Odometry.getVelocity();
+        velocity = velocity.mul(lookAhead);
+
+        robotPosition = robotPosition.add(velocity);
+        distance = target.pos.sub(robotPosition).mag();
+    
 
         if (distance < Tuning.Shooter.SHOOTER_TABLE_HUB[0].getDist()) { // defaults to lowest value if too close, does this because if it interpolates to lower flywheel speed the shot won't go high enough
             Shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getSpeed());

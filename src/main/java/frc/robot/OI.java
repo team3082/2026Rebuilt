@@ -1,120 +1,113 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import frc.robot.Constants.Swerve;
 import frc.robot.controllermaps.LogitechF310;
-import frc.robot.subsystems.AutoTarget;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterTarget;
+import frc.robot.swerve.Odometry;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePID;
-import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 
 public class OI {
-    private static Joystick driverStick, operatorStick;
+    private static Joystick driverStick;
+    private static Joystick operatorStick;
 
-    // ------------------ Driver Controls ------------------ //
+    private static final int AXIS_DRIVE_X  = LogitechF310.AXIS_LEFT_X;
+    private static final int AXIS_DRIVE_Y  = LogitechF310.AXIS_LEFT_Y;
+    private static final int AXIS_ROTATE_X = LogitechF310.AXIS_RIGHT_X;
+    private static final int BTN_SHOOT     = LogitechF310.BUTTON_RIGHT_BUMPER;
+    private static final int BTN_ZERO_HOOD = LogitechF310.BUTTON_A;
+    private static final int BTN_ZERO_GYRO = LogitechF310.BUTTON_Y;
 
-    // Movement
-    private static final int moveX  = LogitechF310.AXIS_LEFT_X;
-    private static final int moveY = LogitechF310.AXIS_LEFT_Y;
-    private static final int rotateX  = LogitechF310.AXIS_RIGHT_X;
+    private static final double DRIVE_DEADBAND  = 0.05;
+    private static final double ROTATE_DEADBAND = 0.05;
+    private static final double SHOOT_MOVE_SCALE = 0.3;
+    private static final double ROTATE_SCALE     = 0.3;
 
-
-    private static final int shoot = LogitechF310.BUTTON_RIGHT_BUMPER;
-    private static final int zeroHood = LogitechF310.BUTTON_A;
-
- 
-    // zero is for Pigeon 
-    private static final int zero = LogitechF310.BUTTON_Y;
-
-    /**
-     * Initialize OI with preset joystick ports.
-     */
     public static void init() {
-        driverStick = new Joystick(0);
+        driverStick   = new Joystick(0);
         operatorStick = new Joystick(1);
     }
 
-    public static void userInput() {
-        driverInput();
+    public static void update() {
+        handleDriverInput();
     }
 
-    /**
-     * Instruct the robot to follow instructions from joysticks.
-     * One call from this equals one frame of robot instruction.
-     * Because we used TimedRobot, this runs 50 times a second,
-     * so this lives in the teleopPeriodic() function.
-     */
-    private static void driverInput() {
-        // Reset pigeon
-        if (driverStick.getRawButton(zero)) Pigeon.reset();
+    private static void handleDriverInput() {
+        if (driverStick.getRawButton(BTN_ZERO_GYRO)) {
+            Pigeon.reset();
+        }
 
-        if (driverStick.getRawButtonPressed(zeroHood)) {
+        if (driverStick.getRawButtonPressed(BTN_ZERO_HOOD)) {
             ShooterManager.zeroHood();
         }
 
-        if (driverStick.getRawButton(shoot)) {
-            Vector2 drive = getJoyVector();
-            
-            // Get the angle to the target and set it as the destination for the SwervePID
-            Vector2 targetPos = ShooterManager.getTarget().pos;
-            double targetAngle = Math.atan2(targetPos.y - SwervePosition.getPosition().y, targetPos.x - SwervePosition.getPosition().x);
-            SwervePID.setDestState(SwervePosition.getPosition(), targetAngle);
-            
-            if (drive.mag() > 0.05) {
-                shootAndMove(drive);
-            } else {
-               plantAndShoot();
-            }
-
+        if (driverStick.getRawButton(BTN_SHOOT)) {
+            handleShootingMode();
         } else {
             ShooterManager.stopShooting();
-            normalDrive();
+            handleNormalDrive();
         }
-       
     }
 
-    private static void shootAndMove(Vector2 drive) {
-        drive = drive.mul(0.3);
+    private static void handleShootingMode() {
+        Vector2 driveInput = getRawDriveVector();
 
-        SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), drive);
+        // Predict where the robot will be when the shot lands
+        ShooterTarget target  = ShooterManager.getTarget();
+        Vector2 currentPos    = Odometry.getPosition();
+        double  distance      = target.pos.sub(currentPos).mag();
+        double  lookAheadTime = distance * Tuning.Shooter.LOOK_AHEAD_TIME_K;
+        Vector2 predictedPos  = currentPos.add(Odometry.getVelocity().mul(lookAheadTime));
+        Vector2 shooterPos = predictedPos.add(Constants.Shooter.TURRET_POS_OFFSET);
+
+        double aimAngle = Math.atan2(
+            target.pos.y - shooterPos.y,
+            target.pos.x - shooterPos.x
+        );
+
+        SwervePID.setDestState(shooterPos, aimAngle);
+
+        if (driveInput.mag() > DRIVE_DEADBAND) {
+            handleShootWhileMoving(driveInput);
+        } else {
+            handleShootWhileStationary();
+        }
+    }
+
+    private static void handleShootWhileMoving(Vector2 driveInput) {
+        SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), driveInput.mul(SHOOT_MOVE_SCALE));
         ShooterManager.shoot();
     }
 
-    private static void plantAndShoot(){
-                
+    private static void handleShootWhileStationary() {
         if (SwervePID.atRot()) {
             SwerveManager.plant();
         } else {
             SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), new Vector2());
         }
-        
         ShooterManager.shoot();
     }
 
-    private static void normalDrive() {
-        Vector2 drive = getJoyVector();
-        double rotate =  driverStick.getRawAxis(rotateX) * -.3;
-        
-        if (drive.mag() < 0.05) {
-            drive = new Vector2();
-        }
+    private static void handleNormalDrive() {
+        Vector2 driveInput = getRawDriveVector();
+        double  rotateInput = -driverStick.getRawAxis(AXIS_ROTATE_X) * ROTATE_SCALE;
 
-        if (Math.abs(rotate) < 0.05) {
-            rotate = 0;
-        }
+        if (driveInput.mag() < DRIVE_DEADBAND)  driveInput  = new Vector2();
+        if (Math.abs(rotateInput) < ROTATE_DEADBAND) rotateInput = 0;
 
-        SwerveManager.rotateAndDrive(rotate, drive);
+        SwerveManager.rotateAndDrive(rotateInput, driveInput);
     }
 
-    private static Vector2 getJoyVector() {
-        double rawMoveX = driverStick.getRawAxis(moveX) * Math.abs(driverStick.getRawAxis(moveX));
-        double rawMoveY = driverStick.getRawAxis(moveY) * Math.abs(driverStick.getRawAxis(moveY));
-        return new Vector2(rawMoveX, -rawMoveY);
+    /**
+     * Returns a drive vector from the left joystick with quadratic scaling applied
+     * to each axis, preserving direction while reducing sensitivity near center.
+     */
+    private static Vector2 getRawDriveVector() {
+        double x = driverStick.getRawAxis(AXIS_DRIVE_X);
+        double y = driverStick.getRawAxis(AXIS_DRIVE_Y);
+        return new Vector2(x * Math.abs(x), -y * Math.abs(y));
     }
-
 }

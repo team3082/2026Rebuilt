@@ -97,6 +97,10 @@ public class Odometry {
         }
     };
 
+    public static Vector2 getVelocity() {
+        return odometryBuffer.getVelocity();
+    }
+
     public static Vector2 getPosition(){
         synchronized(positionLock){
             return position;
