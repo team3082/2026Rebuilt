@@ -11,7 +11,6 @@ public class ShooterManager {
     // default to safe values so Telemetry static init can't NPE before init() is called
     public static ShooterState shooterState = ShooterState.IDLE;
     private static ShooterTarget target = ShooterTarget.HUB;
-    private static Shooter shooter;
     public static boolean inRange = true; // for LEDs, to track and display if we are in range to shoot at the Hub
     
     public static void init() {
@@ -32,6 +31,7 @@ public class ShooterManager {
                 break;
 
             case REVVING:
+                System.out.println(Shooter.atRampedSpeed());
                 if (Shooter.atAngle() && Shooter.atRampedSpeed()) {
                     shooterState = ShooterState.SHOOTING;
                 }
@@ -41,6 +41,10 @@ public class ShooterManager {
                 break;
 
             case SHOOTING:
+                System.out.println(Shooter.atRampedSpeed());
+                if (!Shooter.atAngle() || !Shooter.atRampedSpeed()) {
+                    shooterState = ShooterState.REVVING;
+                }
                 setShooterAngleAndSpeed();
 
                 break;
@@ -65,10 +69,6 @@ public class ShooterManager {
 
     public static ShooterTarget getTarget() {
         return target != null ? target : ShooterTarget.HUB;
-    }
-
-    public static Shooter getShooter() {
-        return shooter;
     }
 
     public static void stopShooting() {

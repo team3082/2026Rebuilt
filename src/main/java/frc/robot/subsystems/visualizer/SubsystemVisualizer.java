@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Telemetry;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.states.ShooterState;
 
@@ -49,8 +50,8 @@ public class SubsystemVisualizer {
     }
 
     public static void update(){
-        hoodAngle = ShooterManager.getShooter().getAngle();
-        flywheelSpeed = ShooterManager.getShooter().getVelocity();
+        hoodAngle = Shooter.getAngle();
+        flywheelSpeed = Shooter.getVelocity();
     
         hoodLig.setAngle(Math.toDegrees(hoodAngle));
         flywheel.update(flywheelSpeed * 0.01);

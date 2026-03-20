@@ -15,6 +15,7 @@ import frc.robot.auto.Auto;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.visualizer.SubsystemVisualizer;
 import frc.robot.swerve.SwerveManager;
@@ -72,10 +73,10 @@ public class Telemetry {
     private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.getShooterState().name()).getEntry();
 
     // Shooter
-    private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", ShooterManager.getShooter().getTargetAngle()).getEntry();
-    private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", ShooterManager.getShooter().getAngle()).getEntry();
-    private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", ShooterManager.getShooter().getTargetSpeed()).getEntry();
-    private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", ShooterManager.getShooter().getVelocity()).getEntry();
+    private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", Shooter.getTargetAngle()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", Shooter.getAngle()).getEntry();
+    private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", Shooter.getTargetSpeed()).getEntry();
+    private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", Shooter.getVelocity()).getEntry();
 
     // Intake
     private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
@@ -185,10 +186,10 @@ public class Telemetry {
         SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
         SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
 
-        SHOOTER_TARGET_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getTargetAngle());
-        SHOOTER_CURRENT_HOOD_ANGLE.setDouble(ShooterManager.getShooter().getAngle());
-        SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getTargetSpeed());
-        SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(ShooterManager.getShooter().getVelocity());
+        SHOOTER_TARGET_HOOD_ANGLE.setDouble(Shooter.getTargetAngle());
+        SHOOTER_CURRENT_HOOD_ANGLE.setDouble(Shooter.getAngle());
+        SHOOTER_TARGET_FLYWHEEL_SPEED.setDouble(Shooter.getTargetSpeed());
+        SHOOTER_CURRENT_FLYWHEEL_SPEED.setDouble(Shooter.getVelocity());
 
         INTAKE_STATE.setString(Intake.getIntakeState().name());
         INTAKE_ANGLE.setDouble(Intake.getAngle());

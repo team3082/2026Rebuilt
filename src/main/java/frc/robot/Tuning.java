@@ -87,10 +87,10 @@ public final class Tuning {
         public static final double HOOD_KI = 0.000;
         public static final double HOOD_DEADBAND = 0.2;
 
-        public static final double FLYWHEEL_P = 0.05;
+        public static final double FLYWHEEL_P = 0.2;
         public static final double FLYWHEEL_I = 0.0;
-        public static final double FLYWHEEL_D = 0.0;
-        public static final double FLYWHEEL_KV = 0.21;
+        public static final double FLYWHEEL_D = 0.03;
+        public static final double FLYWHEEL_KV = 0.12;
 
         public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
         

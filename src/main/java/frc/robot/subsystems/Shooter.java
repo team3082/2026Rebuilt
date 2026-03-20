@@ -25,8 +25,8 @@ public class Shooter {
      * Initializes the flywheel motors and controllers.
      */
     public static void init() {
-        flywheelMotor = new TalonFX(Constants.Shooter.FLYWHEEL_MOTOR_ID);
-        hoodMotor = new TalonFX(Constants.Shooter.HOOD_MOTOR_ID);
+        flywheelMotor = new TalonFX(Constants.Shooter.FLYWHEEL_MOTOR_ID, "CANivore");
+        hoodMotor = new TalonFX(Constants.Shooter.HOOD_MOTOR_ID, "CANivore");
         
         flywheelMotor.getConfigurator().apply(new TalonFXConfiguration());
         TalonFXConfiguration flywheelConfiguration = new TalonFXConfiguration();
@@ -156,7 +156,7 @@ public class Shooter {
      * @return if it is at target speed
      */
     public static boolean atRampedSpeed() {
-        return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND;
+        return Math.abs(targetFlywheelSpeed - flywheelMotor.getVelocity().getValueAsDouble()) < (Tuning.Shooter.FLYWHEEL_SPEED_DEADBAND / 60.0);
     }
 
     /**

@@ -86,10 +86,8 @@ public class OI {
     }
 
     private static void plantAndShoot(){
-        System.out.println("Shoot and plant");
                 
         if (SwervePID.atRot()) {
-            System.out.println("At target angle, planting");
             SwerveManager.plant();
         } else {
             SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), new Vector2());

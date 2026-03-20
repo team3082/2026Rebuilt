@@ -28,7 +28,7 @@ public class Shoot extends Command{
 
         // Intake.startFeeding(.9);
 
-        // if (!reachedShooting || ShooterManager.getShooter().getVelocity() < ShooterManager.getShooter().getTargetSpeed() - Constants.Shooter.RPM_DROP) {
+        // if (!reachedShooting || Shooter.getVelocity() < Shooter.getTargetSpeed() - Constants.Shooter.RPM_DROP) {
         //     lastShotTime = RTime.now(); // resets time every time it shoots (rpm drops when a ball is shot)
         // }
     }
