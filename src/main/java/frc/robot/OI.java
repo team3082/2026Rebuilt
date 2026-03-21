@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.controllermaps.LogitechF310;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterTarget;
@@ -20,6 +21,10 @@ public class OI {
     private static final int BTN_SHOOT     = LogitechF310.BUTTON_RIGHT_BUMPER;
     private static final int BTN_ZERO_HOOD = LogitechF310.BUTTON_A;
     private static final int BTN_ZERO_GYRO = LogitechF310.BUTTON_Y;
+
+    private static final int toggleIntake  = LogitechF310.BUTTON_LEFT_BUMPER;
+    private static final int reverseIntake = LogitechF310.AXIS_LEFT_TRIGGER;
+    private static final int intakeFeed    = LogitechF310.AXIS_RIGHT_TRIGGER;
 
     private static final double DRIVE_DEADBAND  = 0.05;
     private static final double ROTATE_DEADBAND = 0.05;
@@ -48,6 +53,16 @@ public class OI {
         } else {
             ShooterManager.stopShooting();
             handleNormalDrive();
+        }
+
+        if (driverStick.getRawButton(toggleIntake)) {
+            Intake.startIntaking();
+        } else if (driverStick.getRawAxis(reverseIntake) > 0.25) {
+            Intake.reverse();
+        } else if (driverStick.getRawAxis(intakeFeed) > 0.10) {
+            Intake.startFeeding(driverStick.getRawAxis(intakeFeed));
+        } else {
+            Intake.stopIntaking();
         }
     }
 

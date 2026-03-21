@@ -5,6 +5,7 @@ import frc.robot.Tuning;
 import frc.robot.subsystems.states.ShooterState;
 import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.Odometry;
+import frc.robot.swerve.SwervePID;
 import frc.robot.utils.Vector2;
 
 public class ShooterManager {
@@ -31,8 +32,7 @@ public class ShooterManager {
                 break;
 
             case REVVING:
-                System.out.println(Shooter.atRampedSpeed());
-                if (Shooter.atAngle() && Shooter.atRampedSpeed()) {
+                if (Shooter.atAngle() && Shooter.atRampedSpeed() && SwervePID.atRot()) {
                     shooterState = ShooterState.SHOOTING;
                 }
                 
@@ -41,8 +41,7 @@ public class ShooterManager {
                 break;
 
             case SHOOTING:
-                System.out.println(Shooter.atRampedSpeed());
-                if (!Shooter.atAngle() || !Shooter.atRampedSpeed()) {
+                if (!Shooter.atAngle() || !Shooter.atRampedSpeed() || !SwervePID.atRot()) {
                     shooterState = ShooterState.REVVING;
                 }
                 setShooterAngleAndSpeed();

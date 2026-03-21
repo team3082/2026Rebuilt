@@ -144,7 +144,6 @@ public class Constants {
 
         public static final double INTAKE_DOWN_ANGLE = 5.5;
         public static final double INTAKE_UP_ANGLE = 1.75;
-        public static final double INTAKE_SAFE_ANGLE = 1.3;
     }
 
     public static final class Indexer {
