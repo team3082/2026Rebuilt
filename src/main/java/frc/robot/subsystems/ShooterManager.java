@@ -115,19 +115,10 @@ public class ShooterManager {
 
     private static void aimAtHub() {
 
-        Vector2 robotPosition = Odometry.getPosition();
-        double distance = target.pos.sub(robotPosition).mag();
-    
-        double lookAhead = distance * Tuning.Shooter.LOOK_AHEAD_TIME_K;
+        Vector2 finalPredictedRobotPosition = predictRobotPos();
+        double finalPredictedDistance = target.pos.sub(finalPredictedRobotPosition).mag();
 
-        Vector2 velocity = Odometry.getVelocity();
-        velocity = velocity.mul(lookAhead);
-
-        robotPosition = robotPosition.add(velocity);
-        distance = target.pos.sub(robotPosition).mag();
-    
-
-        if (distance < Tuning.Shooter.SHOOTER_TABLE_HUB[0].getDist()) { // defaults to lowest value if too close, does this because if it interpolates to lower flywheel speed the shot won't go high enough
+        if (finalPredictedDistance < Tuning.Shooter.SHOOTER_TABLE_HUB[0].getDist()) { // defaults to lowest value if too close, does this because if it interpolates to lower flywheel speed the shot won't go high enough
             Shooter.setTargetSpeed(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getSpeed());
             Shooter.setTargetAngle(Tuning.Shooter.SHOOTER_TABLE_HUB[0].getAngle() - Constants.Shooter.HOOD_ANGLE_OFFSET);
             return;
@@ -136,10 +127,10 @@ public class ShooterManager {
         for (int i = 0; i < Tuning.Shooter.SHOOTER_TABLE_HUB.length - 1; i++) {
             // finds which two values current distance is between and interpolates hood angle and flywheel speed between those values
             // if value is greater than maximum distance, continues linear approximation to that distance
-            if ((Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist() < distance && distance < Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getDist()) || i == Tuning.Shooter.SHOOTER_TABLE_HUB.length - 2) {
+            if ((Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist() < finalPredictedDistance && finalPredictedDistance < Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getDist()) || i == Tuning.Shooter.SHOOTER_TABLE_HUB.length - 2) {
 
                 // amount that distance is from first to second distance
-                double t = (distance - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist()) / (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getDist() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist());
+                double t = (finalPredictedDistance - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist()) / (Tuning.Shooter.SHOOTER_TABLE_HUB[i+1].getDist() - Tuning.Shooter.SHOOTER_TABLE_HUB[i].getDist());
                 
                 // interpolates flywheel speed and angle
                 double baseFlywheelSpeed = Tuning.Shooter.SHOOTER_TABLE_HUB[i].getSpeed();
@@ -158,6 +149,26 @@ public class ShooterManager {
         Shooter.setTargetSpeed(1000);
         System.out.println("Can't shoot from here");
         inRange = false;
+    }
+
+    /**
+     * predicts robot shooter position based on velocity for move and shoot
+     * @return predicted robot position
+     */
+    public static Vector2 predictRobotPos() {
+        Vector2 robotPosition = Odometry.getPosition().add(Constants.Shooter.SHOOTER_POS_OFFSET);
+        double distance = target.pos.sub(robotPosition).mag();
+    
+        double lookAhead = distance * Tuning.Shooter.LOOK_AHEAD_TIME_K;
+
+        Vector2 velocity = Odometry.getVelocity();
+
+        Vector2 newPos = robotPosition.add(velocity.mul(lookAhead));
+        double newDistance = target.pos.sub(newPos).mag();
+        double newLookAhead = newDistance * Tuning.Shooter.LOOK_AHEAD_TIME_K;
+
+        Vector2 finalPredictedRobotPosition = robotPosition.add(velocity.mul(newLookAhead));
+        return finalPredictedRobotPosition;
     }
 }
 

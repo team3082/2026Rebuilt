@@ -23,7 +23,6 @@ public class OI {
 
     private static final double DRIVE_DEADBAND  = 0.05;
     private static final double ROTATE_DEADBAND = 0.05;
-    private static final double SHOOT_MOVE_SCALE = 0.3;
     private static final double ROTATE_SCALE     = 0.3;
 
     public static void init() {
@@ -56,19 +55,19 @@ public class OI {
         Vector2 driveInput = getRawDriveVector();
 
         // Predict where the robot will be when the shot lands
-        ShooterTarget target  = ShooterManager.getTarget();
-        Vector2 currentPos    = Odometry.getPosition();
-        double  distance      = target.pos.sub(currentPos).mag();
-        double  lookAheadTime = distance * Tuning.Shooter.LOOK_AHEAD_TIME_K;
-        Vector2 predictedPos  = currentPos.add(Odometry.getVelocity().mul(lookAheadTime));
-        Vector2 shooterPos = predictedPos.add(Constants.Shooter.TURRET_POS_OFFSET);
+        ShooterTarget target = ShooterManager.getTarget();
+      
+        Vector2 predictedPos = ShooterManager.predictRobotPos();
+        double distance = target.pos.sub(predictedPos).mag();
+        double timeOfFlight = distance * Tuning.Shooter.LOOK_AHEAD_TIME_K;
 
-        double aimAngle = Math.atan2(
-            target.pos.y - shooterPos.y,
-            target.pos.x - shooterPos.x
-        );
+        Vector2 velocityCompensation = Odometry.getVelocity().mul(timeOfFlight);
+        Vector2 shotTarget = target.pos.sub(velocityCompensation);
+        Vector2 shotAim = shotTarget.sub(predictedPos);
 
-        SwervePID.setDestState(shooterPos, aimAngle);
+        double targetAngle = Math.atan2(shotAim.y, shotAim.x);
+
+        SwervePID.setDestState(Odometry.getPosition(), targetAngle);
 
         if (driveInput.mag() > DRIVE_DEADBAND) {
             handleShootWhileMoving(driveInput);
@@ -78,7 +77,7 @@ public class OI {
     }
 
     private static void handleShootWhileMoving(Vector2 driveInput) {
-        SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), driveInput.mul(SHOOT_MOVE_SCALE));
+        SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), driveInput.mul(Constants.Swerve.shootWhileMoveSpeed));
         ShooterManager.shoot();
     }
 
