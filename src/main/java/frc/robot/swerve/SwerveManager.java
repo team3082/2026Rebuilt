@@ -157,7 +157,7 @@ public final class SwerveManager {
     public static void plant() {
         for (SwerveModule mod : mods) {
             mod.drive(0);
-            mod.rotateToRad(mod.pos.atan2()+Math.PI/2);
+            mod.rotateToRad(mod.pos.atan2() + Math.PI/2);
         }
     }
 

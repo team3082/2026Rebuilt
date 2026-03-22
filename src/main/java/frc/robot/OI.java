@@ -80,7 +80,7 @@ public class OI {
         Vector2 shotTarget = target.pos.sub(velocityCompensation);
         Vector2 shotAim = shotTarget.sub(predictedPos);
 
-        double targetAngle = Math.atan2(shotAim.y, shotAim.x);
+        double targetAngle = Math.atan2(shotAim.y, shotAim.x) + Math.PI;
 
         SwervePID.setDestState(Odometry.getPosition(), targetAngle);
 

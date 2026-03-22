@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
@@ -44,9 +45,9 @@ public class Intake {
         pivotConfig.Slot0.kD = Tuning.Intake.PIVOT_D;
         pivotConfig.Slot0.kG = Tuning.Intake.PIVAT_KG;
 
-        pivotConfig.MotionMagic.MotionMagicCruiseVelocity = Tuning.Intake.PIVOT_VEL;
-        pivotConfig.MotionMagic.MotionMagicAcceleration = Tuning.Intake.PIVOT_ACCEL;
-        pivotConfig.MotionMagic.MotionMagicJerk = Tuning.Intake.PIVOT_JERK;
+        // pivotConfig.MotionMagic.MotionMagicCruiseVelocity = Tuning.Intake.PIVOT_VEL;
+        // pivotConfig.MotionMagic.MotionMagicAcceleration = Tuning.Intake.PIVOT_ACCEL;
+        // pivotConfig.MotionMagic.MotionMagicJerk = Tuning.Intake.PIVOT_JERK;
         
         pivotConfig.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -60,24 +61,24 @@ public class Intake {
     public static void update(){
         switch (rollerState) {
             case RESTING:
-                pivotMotor.setControl(new MotionMagicVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
+                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(0);
                 break;
         
             case INTAKING:
-                pivotMotor.setControl(new MotionMagicVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
+                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(Tuning.Intake.SPEED);
                 break;
 
             case REVERSE:
-                pivotMotor.setControl(new MotionMagicVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
+                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_DOWN_ANGLE));
                 rollerMotor.set(Tuning.Intake.REVERSE_SPEED);
                 break;
 
             case FEEDING:
                 double targetAngle = feedPercent * (Constants.Intake.INTAKE_UP_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE; // lets driver control how far intake raises
 
-                pivotMotor.setControl(new MotionMagicVoltage(targetAngle));
+                pivotMotor.setControl(new PositionVoltage(targetAngle));
                 rollerMotor.set(-0.38);
                 break;
         }

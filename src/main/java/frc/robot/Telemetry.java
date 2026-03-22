@@ -18,6 +18,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.visualizer.SubsystemVisualizer;
+import frc.robot.swerve.Odometry;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.swerve.visualizer.SwerveBaseVisualizer;
@@ -77,6 +78,7 @@ public class Telemetry {
     private static final GenericEntry SHOOTER_CURRENT_HOOD_ANGLE = shooterTab.add("Current hood angle", Shooter.getAngle()).getEntry();
     private static final GenericEntry SHOOTER_TARGET_FLYWHEEL_SPEED = shooterTab.add("Target flywheel speed", Shooter.getTargetSpeed()).getEntry();
     private static final GenericEntry SHOOTER_CURRENT_FLYWHEEL_SPEED = shooterTab.add("Current flywheel speed", Shooter.getVelocity()).getEntry();
+    private static final GenericEntry SHOOTER_DIST_FROM_HUB = shooterManagerTab.add("Dist to hub", ShooterManager.getTarget().pos.sub(Odometry.getPosition().add(Constants.Shooter.SHOOTER_POS_OFFSET)).mag()).getEntry();
 
     // Intake
     private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
@@ -185,6 +187,7 @@ public class Telemetry {
     private static void updateSubsystems() {
         SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
         SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
+        SHOOTER_DIST_FROM_HUB.setDouble(ShooterManager.getTarget().pos.sub(Odometry.getPosition().add(Constants.Shooter.SHOOTER_POS_OFFSET)).mag());
 
         SHOOTER_TARGET_HOOD_ANGLE.setDouble(Shooter.getTargetAngle());
         SHOOTER_CURRENT_HOOD_ANGLE.setDouble(Shooter.getAngle());

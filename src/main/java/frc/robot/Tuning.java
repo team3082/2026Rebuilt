@@ -99,15 +99,15 @@ public final class Tuning {
         public static final double HOOD_ZEROING_SPEED = -0.2;
 
         public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
-            new ShooterTableValue(75.0, Math.toRadians(25.0), 1250), // idc
-            new ShooterTableValue(90.0, Math.toRadians(25.0), 1390),//good
-            new ShooterTableValue(106.0, Math.toRadians(25.0), 1470),  //g
-            new ShooterTableValue(120.0, Math.toRadians(25.0), 1540), //great
-            new ShooterTableValue(136.0, Math.toRadians(25.0), 1625),//g
-            new ShooterTableValue(150.0, Math.toRadians(25.0), 1690), //perfection
-            new ShooterTableValue(165.0, Math.toRadians(25.0), 1740), // perfect fr
-            new ShooterTableValue(187.0, Math.toRadians(25.0), 1860),//
-            new ShooterTableValue(220.0, Math.toRadians(30.0), 1950) 
+            new ShooterTableValue(75.0, Math.toRadians(25.0), 2125),  //g
+            new ShooterTableValue(90.0, Math.toRadians(25.0), 2150),  //g
+            new ShooterTableValue(106.0, Math.toRadians(25.0), 2250), //g
+            new ShooterTableValue(120.0, Math.toRadians(25.0), 2375), //g
+            new ShooterTableValue(136.0, Math.toRadians(25.0), 2425), //g
+            new ShooterTableValue(150.0, Math.toRadians(25.0), 2550), //g final rpm
+            new ShooterTableValue(165.0, Math.toRadians(30.0), 2550), //g
+            new ShooterTableValue(187.0, Math.toRadians(34.0), 2550), //prettygood
+            new ShooterTableValue(220.0, Math.toRadians(38.0), 2700)  //g
         };
 
         public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = {
@@ -123,7 +123,7 @@ public final class Tuning {
             new ShooterTableValue(540.0, Math.toRadians(50.0), 3600)
         };
 
-        public static final double LOOK_AHEAD_TIME_K = .5;
+        public static final double LOOK_AHEAD_TIME_K = 0.5;
         public static final Vector2 TURRET_POS_OFFSET = new Vector2(3.75, 4.25);
     }
 
@@ -133,17 +133,17 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double SPEED = -0.45;
+        public static final double SPEED = -0.4;
         public static final double REVERSE_SPEED = 0.4;
         
-        public static final double PIVOT_P = 6.5; 
+        public static final double PIVOT_P = 0.65; 
         public static final double PIVOT_I = 0.0;
         public static final double PIVOT_D = 0.0;
-        public static final double PIVAT_KG = -0.5;
+        public static final double PIVAT_KG = -0.6;
 
-        public static final double PIVOT_VEL = 5000;
-        public static final double PIVOT_ACCEL = 9000;
-        public static final double PIVOT_JERK = 9000;
+        // public static final double PIVOT_VEL = 1200;
+        // public static final double PIVOT_ACCEL = 1600;
+        // public static final double PIVOT_JERK = 1000;
     }
 
     public static double holonomic_lookahead_time = 0;

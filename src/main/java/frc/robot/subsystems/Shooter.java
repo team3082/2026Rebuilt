@@ -73,10 +73,9 @@ public class Shooter {
                 flywheelMotor.setControl(new CoastOut());
                 if (Robot.isReal()){
                     hoodMotor.set(Tuning.Shooter.HOOD_ZEROING_SPEED);
-                    
+                    ShooterManager.stopShooting();
                     if (hoodMotor.getStatorCurrent().getValueAsDouble() > 80) {
-                        hoodMotor.setPosition(0);
-                        ShooterManager.stopShooting();
+                        hoodMotor.setPosition(0);  
                     }
 
                 } else {
