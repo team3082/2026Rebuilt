@@ -8,12 +8,17 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.states.ShooterTarget;
+import frc.robot.swerve.Odometry;
+import frc.robot.swerve.SwerveManager;
+import frc.robot.swerve.SwervePID;
 import frc.robot.utils.RTime;
+import frc.robot.utils.Vector2;
 
 public class Shoot extends Command{
 
     private double lastShotTime;
-    private boolean reachedShooting; // starts detection of balls leaving once shooter starts
+    private boolean reachedShooting; 
     
     @Override
     public void initialize() {
@@ -24,6 +29,13 @@ public class Shoot extends Command{
 
     @Override
     public void execute() {
+        ShooterTarget target = ShooterManager.getTarget();
+        Vector2 shotAim = target.pos.sub(Odometry.getPosition());
+        double targetAngle = Math.atan2(shotAim.y, shotAim.x) + Math.PI;
+
+        SwervePID.setDestState(Odometry.getPosition(), targetAngle);
+        SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), SwervePID.updateOutputVel());
+
         if (ShooterManager.getShooterState() == ShooterState.SHOOTING) {
             reachedShooting = true;
         }
@@ -31,7 +43,7 @@ public class Shoot extends Command{
         Intake.startFeeding(.9);
 
         if (!reachedShooting || Shooter.getVelocity() < Shooter.getTargetSpeed() - Constants.Shooter.RPM_DROP) {
-            lastShotTime = RTime.now(); // resets time every time it shoots (rpm drops when a ball is shot)
+            lastShotTime = RTime.now(); 
         }
     }
 
@@ -43,7 +55,7 @@ public class Shoot extends Command{
 
     @Override
     public boolean isFinished() {
-        return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; // checks if time since last shot is high enough to end
+        return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; 
     }
 
 }
