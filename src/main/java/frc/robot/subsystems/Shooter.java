@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
-import javax.naming.InitialContext;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -73,9 +70,9 @@ public class Shooter {
                 flywheelMotor.setControl(new CoastOut());
                 if (Robot.isReal()){
                     hoodMotor.set(Tuning.Shooter.HOOD_ZEROING_SPEED);
-                    ShooterManager.stopShooting();
                     if (hoodMotor.getStatorCurrent().getValueAsDouble() > 80) {
                         hoodMotor.setPosition(0);  
+                        ShooterManager.stopShooting();
                     }
 
                 } else {
