@@ -88,6 +88,7 @@ public class Telemetry {
     // Spindexer and Handoff
     private static final GenericEntry SPINDEXER_SPEED = indexerTab.add("Spindexer speed", Indexer.getSpindexerSpeed()).getEntry();
     private static final GenericEntry HANDOFF_SPEED = indexerTab.add("Handoff speed", Indexer.getHandoffSpeed()).getEntry();
+    private static final GenericEntry INDEXER_STATE = indexerTab.add("Indexer state", Indexer.getIndexerState().name()).getEntry();
 
     public static void init() {
         robotTab.add("Field View", fieldView);
@@ -200,6 +201,7 @@ public class Telemetry {
 
         SPINDEXER_SPEED.setDouble(Indexer.getSpindexerSpeed());
         HANDOFF_SPEED.setDouble(Indexer.getHandoffSpeed());
+        INDEXER_STATE.setString(Indexer.getIndexerState().name());
 
         SubsystemVisualizer.update();
     }

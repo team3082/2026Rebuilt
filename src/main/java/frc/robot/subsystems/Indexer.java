@@ -7,8 +7,16 @@ import frc.robot.Constants;
 import frc.robot.Tuning;
 
 public class Indexer {
+
+    public enum IndexerState {
+        NORMAL,
+        REVERSE,
+    }
+
     private static TalonFX spindexerMotor;
     private static TalonFX handoffMotor;
+
+    private static IndexerState indexerState = IndexerState.NORMAL;
 
     public static void init() {
         spindexerMotor = new TalonFX(Constants.Indexer.SPINDEXER_ID, "CANivore");
@@ -28,15 +36,24 @@ public class Indexer {
     }
 
     public static void update() {
-        switch (ShooterManager.getShooterState()) {
-            case SHOOTING:
-                spindexerMotor.set(Tuning.Indexer.SPINDEXER_SPEED);
-                handoffMotor.set(Tuning.Indexer.HANDOFF_SPEED);
-                break;
+        switch (indexerState) {
+            case NORMAL:
+                switch (ShooterManager.getShooterState()) {
+                    case SHOOTING:
+                        spindexerMotor.set(Tuning.Indexer.SPINDEXER_SPEED);
+                        handoffMotor.set(Tuning.Indexer.HANDOFF_SPEED);
+                        break;
 
-            default:
-                spindexerMotor.set(0);
-                handoffMotor.set(0);
+                    default:
+                        spindexerMotor.set(0);
+                        handoffMotor.set(0);
+                        break;
+                }
+                break;
+            
+            case REVERSE:
+                spindexerMotor.set(-0.25);
+                handoffMotor.set(0.25);
                 break;
         }
     }
@@ -47,5 +64,17 @@ public class Indexer {
 
     public static double getHandoffSpeed() {
         return handoffMotor.get();
+    }
+
+    public static IndexerState getIndexerState() {
+        return indexerState;
+    }
+
+    public static void reverse() {
+        indexerState = IndexerState.REVERSE;
+    }
+
+    public static void setNormalMode() {
+        indexerState = IndexerState.NORMAL;
     }
 }

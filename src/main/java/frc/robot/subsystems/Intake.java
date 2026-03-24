@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -16,6 +15,7 @@ public class Intake {
         INTAKING,
         REVERSE,
         FEEDING,
+        IN_ROBOT,
     }
 
     private static TalonFX pivotMotor;
@@ -44,10 +44,6 @@ public class Intake {
         pivotConfig.Slot0.kI = Tuning.Intake.PIVOT_I;
         pivotConfig.Slot0.kD = Tuning.Intake.PIVOT_D;
         pivotConfig.Slot0.kG = Tuning.Intake.PIVAT_KG;
-
-        // pivotConfig.MotionMagic.MotionMagicCruiseVelocity = Tuning.Intake.PIVOT_VEL;
-        // pivotConfig.MotionMagic.MotionMagicAcceleration = Tuning.Intake.PIVOT_ACCEL;
-        // pivotConfig.MotionMagic.MotionMagicJerk = Tuning.Intake.PIVOT_JERK;
         
         pivotConfig.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -76,10 +72,15 @@ public class Intake {
                 break;
 
             case FEEDING:
-                double targetAngle = feedPercent * (Constants.Intake.INTAKE_UP_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE; // lets driver control how far intake raises
+                double targetAngle = feedPercent * (Constants.Intake.INTAKE_FEED_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE; // lets driver control how far intake raises
 
                 pivotMotor.setControl(new PositionVoltage(targetAngle));
                 rollerMotor.set(-0.38);
+                break;
+
+            case IN_ROBOT:
+                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_UP_ANGLE));
+                rollerMotor.set(0);
                 break;
         }
     }
@@ -109,12 +110,16 @@ public class Intake {
         feedPercent = percent;
     }
 
+    public static void retract() {
+        rollerState = IntakeState.IN_ROBOT;
+    }
+
     public static double getAngle() {
         if (Robot.isReal()) {
             return pivotMotor.getPosition().getValueAsDouble();
         } else {
             if (rollerState == IntakeState.FEEDING) {
-                return feedPercent * (Constants.Intake.INTAKE_UP_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE;
+                return feedPercent * (Constants.Intake.INTAKE_FEED_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE;
             } else {
                 return Constants.Intake.INTAKE_DOWN_ANGLE;
             }
@@ -136,7 +141,10 @@ public class Intake {
                     return Tuning.Intake.REVERSE_SPEED;
                 
                 case FEEDING:
-                    return 0;                    
+                    return 0;    
+                
+                case IN_ROBOT:
+                    return 0;
             }
         }
         return 0;

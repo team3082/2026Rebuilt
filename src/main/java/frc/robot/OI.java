@@ -2,8 +2,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.controllermaps.LogitechF310;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
+import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.Odometry;
@@ -26,6 +28,9 @@ public class OI {
     private static final int reverseIntake = LogitechF310.AXIS_LEFT_TRIGGER;
     private static final int intakeFeed    = LogitechF310.AXIS_RIGHT_TRIGGER;
 
+    private static final int reverseIndexer = LogitechF310.BUTTON_X;
+    private static final int defenseMode   = LogitechF310.BUTTON_RIGHT_BUMPER;
+
     private static final double DRIVE_DEADBAND  = 0.05;
     private static final double ROTATE_DEADBAND = 0.05;
     private static final double ROTATE_SCALE     = 0.3;
@@ -37,6 +42,7 @@ public class OI {
 
     public static void update() {
         handleDriverInput();
+        operatorInput();
     }
 
     private static void handleDriverInput() {
@@ -62,7 +68,25 @@ public class OI {
         } else if (driverStick.getRawAxis(intakeFeed) > 0.10) {
             Intake.startFeeding(driverStick.getRawAxis(intakeFeed));
         } else {
-            Intake.stopIntaking();
+            if (Intake.getIntakeState() != IntakeState.IN_ROBOT) {
+                Intake.stopIntaking();
+            }
+        }
+
+        if (driverStick.getRawButton(reverseIndexer)) {
+            Indexer.reverse();
+        } else {
+            Indexer.setNormalMode();
+        }
+    }
+
+    private static void operatorInput() {
+        if (operatorStick.getRawButtonPressed(defenseMode)) {
+            if (Intake.getIntakeState() == IntakeState.IN_ROBOT) {
+                Intake.stopIntaking();
+            } else if (Intake.getIntakeState() == IntakeState.RESTING) {
+                Intake.retract();
+            }
         }
     }
 
