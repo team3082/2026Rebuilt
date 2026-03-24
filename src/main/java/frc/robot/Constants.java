@@ -133,7 +133,7 @@ public class Constants {
         public static final double HOOD_ANGLE_OFFSET = Math.toRadians(25.0);
 
         public static final double RPM_DROP = 50; // amount that rpm drops when ball is shot
-        public static final double BALL_TIMEOUT = 4.5; // seconds without shots to assume hopper is empty
+        public static final double BALL_TIMEOUT = 4; // seconds without shots to assume hopper is empty
         public static final Vector2 SHOOTER_POS_OFFSET = new Vector2(3.75, 4.25);
 
     }

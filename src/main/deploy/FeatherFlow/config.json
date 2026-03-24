@@ -5,7 +5,7 @@
         "x": 510,
         "y": 25
       },
-      "name": "Trench Alliance Side",
+      "name": "Trench Left Alliance Side",
       "color": "purple",
       "enabled": true,
       "locked": true,
@@ -16,7 +16,7 @@
         "x": 415,
         "y": 25
       },
-      "name": "Trench Neutral Side",
+      "name": "Trench Left Neutral Side",
       "color": "purple",
       "enabled": true,
       "locked": true,
@@ -38,7 +38,7 @@
         "x": 415,
         "y": 292
       },
-      "name": "Trench Left Alliance Side",
+      "name": "Trench Right Neutral Side",
       "color": "blue",
       "enabled": true,
       "locked": true,
