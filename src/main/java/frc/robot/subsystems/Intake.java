@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
@@ -79,7 +80,11 @@ public class Intake {
                 break;
 
             case IN_ROBOT:
-                pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_UP_ANGLE));
+                if (Math.abs(pivotMotor.getPosition().getValueAsDouble() - Constants.Intake.INTAKE_UP_ANGLE) < 0.5) {
+                    pivotMotor.setControl(new StaticBrake());
+                } else {
+                    pivotMotor.setControl(new PositionVoltage(Constants.Intake.INTAKE_UP_ANGLE));
+                }
                 rollerMotor.set(0);
                 break;
         }

@@ -142,9 +142,9 @@ public class Constants {
         public static final int PIVOT_MOTOR_ID = 10;
         public static final int ROLLER_MOTOR_ID = 9;
 
-        public static final double INTAKE_DOWN_ANGLE = 6.15;
-        public static final double INTAKE_FEED_ANGLE = 2.25;
-        public static final double INTAKE_UP_ANGLE   = 1.0;
+        public static final double INTAKE_DOWN_ANGLE = 17.75;
+        public static final double INTAKE_FEED_ANGLE = 6.25;
+        public static final double INTAKE_UP_ANGLE   = 2.0;
     }
 
     public static final class Indexer {

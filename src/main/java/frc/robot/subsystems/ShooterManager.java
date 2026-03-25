@@ -119,12 +119,12 @@ public class ShooterManager {
                 break;
         
             case MANUAL_TRENCH:
-                Shooter.setTargetSpeed(2410);           
+                Shooter.setTargetSpeed(2510);           
                 Shooter.setTargetAngle(0);
                 break;
 
             case MANUAL_TOWER:
-                Shooter.setTargetSpeed(2375);
+                Shooter.setTargetSpeed(2350);
                 Shooter.setTargetAngle(0);
                 break;
         }
