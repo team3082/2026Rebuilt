@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Tuning;
 import frc.robot.subsystems.states.ShooterState;
 import frc.robot.subsystems.states.ShooterTarget;
@@ -9,10 +10,18 @@ import frc.robot.swerve.SwervePID;
 import frc.robot.utils.Vector2;
 
 public class ShooterManager {
+
+    public enum ShooterManagerState {
+        NORMAL,
+        MANUAL_TOWER,
+        MANUAL_TRENCH,
+    }
+
     // default to safe values so Telemetry static init can't NPE before init() is called
     public static ShooterState shooterState = ShooterState.IDLE;
     private static ShooterTarget target = ShooterTarget.HUB;
     public static boolean inRange = true; // for LEDs, to track and display if we are in range to shoot at the Hub
+    private static ShooterManagerState targetingState = ShooterManagerState.NORMAL;
     
     public static void init() {
         Shooter.init();
@@ -32,7 +41,7 @@ public class ShooterManager {
                 break;
 
             case REVVING:
-                if (Shooter.atAngle() && Shooter.atRampedSpeed() && SwervePID.atRot()) {
+                if (Shooter.atAngle() && Shooter.atRampedSpeed() && (SwervePID.atRot() || OI.manualAim)) {
                     shooterState = ShooterState.SHOOTING;
                 }
                 
@@ -50,6 +59,22 @@ public class ShooterManager {
         }
         Shooter.update();
 
+    }
+
+    public static ShooterManagerState getTargetingState() {
+        return targetingState;
+    }
+
+    public static void setNormalAiming() {
+        targetingState = ShooterManagerState.NORMAL;
+    }
+
+    public static void setManualTower() {
+        targetingState = ShooterManagerState.MANUAL_TOWER;
+    }
+
+    public static void setManualTrench() {
+        targetingState = ShooterManagerState.MANUAL_TRENCH;
     }
 
     public static void shoot() {
@@ -79,15 +104,31 @@ public class ShooterManager {
     }
 
     private static void setShooterAngleAndSpeed() {
-        switch (target) {
-            case HUB:
-                aimAtHub();
+
+        switch (targetingState) {
+            case NORMAL:
+                switch (target) {
+                    case HUB:
+                        aimAtHub();
+                        break;
+                        
+                    default:
+                        aimPass();
+                        break;
+                }
                 break;
-                
-            default:
-                aimPass();
+        
+            case MANUAL_TRENCH:
+                Shooter.setTargetSpeed(2410);           
+                Shooter.setTargetAngle(0);
+                break;
+
+            case MANUAL_TOWER:
+                Shooter.setTargetSpeed(2375);
+                Shooter.setTargetAngle(0);
                 break;
         }
+        
     }
 
     private static void aimPass() {

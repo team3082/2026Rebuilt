@@ -72,6 +72,7 @@ public class Telemetry {
     // Shooter Manager
     private static final GenericEntry SHOOTER_TARGET = shooterManagerTab.add("Shooter target", ShooterManager.getTarget().name()).getEntry();
     private static final GenericEntry SHOOTER_STATE = shooterManagerTab.add("Shooter state", ShooterManager.getShooterState().name()).getEntry();
+    private static final GenericEntry SHOOTER_TARGETING_STATE = shooterManagerTab.add("Shooter targeting state", ShooterManager.getTargetingState().name()).getEntry();
 
     // Shooter
     private static final GenericEntry SHOOTER_TARGET_HOOD_ANGLE = shooterTab.add("Target hood angle", Shooter.getTargetAngle()).getEntry();
@@ -189,6 +190,7 @@ public class Telemetry {
         SHOOTER_TARGET.setString(ShooterManager.getTarget().name());
         SHOOTER_STATE.setString(ShooterManager.getShooterState().name());
         SHOOTER_DIST_FROM_HUB.setDouble(ShooterManager.getTarget().pos.sub(Odometry.getPosition().add(Constants.Shooter.SHOOTER_POS_OFFSET)).mag());
+        SHOOTER_TARGETING_STATE.setString(ShooterManager.getTargetingState().name());
 
         SHOOTER_TARGET_HOOD_ANGLE.setDouble(Shooter.getTargetAngle());
         SHOOTER_CURRENT_HOOD_ANGLE.setDouble(Shooter.getAngle());

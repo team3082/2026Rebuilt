@@ -6,6 +6,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.ShooterManager.ShooterManagerState;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.Odometry;
@@ -31,6 +32,11 @@ public class OI {
     private static final int reverseIndexer = LogitechF310.BUTTON_X;
     private static final int defenseMode   = LogitechF310.BUTTON_RIGHT_BUMPER;
 
+    private static final int manualTrenchToggle = LogitechF310.BUTTON_B;
+    private static final int manualTowerToggle = LogitechF310.BUTTON_A;
+    private static final int manualAimToggle = LogitechF310.BUTTON_Y;
+    public static boolean manualAim = false;
+
     private static final double DRIVE_DEADBAND  = 0.05;
     private static final double ROTATE_DEADBAND = 0.05;
     private static final double ROTATE_SCALE     = 0.3;
@@ -55,7 +61,12 @@ public class OI {
         }
 
         if (driverStick.getRawButton(BTN_SHOOT)) {
-            handleShootingMode();
+            ShooterManager.shoot();
+            if (manualAim) {
+                handleNormalDrive();
+            } else {
+                handleShootingMode();
+            }
         } else {
             ShooterManager.stopShooting();
             handleNormalDrive();
@@ -87,6 +98,26 @@ public class OI {
             } else if (Intake.getIntakeState() == IntakeState.RESTING) {
                 Intake.retract();
             }
+        }
+
+        if (operatorStick.getRawButtonPressed(manualTrenchToggle)) {
+            if (ShooterManager.getTargetingState() == ShooterManagerState.MANUAL_TRENCH) {
+                ShooterManager.setNormalAiming();
+            } else {
+                ShooterManager.setManualTrench();
+            }
+        }
+
+        if (operatorStick.getRawButtonPressed(manualTowerToggle)) {
+            if (ShooterManager.getTargetingState() == ShooterManagerState.MANUAL_TOWER) {
+                ShooterManager.setNormalAiming();
+            } else {
+                ShooterManager.setManualTower();
+            }
+        }
+
+        if (operatorStick.getRawButtonPressed(manualAimToggle)) {
+            manualAim = !manualAim;
         }
     }
 
