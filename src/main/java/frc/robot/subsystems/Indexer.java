@@ -52,14 +52,14 @@ public class Indexer {
                 break;
             
             case REVERSE:
-                spindexerMotor.set(-0.25);
-                handoffMotor.set(0.25);
+                spindexerMotor.set(-0.65);
+                handoffMotor.set(0.65);
                 break;
         }
     }
 
     public static double getSpindexerSpeed() {
-        return spindexerMotor.get();
+        return spindexerMotor.getVelocity().getValueAsDouble();
     }
 
     public static double getHandoffSpeed() {

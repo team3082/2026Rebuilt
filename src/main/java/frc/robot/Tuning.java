@@ -88,7 +88,7 @@ public final class Tuning {
         public static final double HOOD_KI = 0.000;
         public static final double HOOD_DEADBAND = 0.2;
 
-        public static final double FLYWHEEL_P = 0.2;
+        public static final double FLYWHEEL_P = 0.4;
         public static final double FLYWHEEL_I = 0.0;
         public static final double FLYWHEEL_D = 0.03;
         public static final double FLYWHEEL_KV = 0.12;
@@ -106,7 +106,7 @@ public final class Tuning {
             new ShooterTableValue(136.0, Math.toRadians(25.0), 2425), //g
             new ShooterTableValue(150.0, Math.toRadians(25.0), 2550), //g final rpm
             new ShooterTableValue(165.0, Math.toRadians(30.0), 2550), //g
-            new ShooterTableValue(187.0, Math.toRadians(34.0), 2550), //prettygood
+            new ShooterTableValue(187.0, Math.toRadians(34.0), 2650), //prettygood
             new ShooterTableValue(220.0, Math.toRadians(38.0), 2700)  //g
         };
 
@@ -128,8 +128,8 @@ public final class Tuning {
     }
 
     public static final class Indexer {
-        public static final double SPINDEXER_SPEED = 0.75;
-        public static final double HANDOFF_SPEED = -0.6;
+        public static final double SPINDEXER_SPEED = 0.55;
+        public static final double HANDOFF_SPEED = -0.4;
     }
 
     public static final class Intake {

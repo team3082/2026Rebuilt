@@ -41,9 +41,9 @@ public class ShooterManager {
                 break;
 
             case SHOOTING:
-                if (!Shooter.atAngle() || !Shooter.atRampedSpeed() || !SwervePID.atRot()) {
-                    shooterState = ShooterState.REVVING;
-                }
+                // if (!Shooter.atAngle() || !Shooter.atRampedSpeed() || !SwervePID.atRot()) {
+                //     shooterState = ShooterState.REVVING;
+                // }
                 setShooterAngleAndSpeed();
 
                 break;
