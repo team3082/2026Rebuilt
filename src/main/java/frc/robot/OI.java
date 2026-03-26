@@ -100,24 +100,18 @@ public class OI {
             }
         }
 
-        if (operatorStick.getRawButtonPressed(manualTrenchToggle)) {
-            if (ShooterManager.getTargetingState() == ShooterManagerState.MANUAL_TRENCH) {
-                ShooterManager.setNormalAiming();
-            } else {
-                ShooterManager.setManualTrench();
-            }
+        if (operatorStick.getRawButton(manualTowerToggle)) {
+            ShooterManager.setManualTower();
+        } else if (operatorStick.getRawButton(manualTrenchToggle)) {
+            ShooterManager.setManualTrench();
+        } else {
+            ShooterManager.setNormalAiming();
         }
 
-        if (operatorStick.getRawButtonPressed(manualTowerToggle)) {
-            if (ShooterManager.getTargetingState() == ShooterManagerState.MANUAL_TOWER) {
-                ShooterManager.setNormalAiming();
-            } else {
-                ShooterManager.setManualTower();
-            }
-        }
-
-        if (operatorStick.getRawButtonPressed(manualAimToggle)) {
-            manualAim = !manualAim;
+        if (operatorStick.getRawButton(manualAimToggle)) {
+            manualAim = true;
+        } else {
+            manualAim = false;
         }
     }
 

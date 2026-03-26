@@ -48,9 +48,14 @@ public class VisionManager {
 
             Transform3d transform = target.getBestCameraToTarget();
             int id = target.getFiducialId();
+            
 
             if (id < 0 || id > Constants.APRIL_TAGS.length) {
                 continue; // Skip invalid id
+            }
+
+            if (target.getPoseAmbiguity() > 0.2){
+                continue;
             }
             
             Vector2 vectorTransform = new Vector2(transform.getX(), transform.getY());

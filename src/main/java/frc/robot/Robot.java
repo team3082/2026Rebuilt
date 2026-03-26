@@ -58,8 +58,8 @@ public class Robot extends LoggedRobot {
     Telemetry.init();
 
     //LEDs
-    LEDManager.init();
-    LEDMech2D.init();
+    // LEDManager.init();
+    // LEDMech2D.init();
     
     // Controls
     OI.init();
@@ -84,7 +84,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotPeriodic() {
-    LEDMech2D.update();
+    // LEDMech2D.update();
     RTime.update();
     Pigeon.update();
     ShooterManager.update();
@@ -93,7 +93,7 @@ public class Robot extends LoggedRobot {
     Telemetry.update();
     SwervePosition.update();
     SwerveManager.update();
-    LEDManager.update();
+    // LEDManager.update();
   }
 
   @Override

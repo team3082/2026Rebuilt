@@ -269,7 +269,7 @@ public class FeatherFlow {
             }
 
             profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
-                segPath, 90*1.5, 3, 90*1.5, 140, targetHeadings
+                segPath, 110, 3, 120, 110, targetHeadings
             ));
 
             segmentDistOffset += segDist[pointCount - 1];

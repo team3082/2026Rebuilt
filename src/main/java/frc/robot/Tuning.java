@@ -133,8 +133,9 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double SPEED = -0.4;
-        public static final double REVERSE_SPEED = 0.4;
+        public static final double INTAKE_SPEED = -42.5;
+        public static final double FEED_SPEED = -50;
+        public static final double REVERSE_SPEED = 40;
         
         public static final double PIVOT_P = 0.45; 
         public static final double PIVOT_I = 0.0;
@@ -144,6 +145,11 @@ public final class Tuning {
         // public static final double PIVOT_VEL = 1200;
         // public static final double PIVOT_ACCEL = 1600;
         // public static final double PIVOT_JERK = 1000;
+
+        public static final double ROLLER_P = 0.01;
+        public static final double ROLLER_I = 0;
+        public static final double ROLLER_D = 0;
+        public static final double ROLLER_KV = 0.13;
     }
 
     public static double holonomic_lookahead_time = 0;
