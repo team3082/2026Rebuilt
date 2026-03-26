@@ -133,7 +133,7 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double SPEED = -0.6;
+        public static final double SPEED = -0.4;
         public static final double REVERSE_SPEED = 0.4;
         
         public static final double PIVOT_P = 0.45; 

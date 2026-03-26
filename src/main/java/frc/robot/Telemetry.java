@@ -85,6 +85,7 @@ public class Telemetry {
     private static final GenericEntry INTAKE_STATE = intakeTab.add("Intake state", Intake.getIntakeState().name()).getEntry();
     private static final GenericEntry INTAKE_ANGLE = intakeTab.add("Intake angle", Intake.getAngle()).getEntry();
     private static final GenericEntry INTAKE_SPEED = intakeTab.add("Intake speed", Intake.getSpeed()).getEntry();
+    private static final GenericEntry INTAKE_TARGET_ANGLE = intakeTab.add("Intake target angle", Intake.getTargetAngle()).getEntry();
 
     // Spindexer and Handoff
     private static final GenericEntry SPINDEXER_SPEED = indexerTab.add("Spindexer speed", Indexer.getSpindexerSpeed()).getEntry();
@@ -200,6 +201,7 @@ public class Telemetry {
         INTAKE_STATE.setString(Intake.getIntakeState().name());
         INTAKE_ANGLE.setDouble(Intake.getAngle());
         INTAKE_SPEED.setDouble(Intake.getSpeed());
+        INTAKE_TARGET_ANGLE.setDouble(Intake.getTargetAngle());
 
         SPINDEXER_SPEED.setDouble(Indexer.getSpindexerSpeed());
         HANDOFF_SPEED.setDouble(Indexer.getHandoffSpeed());

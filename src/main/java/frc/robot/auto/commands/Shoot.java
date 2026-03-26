@@ -39,7 +39,7 @@ public class Shoot extends Command{
 
         if (ShooterManager.getShooterState() == ShooterState.SHOOTING) {
             reachedShooting = true;
-            Intake.startFeeding(Math.sin(Timer.getFPGATimestamp())*.5+1);
+            Intake.startFeeding(Math.sin(Timer.getFPGATimestamp())*.5+.5);
         }
 
         if (!reachedShooting || Shooter.getVelocity() < Shooter.getTargetSpeed() - Constants.Shooter.RPM_DROP) {

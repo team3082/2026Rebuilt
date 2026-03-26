@@ -112,7 +112,7 @@ public class Intake {
      */
     public static void startFeeding(double percent) {
         rollerState = IntakeState.FEEDING;
-        feedPercent = percent;
+        feedPercent = Math.max(0, Math.min(1, percent));
     }
 
     public static void retract() {
@@ -153,5 +153,9 @@ public class Intake {
             }
         }
         return 0;
+    }
+
+    public static double getTargetAngle() {
+        return feedPercent * (Constants.Intake.INTAKE_FEED_ANGLE - Constants.Intake.INTAKE_DOWN_ANGLE) + Constants.Intake.INTAKE_DOWN_ANGLE;
     }
 }
