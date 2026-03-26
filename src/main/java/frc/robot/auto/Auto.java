@@ -19,18 +19,9 @@ public class Auto {
     public static RoutineManager routineManager;
 
     @AutoRoutine()
-    public SequentialCommandGroup Shoot(){
-        return new SequentialCommandGroup(
-        //    new StartIntake(),
-           new Shoot()
-        );
-    }
-
-    @AutoRoutine()
     public SequentialCommandGroup Left3Piece() {
         Pigeon.setYaw(90);
         return new SequentialCommandGroup(
-            new Shoot(),
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("3 Piece Left",
                 true, 
@@ -52,7 +43,6 @@ public class Auto {
     public SequentialCommandGroup Right3Piece() {
         Pigeon.setYaw(-90);
         return new SequentialCommandGroup(
-            new Shoot(),
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("3 Piece Right", 
                 new Shoot(),
@@ -82,61 +72,6 @@ public class Auto {
                 new Shoot()
             ));
     }
-
-    @AutoRoutine()
-    public SequentialCommandGroup MosesRight() {
-        Pigeon.setYaw(-90);
-        return new SequentialCommandGroup(
-            // new StartIntake(),
-            new Shoot(),
-            FeatherFlow.buildFeatherAuto("Moses Right", 
-                new Shoot(),
-                new Shoot()
-            )
-        );
-    }
-    
-    @AutoRoutine()
-    public SequentialCommandGroup SilverLining(){
-        Pigeon.setYaw(-90);
-        return new SequentialCommandGroup(
-            // new StartIntake(),
-            new Shoot(),
-            FeatherFlow.buildFeatherAuto("Silver Lining", 
-                new Shoot(),
-                new Shoot()
-            )
-        );
-
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup MosesLeft() {
-        Pigeon.setYaw(90);
-        return new SequentialCommandGroup(
-            // new StartIntake(),
-            new Shoot(),
-            FeatherFlow.buildFeatherAuto("Moses Left", 
-                true,
-                new Shoot(),
-                new Shoot()
-            )
-        );
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup Example() {
-        Pigeon.setYaw(90);
-        return new SequentialCommandGroup(
-            new StartIntake(),
-            FeatherFlow.buildFeatherAuto("Example", 
-                true,
-                new Shoot(),
-                new Shoot()
-            )
-        );
-    }
-
 
     /**
      * Gets the auto selector from {@link RoutineManager}

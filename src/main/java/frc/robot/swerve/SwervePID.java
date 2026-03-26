@@ -2,10 +2,6 @@ package frc.robot.swerve;
 
 import static frc.robot.Tuning.*;
 
-import org.littletonrobotics.junction.Logger;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.utils.PIDController;
 import frc.robot.utils.RotationalPIDController;

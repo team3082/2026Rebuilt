@@ -1,48 +1,61 @@
 package frc.robot.auto.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.Tuning;
-// import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.ShooterManager;
-// import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterManager;
+import frc.robot.subsystems.states.ShooterState;
+import frc.robot.subsystems.states.ShooterTarget;
+import frc.robot.swerve.Odometry;
+import frc.robot.swerve.SwerveManager;
+import frc.robot.swerve.SwervePID;
 import frc.robot.utils.RTime;
+import frc.robot.utils.Vector2;
 
 public class Shoot extends Command{
 
     private double lastShotTime;
-    // private boolean reachedShooting; // starts detection of balls leaving once shooter starts
+    private boolean reachedShooting; 
     
     @Override
     public void initialize() {
         System.out.println("shooting");
         lastShotTime = RTime.now();
-        // ShooterManager.shoot();
+        ShooterManager.shoot();
     }
 
     @Override
     public void execute() {
-        // if (ShooterManager.getShooterState() == ShooterState.SHOOTING) {
-        //     reachedShooting = true;
-        // }
+        ShooterTarget target = ShooterManager.getTarget();
+        Vector2 shotAim = target.pos.sub(Odometry.getPosition());
+        double targetAngle = Math.atan2(shotAim.y, shotAim.x) + Math.PI;
 
-        // Intake.startFeeding(.9);
+        SwervePID.setDestState(Odometry.getPosition(), targetAngle);
+        SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), SwervePID.updateOutputVel());
 
-        // if (!reachedShooting || Shooter.getVelocity() < Shooter.getTargetSpeed() - Constants.Shooter.RPM_DROP) {
-        //     lastShotTime = RTime.now(); // resets time every time it shoots (rpm drops when a ball is shot)
-        // }
+        if (ShooterManager.getShooterState() == ShooterState.SHOOTING) {
+            reachedShooting = true;
+            Intake.startFeeding(Math.sin(Timer.getFPGATimestamp())*.5+1);
+        }
+
+        if (!reachedShooting || Shooter.getVelocity() < Shooter.getTargetSpeed() - Constants.Shooter.RPM_DROP) {
+            lastShotTime = RTime.now(); 
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        // ShooterManager.stopShooting();
-        // Intake.startIntaking();
+        ShooterManager.stopShooting();
+        Intake.startIntaking();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
-        // return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; // checks if time since last shot is high enough to end
+        return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; 
     }
 
 }
