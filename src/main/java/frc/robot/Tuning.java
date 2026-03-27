@@ -128,7 +128,7 @@ public final class Tuning {
     }
 
     public static final class Indexer {
-        public static final double SPINDEXER_SPEED = 0.55;
+        public static final double SPINDEXER_SPEED = 0.4;
         public static final double HANDOFF_SPEED = -0.4;
     }
 

@@ -97,7 +97,7 @@ public class Telemetry {
         robotTab.add("Swerve View", swerveView);
 
         SwerveBaseVisualizer.init();
-        SubsystemVisualizer.init();
+        // SubsystemVisualizer.init();
         robotTab.addString("Position", () -> SwervePosition.getPosition().toString());
         robotTab.addString("PID Dest Position", () -> SwervePID.getDest().toString());
         
@@ -108,12 +108,16 @@ public class Telemetry {
         robotTab.add("Subsystem View Top", subsystemViewTop);
     }
 
+    public static int count = 0;
     public static void update() {
-        updateField();
-        updateSwerve();
-        logValues();
-        updateSubsystems();
-
+        count++;
+        if (count % 5 == 0) {
+            updateField();
+            updateSwerve();
+            logValues();
+            updateSubsystems();
+            count = 0;
+        }
     }
 
     private static void logValues(){
@@ -207,7 +211,7 @@ public class Telemetry {
         HANDOFF_SPEED.setDouble(Indexer.getHandoffSpeed());
         INDEXER_STATE.setString(Indexer.getIndexerState().name());
 
-        SubsystemVisualizer.update();
+        // SubsystemVisualizer.update();
     }
     
 }

@@ -1,0 +1,106 @@
+{
+  "id": "1774638781005",
+  "name": "Untitled",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 513.8177142338207,
+        "y": 160.67051514489845
+      },
+      "handleOutOffset": {
+        "x": 10.399999999999977,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 595.7044867773966,
+        "y": 238.3243535508588
+      },
+      "handleInOffset": {
+        "x": -52.31283311258185,
+        "y": -28.7528752578029
+      },
+      "handleOutOffset": {
+        "x": 39.14563282064728,
+        "y": 21.5157434688644
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 635,
+        "y": 290
+      },
+      "handleOutOffset": {
+        "x": -1.4705923707829243,
+        "y": 9.982919656422212
+      },
+      "handleInOffset": {
+        "x": 1.3990852103376537,
+        "y": -9.497502859921367
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 578.9558318629761,
+        "y": 234.36792489599196
+      },
+      "handleOutOffset": {
+        "x": -49.084262968287305,
+        "y": -58.04208829001745
+      },
+      "handleInOffset": {
+        "x": 21.965056537086184,
+        "y": 25.973655785449523
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1761525063428,
+      "u": 1.92,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 3
+        },
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1774638913604,
+      "u": 2.974,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-03-27T19:13:01.005Z",
+  "lastModified": "2026-03-27T19:21:04.489Z"
+}

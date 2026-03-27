@@ -75,8 +75,8 @@
     },
     {
       "position": {
-        "x": 510,
-        "y": 292
+        "x": 519.7,
+        "y": 288.3
       },
       "handleOutOffset": {
         "x": 0,
@@ -88,8 +88,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
-      "snapPointId": "snap-1772253433219"
+      "name": ""
     },
     {
       "position": {
@@ -146,8 +145,8 @@
     },
     {
       "position": {
-        "x": 510,
-        "y": 292
+        "x": 520.3,
+        "y": 287.3
       },
       "handleOutOffset": {
         "x": 0,
@@ -159,8 +158,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
-      "snapPointId": "snap-1772253433219"
+      "name": ""
     }
   ],
   "controlPoints": [
@@ -354,5 +352,5 @@
     }
   ],
   "created": "2026-03-24T15:08:02.730Z",
-  "lastModified": "2026-03-24T15:16:25.499Z"
+  "lastModified": "2026-03-27T20:06:23.029Z"
 }

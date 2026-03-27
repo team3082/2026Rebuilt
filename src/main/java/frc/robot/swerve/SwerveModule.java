@@ -77,7 +77,7 @@ public class SwerveModule {
 
         absEncoder.getConfigurator().apply(canConfig);
 
-        driveConfig.CurrentLimits.SupplyCurrentLimit = 80;
+        driveConfig.CurrentLimits.SupplyCurrentLimit = 50;
         driveConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         steerConfig.CurrentLimits.SupplyCurrentLimit = 40;

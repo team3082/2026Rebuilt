@@ -40,6 +40,17 @@ public class Auto {
     }
 
     @AutoRoutine()
+    public SequentialCommandGroup OutpostFromCenter() {
+        Pigeon.setYaw(0);
+        return new SequentialCommandGroup(
+            new StartIntake(),
+            FeatherFlow.buildFeatherAuto("Untitled", 
+                new Shoot()
+            )
+        );
+    }
+
+    @AutoRoutine()
     public SequentialCommandGroup Right3Piece() {
         Pigeon.setYaw(-90);
         return new SequentialCommandGroup(
