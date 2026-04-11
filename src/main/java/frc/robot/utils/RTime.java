@@ -74,7 +74,7 @@ public class RTime {
         if(Robot.isSimulation()){
             return m_deltatime;
         }
-        return Robot.defaultPeriodSecs;
+        return Robot.kDefaultPeriod;
     }
 
 
