@@ -1,7 +1,5 @@
 package frc.robot;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
@@ -114,22 +112,9 @@ public class Telemetry {
         if (count % 5 == 0) {
             updateField();
             updateSwerve();
-            logValues();
             updateSubsystems();
             count = 0;
         }
-    }
-
-    private static void logValues(){
-        Logger.recordOutput("Robot/SwervePID/Error", SwervePID.getError().toString());
-        Logger.recordOutput("Robot/SwervePID/Rot Error", SwervePID.getRotationError());
-        Logger.recordOutput("Robot/SwervePID/At Dest", SwervePID.atDest());
-        Logger.recordOutput("Robot/SwervePID/At Rot", SwervePID.atRot());
-        Logger.recordOutput("Robot/Swerve Position", SwervePosition.getPosition().toString());
-        Logger.recordOutput("Robot/Swerve Position/x", SwervePosition.getPosition().x);
-        Logger.recordOutput("Robot/Swerve Position/y", SwervePosition.getPosition().y);
-        Logger.recordOutput("Robot/Swerve Position/rot", Pigeon.getRotationRad());
-
     }
 
     private static void updateSwerve() {
@@ -185,7 +170,6 @@ public class Telemetry {
         fieldView.setRobotPose(currentPose);
 
         try {
-        Logger.recordOutput("Robot/Swerve/Field Pose", currentPose);
         } catch (Exception e) {
             System.out.println("Oopsies!: " + e);
         }
