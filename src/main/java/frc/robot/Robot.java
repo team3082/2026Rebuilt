@@ -1,5 +1,12 @@
 package frc.robot;
 
+import java.io.IOException;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -7,16 +14,17 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // AUTO
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
-import frc.robot.subsystems.LEDs.LEDManager;
-import frc.robot.subsystems.LEDs.LEDMech2D;
 import frc.robot.auto.Auto;
     
 // SUBSYSTEMS
@@ -26,11 +34,14 @@ import frc.robot.swerve.SwervePID;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.auto.CommandLoader;
+import frc.robot.utils.auto.CommandLoader.CommandConstructorInfo;
 import frc.robot.utils.trajectories.FeatherFlow;
 
 public class Robot extends LoggedRobot {
   @SuppressWarnings("resource")
   public Robot() {
+
     if (Robot.isReal()){
       try {
         Thread.sleep(5000);
@@ -80,6 +91,27 @@ public class Robot extends LoggedRobot {
 
     Logger.start(); // Start logging
 
+    ArrayList<CommandConstructorInfo> info = CommandLoader.loadCommandConstructors();
+    info.forEach(System.out::println);
+    SmartDashboard.putData(new Field2d());
+
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      Path target = Path.of("src/main/deploy/command_constructors.json");
+      Path tmp = Files.createTempFile(target.getParent() == null ? Path.of(".") : target.getParent(),
+                                      "command_constructors", ".tmp");
+      // write to temp file first
+      mapper.writerWithDefaultPrettyPrinter().writeValue(tmp.toFile(), info);
+      // then move into place (atomic if supported)
+      try {
+        Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+      } catch (AtomicMoveNotSupportedException ex) {
+        Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING);
+      }
+      System.out.println("Wrote JSON to " + target.toAbsolutePath());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override

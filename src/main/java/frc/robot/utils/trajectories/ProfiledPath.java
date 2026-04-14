@@ -50,6 +50,27 @@ public class ProfiledPath {
         double maxWheelSpeed,
         double maxAcceleration,
         double[] targetHeadings) {
+        return generateSimplifiedProfile(
+            path,
+            maxTransVelocity,
+            maxRotVelocity,
+            maxWheelSpeed,
+            maxAcceleration,
+            targetHeadings,
+            null,
+            null
+        );
+    }
+
+    public static ProfiledPath generateSimplifiedProfile(
+        RobotPath path,
+        double maxTransVelocity,
+        double maxRotVelocity,
+        double maxWheelSpeed,
+        double maxAcceleration,
+        double[] targetHeadings,
+        double[] perPointMaxVelocity,
+        double[] perPointMaxAcceleration) {
 
         ArrayList<ProfiledPoint> points = initializeProfiledPoints(path);
         int N = points.size();
@@ -84,8 +105,22 @@ public class ProfiledPath {
             Math.abs(Constants.Swerve.SWERVEMODX0),
             Math.abs(Constants.Swerve.SWERVEMODY0)
         );
+
+        double[] pointMaxVel = new double[N];
+        double[] pointMaxAccel = new double[N];
+        for (int i = 0; i < N; i++) {
+            double v = (perPointMaxVelocity != null && perPointMaxVelocity.length == N)
+                ? perPointMaxVelocity[i]
+                : maxTransVelocity;
+            double a = (perPointMaxAcceleration != null && perPointMaxAcceleration.length == N)
+                ? perPointMaxAcceleration[i]
+                : maxAcceleration;
+            pointMaxVel[i] = v;
+            pointMaxAccel[i] = a;
+        }
+
         ArrayList<Double> velocities = new ArrayList<>();
-        for (int i = 0; i < N; i++) velocities.add(maxTransVelocity);
+        for (int i = 0; i < N; i++) velocities.add(pointMaxVel[i]);
 
         for (int i = 1; i < N; i++) {
             double ds = points.get(i).getDistance() - points.get(i - 1).getDistance();
@@ -109,7 +144,7 @@ public class ProfiledPath {
         for (int i = 0; i < N; i++) {
             double k = points.get(i).getCurvature();
             if (Math.abs(k) > 1e-9) {
-                double v_lat = Math.sqrt(maxAcceleration / Math.abs(k));
+                double v_lat = Math.sqrt(pointMaxAccel[i] / Math.abs(k));
                 velocities.set(i, Math.min(velocities.get(i), v_lat));
             }
         }
@@ -118,8 +153,9 @@ public class ProfiledPath {
         velocities.set(0, 0.0);
         for (int i = 1; i < N; i++) {
             double ds = points.get(i).getDistance() - points.get(i - 1).getDistance();
+            double stepAccel = Math.min(pointMaxAccel[i - 1], pointMaxAccel[i]);
             double v_accel = Math.sqrt(
-                velocities.get(i - 1) * velocities.get(i - 1) + 2 * maxAcceleration * ds);
+                velocities.get(i - 1) * velocities.get(i - 1) + 2 * stepAccel * ds);
             velocities.set(i, Math.min(velocities.get(i), v_accel));
         }
 
@@ -127,8 +163,9 @@ public class ProfiledPath {
         velocities.set(N - 1, 0.0);
         for (int i = N - 2; i >= 0; i--) {
             double ds = points.get(i + 1).getDistance() - points.get(i).getDistance();
+            double stepAccel = Math.min(pointMaxAccel[i], pointMaxAccel[i + 1]);
             double v_decel = Math.sqrt(
-                velocities.get(i + 1) * velocities.get(i + 1) + 2 * maxAcceleration * ds);
+                velocities.get(i + 1) * velocities.get(i + 1) + 2 * stepAccel * ds);
             velocities.set(i, Math.min(velocities.get(i), v_decel));
         }
 

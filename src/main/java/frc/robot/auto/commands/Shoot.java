@@ -15,11 +15,24 @@ import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePID;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.auto.ChickenPlannable;
 
 public class Shoot extends Command{
 
     private double lastShotTime;
     private boolean reachedShooting; 
+    private double ballTimeout;
+
+    @ChickenPlannable
+    public Shoot(){
+
+    }
+
+    @ChickenPlannable
+    public Shoot(double timeout){
+        this.ballTimeout = timeout;
+    }
+
     
     @Override
     public void initialize() {
@@ -55,7 +68,7 @@ public class Shoot extends Command{
 
     @Override
     public boolean isFinished() {
-        return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; 
+        return RTime.now() - lastShotTime > this.ballTimeout; 
     }
 
 }

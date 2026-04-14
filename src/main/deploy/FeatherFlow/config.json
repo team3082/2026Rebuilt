@@ -51,7 +51,7 @@
       },
       "name": "Depot Left",
       "color": "yellow",
-      "enabled": true,
+      "enabled": false,
       "locked": true,
       "id": "snap-1772254587030"
     },
@@ -68,13 +68,13 @@
     },
     {
       "position": {
-        "x": 620,
-        "y": 84
+        "x": 618.364003725394,
+        "y": 83.04171943193461
       },
       "name": "Depot Center",
       "color": "yellow",
       "enabled": true,
-      "locked": false,
+      "locked": true,
       "id": "snap-1772254789722"
     },
     {

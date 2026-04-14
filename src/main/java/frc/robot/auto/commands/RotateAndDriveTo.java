@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePID;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.auto.ChickenPlannable;
 
 
 public class RotateAndDriveTo extends Command{
@@ -19,6 +20,12 @@ public class RotateAndDriveTo extends Command{
     public RotateAndDriveTo(double angle, Vector2 position){
         rot = angle;
         pos = position;
+    }
+
+    @ChickenPlannable
+    public RotateAndDriveTo(double angle, double x, double y){
+        rot = angle;
+        pos = new Vector2(x, y);
     }
 
     @Override

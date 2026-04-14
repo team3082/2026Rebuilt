@@ -21,5 +21,7 @@ public class FeatherPath {
         public double duration;    
         public double heading;     
         public boolean stopping;    
+        public double maxVelocity;
+        public double maxAcceleration;
     }
 }

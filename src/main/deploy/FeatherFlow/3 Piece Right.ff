@@ -1,5 +1,5 @@
 {
-  "id": "1772253422633",
+  "id": "1776203658205",
   "name": "3 Piece Right",
   "anchorPoints": [
     {
@@ -17,7 +17,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Start",
       "snapPointId": "snap-1772253433219"
     },
     {
@@ -35,7 +35,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Trench Out",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -53,7 +53,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "Middle Cycle"
     },
     {
       "position": {
@@ -70,7 +70,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Trench In",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -88,7 +88,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Shoot Position",
       "snapPointId": "snap-1772253433219"
     },
     {
@@ -106,7 +106,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Trench Out",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -124,7 +124,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "Middle Cycle"
     },
     {
       "position": {
@@ -141,7 +141,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Trench In",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -159,7 +159,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Shoot Position",
       "snapPointId": "snap-1772253433219"
     }
   ],
@@ -171,7 +171,20 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1776106439014,
+      "u": 1.6,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "motionLimits",
+          "velocity": 40,
+          "acceleration": 120
         }
       ],
       "name": ""
@@ -195,37 +208,26 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 0
+          "heading": 180
         }
       ],
       "name": ""
     },
     {
-      "id": 1774362500556,
-      "u": 2.52,
+      "id": 1776106402699,
+      "u": 2.34,
       "color": "blue",
       "attributes": [
         {
-          "type": "rotate",
-          "heading": 60
+          "type": "motionLimits",
+          "velocity": 120,
+          "acceleration": 120
         }
       ],
       "name": ""
     },
     {
-      "id": 1774364793845,
-      "u": 2.8,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 0
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253830774,
+      "id": 1776106202177,
       "u": 3.01,
       "color": "blue",
       "attributes": [
@@ -248,6 +250,10 @@
         {
           "type": "rotate",
           "heading": 0
+        },
+        {
+          "type": "stop",
+          "duration": 5
         }
       ],
       "name": ""
@@ -266,7 +272,7 @@
     },
     {
       "id": 1774362545207,
-      "u": 5.62,
+      "u": 5.39,
       "color": "blue",
       "attributes": [
         {
@@ -283,7 +289,7 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 0
         }
       ],
       "name": ""
@@ -296,18 +302,6 @@
         {
           "type": "rotate",
           "heading": 90
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1774364783244,
-      "u": 6.7,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 0
         }
       ],
       "name": ""
@@ -336,23 +330,15 @@
         {
           "type": "command",
           "stopping": true
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253858294,
-      "u": 7.999,
-      "color": "blue",
-      "attributes": [
+        },
         {
-          "type": "rotate",
-          "heading": 0
+          "type": "stop",
+          "duration": 5
         }
       ],
       "name": ""
     }
   ],
-  "created": "2026-02-28T04:37:02.634Z",
-  "lastModified": "2026-03-24T15:07:13.628Z"
+  "created": "2026-04-14T21:54:18.206Z",
+  "lastModified": "2026-04-14T21:54:23.760Z"
 }
