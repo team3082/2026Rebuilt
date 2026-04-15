@@ -3,10 +3,16 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N4;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
+import frc.robot.vision.VisionManager;
 
 public class SwervePosition {
 
@@ -20,11 +26,12 @@ public class SwervePosition {
     private static Vector2 difference;
 
 
-    // for kalman filtering
+    // for kalman filtering, may need tuning
     private static Matrix<N2, N1> prediction = VecBuilder.fill(0, 0);
-    private static Matrix<N2, N2> uncertainty = Matrix.eye(Nat.N2());
-    private static final Matrix<N2, N2> drift = VecBuilder.fill(0.01, 0, 0, 0.01); 
-    private static final Matrix<N2, N2> visionError = VecBuilder.fill(0.1, 0, 0, 0.1);   
+    // 2x2 matrices
+    private static Matrix<N2, N2> uncertainty = new Matrix<>(Nat.N2(), Nat.N2());;
+    private static final Matrix<N2, N2> odometryError =  new Matrix<>(Nat.N2(), Nat.N2()); 
+    private static final Matrix<N2, N2> visionError = new Matrix<>(Nat.N2(), Nat.N2());   
 
 
     public static void init() {
@@ -33,6 +40,13 @@ public class SwervePosition {
         lastOdomPos = new Vector2(0.0,0.0);
         Odometry.init();
 
+        // for kalman filtering, these values may need tuning
+        uncertainty.set(0,0,0.01);
+        uncertainty.set(1,1,0.01);
+        odometryError.set(0,0,0.01);
+        odometryError.set(1,1,0.01);
+        visionError.set(0,0,0.01);
+        visionError.set(1,1,0.01);
     }
 
     public static void update() {
@@ -52,15 +66,17 @@ public class SwervePosition {
     }
 
     public static void predict(){
+        // predicting next position based on previous position and current velocity
         prediction = prediction.plus(VecBuilder.fill(difference.x, difference.y));
-        uncertainty = uncertainty.plus(drift);
-    }
+        
+        // wheels may shift
+        uncertainty.plus(odometryError);
 
-    public static void updateVision(Matrix<N2,N2> visionPos) {
-        Matrix<N2,N2> kalmanGain = uncertainty.div(uncertainty.plus(visionError));
-        Vector2 innovation = visionPos.sub(prediction);
-        prediction = prediction.add(innovation.mul(kalmanGain));
-        uncertainty = uncertainty.mul(1 - kalmanGain);
+        Matrix<N2, N2> kalmanGain = uncertainty.times((uncertainty.plus(visionError)).inv());
+
+        // recalculate position and uncertainty
+        position = prediction.plus(kalmanGain.times(VisionManager.getPosition()));
+        
     }
 
     //public static final double correctionMultiplier = 0.1;
@@ -107,12 +123,6 @@ public class SwervePosition {
     public static Pose2d getPose() {
         return new Pose2d(new Translation2d(position.x, position.y), Rotation2d.fromRadians(Pigeon.getRotationRad()));
     }
-
-
-    void kalmanUpdate(){
-        
-    }
-
 
     
 }
