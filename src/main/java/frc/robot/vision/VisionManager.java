@@ -5,12 +5,18 @@ import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.utils.Vector2;
 
 public class VisionManager {
@@ -100,6 +106,28 @@ public class VisionManager {
         Vector2 averagePosition = new Vector2(sumX / positions.size(), sumY / positions.size());
         return Optional.of(averagePosition);
     };
+
+    // gets the vision position as a Matrix instead of an Optional<Vector2>
+    public static Matrix<N2, N1> getMatrixPosition(){
+
+        Matrix<N2, N1> mat = new Matrix<>(Nat.N2(), Nat.N1());
+        double pigeonAngle = Pigeon.getRotationRad();
+
+        if(getPosition(pigeonAngle).isPresent()){
+            // gets the non-null value
+            Vector2 position = getPosition(pigeonAngle).get();
+
+            mat.set(0, 0, position.x);
+            mat.set(1, 0, position.y);
+
+            // returns vision position as a matrix
+            return mat;
+
+        } else {
+
+            return null;
+        }
+    }
 
     public static Optional<Double> getRotation(double pigeonAngle) {
 

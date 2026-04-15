@@ -6,6 +6,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N4;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N1;
+
+import java.util.Optional;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -53,29 +56,43 @@ public class SwervePosition {
         Vector2 odometryPos = Odometry.getPosition();
         Vector2 odometryInnovation = odometryPos.sub(lastOdomPos);
         
-        position = new Vector2(prediction.get(0, 0), prediction.get(1, 0));
+        // position = new Vector2(prediction.get(0, 0), prediction.get(1, 0));
         difference = odometryPos.sub(lastOdomPos);
-        predict();
+        kalmanPredict();
         lastOdomPos = odometryPos;
-
-        
 
         absVelocity = odometryInnovation.div(RTime.deltaTime());
 
         //System.out.println("lala odometry: " + odometryPos);
     }
 
-    public static void predict(){
-        // predicting next position based on previous position and current velocity
+    public static void kalmanPredict(){
+        // predicting next position
         prediction = prediction.plus(VecBuilder.fill(difference.x, difference.y));
         
         // wheels may shift
-        uncertainty.plus(odometryError);
+        uncertainty = uncertainty.plus(odometryError);
 
-        Matrix<N2, N2> kalmanGain = uncertainty.times((uncertainty.plus(visionError)).inv());
+        Matrix<N2,N1> visionPosition = VisionManager.getMatrixPosition();
 
-        // recalculate position and uncertainty
-        position = prediction.plus(kalmanGain.times(VisionManager.getPosition()));
+        // recalculate position and uncertainty if there is a position in vision
+        if(visionPosition != null){
+
+            Matrix<N2, N2> kalmanGain = uncertainty.times((uncertainty.plus(visionError)).inv());
+            // error between vision position and prediction based solely on odometry
+            Matrix<N2, N1> error = visionPosition.minus(prediction);
+            prediction = prediction.plus(kalmanGain.times(error));
+
+            // update position and uncertainty
+            position = new Vector2(prediction.get(0,0), prediction.get(1,0));
+            uncertainty = (Matrix.eye(Nat.N2()).minus(kalmanGain)).times(uncertainty);
+
+        } else {
+
+            // update position based on odometry only
+            position = new Vector2(prediction.get(0, 0), prediction.get(1, 0));
+
+        }
         
     }
 
