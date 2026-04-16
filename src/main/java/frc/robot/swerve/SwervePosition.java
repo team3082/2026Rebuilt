@@ -1,6 +1,5 @@
 package frc.robot.swerve;
 
-import java.lang.StackWalker.Option;
 import java.util.Optional;
 import java.util.TreeMap;
 
@@ -11,7 +10,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N13;
 import edu.wpi.first.math.numbers.N2;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.utils.RTime;
@@ -53,9 +51,11 @@ public class SwervePosition {
      */
     private static final Matrix<N2, N2> R_VISION = Matrix.eye(Nat.N2()).times(0.01);   
     
+    /**
+     * Node map with stored positions with correspoding time values.
+     */
     private static TreeMap<Matrix<N2, N1>, Double> poseHistory = new TreeMap<>();
 
-    
     public static void init() {
         position = new Vector2(0, 0);
         absVelocity = new Vector2(0, 0);
@@ -72,16 +72,13 @@ public class SwervePosition {
      * Should be called in a periodic method (e.g., Robot.robotPeriodic).
      */
     public static void update() {
-        //Step 1: Get Change
+        //Get Change
         Vector2 currentOdomPos = Odometry.getPosition();
         Vector2 odomDelta = currentOdomPos.sub(lastOdomPos);
         double distanceTraveled = odomDelta.mag();
 
-        //Step 2: Predict new position based on odometry
+        //Predict new position based on odometry
         predict(odomDelta, distanceTraveled);
-
-        //Save to position buffer
-        poseHistory.put(stateEstimate, Double.valueOf(RTime.now()));
         
         //remove all elements from .5 seconds ago
         while (!poseHistory.isEmpty() && RTime.now() - poseHistory.firstEntry().getValue() > 0.5) {
@@ -92,6 +89,14 @@ public class SwervePosition {
         if (visionMeasurement.isPresent()) {
             correct(visionMeasurement.get());
         }
+
+        //Save to position buffer
+        poseHistory.put(stateEstimate, VisionManager.getTimestampSeconds());
+
+        //Corrects stateEstimate based on latency
+        Double timeDifference = VisionManager.getTimestampSeconds() - VisionManager.getLatency();
+        Matrix<N2, N1> error = VisionManager.getMatrixPosition().get().minus(poseHistory.get(timeDifference));
+        stateEstimate.minus(error);
 
         // Update the public position and velocity based on the internal state estimate
         position = new Vector2(stateEstimate.get(0, 0), stateEstimate.get(1, 0));

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.Matrix;
@@ -42,8 +43,8 @@ public class VisionManager {
 
         for (Camera camera : cameras) {
             if(camera.isDisabled()) continue;
-            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();  
-            
+            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();    
+            camera.photonCamera.getLatestResult().getTimestampSeconds();
             
             if (target != null) if (camera.isLatestTarget(target)) {
                 continue;
@@ -158,6 +159,25 @@ public class VisionManager {
             .getAsDouble();
 
         return Optional.of(averageRotation);
+    }
+
+    public static double getTimestampSeconds() {
+        double timestamp = 0;
+
+        for (Camera camera: cameras) {
+            timestamp += camera.photonCamera.getLatestResult().getTimestampSeconds();
+        }
+
+        return timestamp /= cameras.length;
+
+    }
+
+    public static double getLatency() {
+        double latency = 0;
+        for (Camera camera: cameras) {
+            latency += camera.photonCamera.getLatestResult().metadata.getLatencyMillis()/1000;
+        }
+        return latency /= cameras.length;
     }
 
     public static void enableVision(){
