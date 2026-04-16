@@ -108,7 +108,7 @@ public class VisionManager {
     };
 
     // gets the vision position as a Matrix instead of an Optional<Vector2>
-    public static Matrix<N2, N1> getMatrixPosition(){
+    public static Optional<Matrix<N2, N1>> getMatrixPosition(){
 
         Matrix<N2, N1> mat = new Matrix<>(Nat.N2(), Nat.N1());
         double pigeonAngle = Pigeon.getRotationRad();
@@ -121,12 +121,10 @@ public class VisionManager {
             mat.set(1, 0, position.y);
 
             // returns vision position as a matrix
-            return mat;
-
-        } else {
-
-            return null;
-        }
+            return Optional.of(mat);
+        } 
+        
+        return Optional.empty();
     }
 
     public static Optional<Double> getRotation(double pigeonAngle) {
