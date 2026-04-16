@@ -64,6 +64,13 @@ public class Auto {
     }
 
     @AutoRoutine()
+    public SequentialCommandGroup StupidAuto() {
+        return new SequentialCommandGroup(
+            FeatherFlow.buildFeatherAuto("Untitled 3"
+            )); 
+    }
+
+    @AutoRoutine()
     public SequentialCommandGroup CenterToDepot() {
         return new SequentialCommandGroup(
             new StartIntake(),

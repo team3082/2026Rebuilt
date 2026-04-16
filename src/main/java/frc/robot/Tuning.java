@@ -152,5 +152,5 @@ public final class Tuning {
         public static final double ROLLER_KV = 0.13;
     }
 
-    public static double holonomic_lookahead_time = 0;
+    public static double holonomic_lookahead_time = 0.2;
 }

@@ -177,9 +177,9 @@ public class FeatherFlow {
         for (FeatherActionDescriptor action : actions) {
             if (action.type.equals("rotate")) {
                 if(!flipped){
-                    rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading + 90)});
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians((360-(action.heading-90))+180)});
                 } else {
-                    rotateKeyframes.add(new double[]{action.t, Math.toRadians((360-(action.heading+90))+180)});
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading - 90)});
                 }
             }
         }
@@ -304,7 +304,7 @@ public class FeatherFlow {
             }
 
             profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
-                segPath, 110, 3, 120, 110, targetHeadings, pointMaxVelocities, pointMaxAccelerations
+                segPath, 170, 3, 170, 170, targetHeadings, pointMaxVelocities, pointMaxAccelerations
             ));
 
             segmentDistOffset += segDist[pointCount - 1];
