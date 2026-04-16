@@ -1,113 +1,140 @@
 package frc.robot.swerve;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.numbers.N4;
-import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.numbers.N1;
-
+import java.lang.StackWalker.Option;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N13;
+import edu.wpi.first.math.numbers.N2;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 import frc.robot.vision.VisionManager;
 
+/**
+ * Manages the robot's field-relative position using a Kalman Filter.
+ * This class fuses Odometry data (high frequency, prone to drift) with 
+ * Vision data (lower frequency, high absolute accuracy) to provide a stable Pose.
+ */
 public class SwervePosition {
 
-    // Smoothly correct field position based on vision output. VISION_CORRECTION_FACTOR should range from 0.0 to
-    // 1.0, representing the speed at which we blend from the odometry output to the output of the vision. 
-    //static final double VISION_CORRECTION_FACTOR = 0.1;
+    // Final output states
+    private static Vector2 position = new Vector2(0, 0);
+    private static Vector2 absVelocity = new Vector2(0, 0);
+    private static Vector2 lastOdomPos = new Vector2(0, 0);
 
-    private static Vector2 position;
-    private static Vector2 absVelocity;
-    private static Vector2 lastOdomPos;
-    private static Vector2 difference;
+    /*
+     * The State Estimate matrix [x, y]. 
+     * This is the "internal" version of our position used for math.
+     */
+    private static Matrix<N2, N1> stateEstimate = VecBuilder.fill(0, 0);
 
+    /** 
+     * The Covariance Matrix (P). Represents our confidence in the current position.
+     * Higher values mean we are less certain where we are.
+     */
+    private static Matrix<N2, N2> uncertainty = Matrix.eye(Nat.N2()).times(0.1);
+    
+    /**
+     * Base Process Noise (Q). This is how much we "trust" odometry per meter traveled.
+     */
+    private static final double ODOM_TRUST_COEFFICIENT = 0.05; 
 
-    // for kalman filtering, may need tuning
-    private static Matrix<N2, N1> prediction = VecBuilder.fill(0, 0);
-    // 2x2 matrices
-    private static Matrix<N2, N2> uncertainty = new Matrix<>(Nat.N2(), Nat.N2());;
-    private static final Matrix<N2, N2> odometryError =  new Matrix<>(Nat.N2(), Nat.N2()); 
-    private static final Matrix<N2, N2> visionError = new Matrix<>(Nat.N2(), Nat.N2());   
+    /** 
+     * Sensor Noise (R). This is how much we trust the vision system.
+     * A value of 0.01 means we trust vision a lot; 0.5 means vision is "noisy."
+     */
+    private static final Matrix<N2, N2> R_VISION = Matrix.eye(Nat.N2()).times(0.01);   
+    
+    private static TreeMap<Matrix<N2, N1>, Double> poseHistory = new TreeMap<>();
 
-
+    
     public static void init() {
-        absVelocity = new Vector2(0.0,0.0);
-        position = new Vector2(0.0,0.0);
-        lastOdomPos = new Vector2(0.0,0.0);
+        position = new Vector2(0, 0);
+        absVelocity = new Vector2(0, 0);
+        lastOdomPos = new Vector2(0, 0);
+        stateEstimate = VecBuilder.fill(0, 0);
+        
+        uncertainty = Matrix.eye(Nat.N2()).times(0.1);
+        
         Odometry.init();
-
-        // for kalman filtering, these values may need tuning
-        uncertainty.set(0,0,0.01);
-        uncertainty.set(1,1,0.01);
-        odometryError.set(0,0,0.01);
-        odometryError.set(1,1,0.01);
-        visionError.set(0,0,0.01);
-        visionError.set(1,1,0.01);
     }
-
-    public static void update() {
-        Vector2 odometryPos = Odometry.getPosition();
-        Vector2 odometryInnovation = odometryPos.sub(lastOdomPos);
-        
-        // position = new Vector2(prediction.get(0, 0), prediction.get(1, 0));
-        difference = odometryPos.sub(lastOdomPos);
-        kalmanPredict();
-        lastOdomPos = odometryPos;
-
-        absVelocity = odometryInnovation.div(RTime.deltaTime());
-
-        //System.out.println("lala odometry: " + odometryPos);
-    }
-
-    public static void kalmanPredict(){
-        // predicting next position
-        prediction = prediction.plus(VecBuilder.fill(difference.x, difference.y));
-        
-        // wheels may shift
-        uncertainty = uncertainty.plus(odometryError);
-
-        Matrix<N2,N1> visionPosition = VisionManager.getMatrixPosition();
-
-        // recalculate position and uncertainty if there is a position in vision
-        if(visionPosition != null){
-
-            Matrix<N2, N2> kalmanGain = uncertainty.times((uncertainty.plus(visionError)).inv());
-            // error between vision position and prediction based solely on odometry
-            Matrix<N2, N1> error = visionPosition.minus(prediction);
-            prediction = prediction.plus(kalmanGain.times(error));
-
-            // update position and uncertainty
-            position = new Vector2(prediction.get(0,0), prediction.get(1,0));
-            uncertainty = (Matrix.eye(Nat.N2()).minus(kalmanGain)).times(uncertainty);
-
-        } else {
-
-            // update position based on odometry only
-            position = new Vector2(prediction.get(0, 0), prediction.get(1, 0));
-
-        }
-        
-    }
-
-    //public static final double correctionMultiplier = 0.1;
 
     /**
-     * Returns array of the robot's angle and distance in INCHES based of manual calculations
+     * The main loop for position tracking. 
+     * Should be called in a periodic method (e.g., Robot.robotPeriodic).
      */
-    public static double[] getPositionPolar() {
-        
-        Vector2 pos = getPosition();
-        double distance = pos.mag();
-        double angleRad = pos.atan2();
+    public static void update() {
+        //Step 1: Get Change
+        Vector2 currentOdomPos = Odometry.getPosition();
+        Vector2 odomDelta = currentOdomPos.sub(lastOdomPos);
+        double distanceTraveled = odomDelta.mag();
 
-        return new double[]{ angleRad, distance };
+        //Step 2: Predict new position based on odometry
+        predict(odomDelta, distanceTraveled);
+
+        //Save to position buffer
+        poseHistory.put(stateEstimate, Double.valueOf(RTime.now()));
+        
+        //remove all elements from .5 seconds ago
+        while (!poseHistory.isEmpty() && RTime.now() - poseHistory.firstEntry().getValue() > 0.5) {
+            poseHistory.pollFirstEntry();
+        }
+
+        Optional<Matrix<N2, N1>> visionMeasurement = VisionManager.getMatrixPosition();
+        if (visionMeasurement.isPresent()) {
+            correct(visionMeasurement.get());
+        }
+
+        // Update the public position and velocity based on the internal state estimate
+        position = new Vector2(stateEstimate.get(0, 0), stateEstimate.get(1, 0));
+        
+        double dt = RTime.deltaTime();
+        absVelocity = (dt > 0) ? odomDelta.div(dt) : new Vector2(0, 0);
+        
+        lastOdomPos = currentOdomPos;
+    }
+
+    /**
+     * Prediction Step:
+     * We add the delta from odometry to our current estimate.
+     * We also increase uncertainty based on how far we moved.
+     */
+    private static void predict(Vector2 delta, double distance) {
+        // Move the estimate
+        stateEstimate = stateEstimate.plus(VecBuilder.fill(delta.x, delta.y));
+
+        // Grow uncertainty dynamically: P = P + (distance * Q_coeff)
+        // This ensures that if we are sitting still, the uncertainty doesn't explode.
+        Matrix<N2, N2> dynamicProcessNoise = Matrix.eye(Nat.N2()).times(distance * ODOM_TRUST_COEFFICIENT);
+        uncertainty = uncertainty.plus(dynamicProcessNoise);
+    }
+
+    /**
+     * Correction Step (The "Kalman" part):
+     * Merges the vision data with our predicted state.
+     */
+    private static void correct(Matrix<N2, N1> measurement) {
+        // Calculate Kalman Gain (K) ue How much do we trust vision vs. our prediction?
+        // K = uncertainty / (uncertainty + vision_noise)
+        Matrix<N2, N2> kalmanGain = uncertainty.times((uncertainty.plus(R_VISION)).inv());
+        
+        // Calculate the difference between vision and prediction (Innovation)
+        Matrix<N2, N1> innovation = measurement.minus(stateEstimate);
+        
+        // Adjust the estimate based on the gain: x = x + K * innovation
+        stateEstimate = stateEstimate.plus(kalmanGain.times(innovation));
+
+        // Update the uncertainty: Because we have a new measurement, we are now MORE certain.
+        // P = (I - K) * P
+        uncertainty = Matrix.eye(Nat.N2()).minus(kalmanGain).times(uncertainty);
     }
 
     public static Vector2 getPosition() {
@@ -118,31 +145,20 @@ public class SwervePosition {
         return absVelocity;
     }
 
-    /**
-     * Recalibrates the SwervePosition based on a position on the field. Should only be used when vision is disabled,
-     * otherwise it'll just be overwritten the next frame.
-     * @param newPosition the new position to set the robot position to
-     */
     public static void setPosition(Vector2 newPosition) {
         Odometry.setPosition(newPosition);
+        stateEstimate = VecBuilder.fill(newPosition.x, newPosition.y);
         position = newPosition;
-    }
-    
-    public static double getAngleOffsetToTarget(Vector2 desiredPosition){
-        Vector2 currentPos = getPosition();
-        Vector2 dif = new Vector2(desiredPosition.y - currentPos.y, desiredPosition.x - currentPos.x);
-        return Math.PI/2 - dif.atan2();
+        lastOdomPos = newPosition;
+
+        // Reset uncertainty because we've been told exactly where we are
+        uncertainty = Matrix.eye(Nat.N2()).times(0.01);
     }
 
-    /**
-     * Return the current pose of the robot, adjusted for the rotation.
-     */
     public static Pose2d getPose() {
-        return new Pose2d(new Translation2d(position.x, position.y), Rotation2d.fromRadians(Pigeon.getRotationRad()));
+        return new Pose2d(
+            new Translation2d(position.x, position.y), 
+            Rotation2d.fromRadians(Pigeon.getRotationRad())
+        );
     }
-
-    
 }
-
-
-
