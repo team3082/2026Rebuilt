@@ -65,9 +65,13 @@ public class Auto {
 
     @AutoRoutine()
     public SequentialCommandGroup StupidAuto() {
+                Pigeon.setYaw(-90);
+
         return new SequentialCommandGroup(
-            FeatherFlow.buildFeatherAuto("Untitled 3"
-            )); 
+            FeatherFlow.buildFeatherAuto("Untitled",
+            new Shoot(),
+            new Shoot())
+        ); 
     }
 
     @AutoRoutine()

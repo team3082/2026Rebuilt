@@ -3,7 +3,6 @@ package frc.robot.auto.commands;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.ProfiledPath;
 import frc.robot.utils.trajectories.ProfiledPoint;
-import frc.robot.Constants;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;

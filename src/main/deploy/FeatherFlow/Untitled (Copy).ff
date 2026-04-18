@@ -1,6 +1,6 @@
 {
-  "id": "1774364882730",
-  "name": "3 Piece Left",
+  "id": "1776527008698",
+  "name": "Untitled (Copy)",
   "anchorPoints": [
     {
       "position": {
@@ -12,66 +12,83 @@
         "y": 0
       },
       "handleInOffset": {
-        "x": 0,
+        "x": 0.2424632884631043,
         "y": 0
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Start",
+      "name": "",
       "snapPointId": "snap-1772253433219"
     },
     {
       "position": {
-        "x": 420,
-        "y": 292
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
       },
       "handleOutOffset": {
-        "x": -40.369578079378755,
-        "y": -0.40127483313972334
+        "x": -49.559732340565944,
+        "y": -2.153303886383267
       },
       "handleInOffset": {
-        "x": 72.76798064761448,
-        "y": 0.723315939415324
+        "x": 15.792314548654272,
+        "y": 0.6861548819296152
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Trench Out",
-      "snapPointId": "snap-1772253494052"
+      "name": "",
+      "snapPointId": "snap-1772774974899"
     },
     {
       "position": {
-        "x": 347.002978195749,
-        "y": 190.72227974717455
+        "x": 332.8008878455067,
+        "y": 214.26931913506505
       },
       "handleOutOffset": {
-        "x": 31.487282859651966,
-        "y": -31.97316757184854
+        "x": 0.9007023485736845,
+        "y": -24.306637117119752
       },
       "handleInOffset": {
-        "x": -61.8093331552634,
-        "y": 62.76312171126773
+        "x": -1.5852148366988144,
+        "y": 42.77910660422831
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Middle Cycle"
+      "name": ""
     },
     {
       "position": {
-        "x": 420,
-        "y": 292
+        "x": 359.1387234086653,
+        "y": 169.92404408729573
       },
       "handleOutOffset": {
-        "x": 20,
-        "y": 0
+        "x": 25.41938230063053,
+        "y": -6.2259530341540125e-15
       },
       "handleInOffset": {
-        "x": -20,
-        "y": 0
+        "x": -10.525361510189606,
+        "y": 5.963184504778609e-15
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Trench In",
-      "snapPointId": "snap-1772253494052"
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 42.906872608756444,
+        "y": -1.0509152840347364e-14
+      },
+      "handleInOffset": {
+        "x": -61.507434169946194,
+        "y": 3.484727607843526e-14
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
     },
     {
       "position": {
@@ -79,70 +96,87 @@
         "y": 292
       },
       "handleOutOffset": {
-        "x": 0,
-        "y": 0
+        "x": 2.527703955391326,
+        "y": -6.191089116324183e-16
       },
       "handleInOffset": {
-        "x": 0,
-        "y": 0
+        "x": -8.217053362353763,
+        "y": 1.0062988098629532e-15
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Shoot Position",
+      "name": "",
       "snapPointId": "snap-1772253433219"
     },
     {
       "position": {
-        "x": 420,
-        "y": 292
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
       },
       "handleOutOffset": {
-        "x": -38.33813624019581,
-        "y": -13.852755551218877
+        "x": -31.066401045730263,
+        "y": 3.804536860168155e-15
       },
       "handleInOffset": {
-        "x": 28.214634903444914,
-        "y": 10.194821100210952
+        "x": 29.629793648834845,
+        "y": 0
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Trench Out",
-      "snapPointId": "snap-1772253494052"
+      "name": "",
+      "snapPointId": "snap-1772774974899"
     },
     {
       "position": {
-        "x": 393.9291193928596,
-        "y": 188.55530683591437
+        "x": 424.3870584681975,
+        "y": 187.27626590247507
       },
       "handleOutOffset": {
-        "x": -77.28558103704752,
-        "y": -1.223251923410514
+        "x": -1.178026402347221e-15,
+        "y": -7.325476092163121
       },
       "handleInOffset": {
-        "x": 48.16240912430294,
-        "y": 0.7622994976145208
+        "x": 1.2532929280306566e-14,
+        "y": 44.24267313921205
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Middle Cycle"
+      "name": ""
     },
     {
       "position": {
-        "x": 420,
-        "y": 292
+        "x": 424.78793617808554,
+        "y": 132.4064971991058
       },
       "handleOutOffset": {
-        "x": 15.980427856871131,
-        "y": 1.1403602396559904
+        "x": -0.6142315351054526,
+        "y": 10.810604110695827
       },
       "handleInOffset": {
-        "x": -0.6081310695294633,
-        "y": -0.04339611544833133
+        "x": 0.12400402170349847,
+        "y": -2.1824968438660557
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Trench In",
-      "snapPointId": "snap-1772253494052"
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -55.08011814654224,
+        "y": 6.7453690384821e-15
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
     },
     {
       "position": {
@@ -150,22 +184,22 @@
         "y": 292
       },
       "handleOutOffset": {
-        "x": 0,
-        "y": 0
+        "x": 32.817033010638376,
+        "y": -8.037854886798262e-15
       },
       "handleInOffset": {
-        "x": 0,
-        "y": 0
+        "x": -23.774868127969054,
+        "y": 1.3469744016545987e-14
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Shoot Position",
+      "name": "",
       "snapPointId": "snap-1772253433219"
     }
   ],
   "controlPoints": [
     {
-      "id": 1774364440359,
+      "id": 1776526673629,
       "u": 1,
       "color": "blue",
       "attributes": [
@@ -177,102 +211,8 @@
       "name": ""
     },
     {
-      "id": 1776106439014,
-      "u": 1.6,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "motionLimits",
-          "velocity": 40,
-          "acceleration": 120
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253964202,
-      "u": 1.67,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 266
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1774362462455,
-      "u": 2.08,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 180
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1776106402699,
-      "u": 2.34,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "motionLimits",
-          "velocity": 120,
-          "acceleration": 120
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1776106202177,
-      "u": 3.01,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 0
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253609080,
-      "u": 4.09,
-      "color": "green",
-      "attributes": [
-        {
-          "type": "command",
-          "stopping": true
-        },
-        {
-          "type": "rotate",
-          "heading": 0
-        },
-        {
-          "type": "stop",
-          "duration": 5
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253847831,
-      "u": 5,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 0
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1774362545207,
-      "u": 5.39,
+      "id": 1776526681711,
+      "u": 2,
       "color": "blue",
       "attributes": [
         {
@@ -283,7 +223,43 @@
       "name": ""
     },
     {
-      "id": 1772253983849,
+      "id": 1776526708046,
+      "u": 3,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1776526712564,
+      "u": 4,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 0
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1776526525149,
+      "u": 5,
+      "color": "green",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 4
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1776526788454,
       "u": 6,
       "color": "blue",
       "attributes": [
@@ -295,50 +271,58 @@
       "name": ""
     },
     {
-      "id": 1774362562289,
-      "u": 6.33,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 90
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253854435,
+      "id": 1776526815738,
       "u": 7,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1776526595786,
+      "u": 7.91,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 0
+        },
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1776526851407,
+      "u": 9,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
           "heading": 0
         }
       ],
       "name": ""
     },
     {
-      "id": 1772253677315,
-      "u": 7.921,
-      "color": "green",
+      "id": 1776526901237,
+      "u": 9.99,
+      "color": "blue",
       "attributes": [
         {
-          "type": "rotate",
-          "heading": 0
-        },
-        {
-          "type": "command",
-          "stopping": true
-        },
-        {
           "type": "stop",
-          "duration": 5
+          "duration": 4
         }
       ],
       "name": ""
     }
   ],
-  "created": "2026-03-24T15:08:02.730Z",
-  "lastModified": "2026-04-14T22:46:59.111Z"
+  "created": "2026-04-18T15:43:28.698Z",
+  "lastModified": "2026-04-18T15:43:28.698Z"
 }
