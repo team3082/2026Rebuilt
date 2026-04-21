@@ -21,56 +21,66 @@ import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.utils.Vector2;
 
 public class VisionManager {
-
-    private static Camera[] cameras;
+    private static Camera[] cameras = new Camera[0];
     private static boolean enabled = true;
 
-    public static void init() {
+    // Cache the latest results so each camera is only polled once per cycle (Bug 5)
+    private static PhotonPipelineResult[] latestResults = new PhotonPipelineResult[0];
 
+    public static void init() {
         if (Robot.isReal()) {
             cameras = new Camera[] {
                 new Camera(new PhotonCamera("ApriltagCamera3"), new Vector2(11.0, 8.5), 0, Math.toRadians(15.0), -Math.PI/2),
-                new Camera(new PhotonCamera("ApriltagCamera4"), new Vector2(-4.25, 13.25),  Math.toRadians(15.0), 0, 0)
+                new Camera(new PhotonCamera("ApriltagCamera4"), new Vector2(-4.25, 13.25), Math.toRadians(15.0), 0, 0)
             };
+            latestResults = new PhotonPipelineResult[cameras.length];
         }
+    }
 
+    /**
+     * Call once per periodic tick to snapshot all camera results.
+     * All other methods read from this cache instead of hitting the network repeatedly.
+     */
+    public static void poll() {
+        for (int i = 0; i < cameras.length; i++) {
+            latestResults[i] = cameras[i].photonCamera.getLatestResult();
+        }
     }
 
     public static Optional<Vector2> getPosition(double pigeonAngle) {
+        // Bug 3: respect the enabled flag
+        if (!enabled) return Optional.empty();
 
         List<Vector2> positions = new ArrayList<>();
 
+        for (int i = 0; i < cameras.length; i++) {
+            Camera camera = cameras[i];
+            if (camera.isDisabled()) continue;
 
-        for (Camera camera : cameras) {
-            if(camera.isDisabled()) continue;
-            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();    
-            camera.photonCamera.getLatestResult().getTimestampSeconds();
-            
-            if (target != null) if (camera.isLatestTarget(target)) {
-                continue;
-            }        
+            // Bug: use cached result, not a fresh network fetch
+            PhotonPipelineResult result = latestResults[i];
+            if (result == null) continue;
 
+            PhotonTrackedTarget target = result.getBestTarget();
+
+            // Bug: null check first, then duplicate check, then register
+            if (target == null) continue;
+            if (camera.isLatestTarget(target)) continue;
             camera.setLatestTarget(target);
-            if (target == null) continue; // Skip if no april tags are found
 
             Transform3d transform = target.getBestCameraToTarget();
             int id = target.getFiducialId();
-            
 
-            if (id < 0 || id > Constants.APRIL_TAGS.length) {
-                continue; // Skip invalid id
-            }
+            // Bug: was `id > length`, should be `id >= length` (off-by-one)
+            if (id < 0 || id >= Constants.APRIL_TAGS.length) continue;
 
-            if (target.getPoseAmbiguity() > 0.2){
-                continue;
-            }
-            
+            if (target.getPoseAmbiguity() > 0.2) continue;
+
             Vector2 vectorTransform = new Vector2(transform.getX(), transform.getY());
             vectorTransform = vectorTransform.rotate(camera.cameraYaw);
 
-            // Rotate robot position to align with field coordinate frame
             double xdistRobot = vectorTransform.x * Math.cos(camera.cameraPitch) - transform.getZ() * Math.sin(camera.cameraPitch);
-            double ydistRobot = vectorTransform.y * Math.cos(camera.cameraRoll) + transform.getZ() * Math.sin(camera.cameraRoll);
+            double ydistRobot = vectorTransform.y * Math.cos(camera.cameraRoll)   + transform.getZ() * Math.sin(camera.cameraRoll);
 
             Vector2 distRobot = new Vector2(xdistRobot, ydistRobot);
 
@@ -79,119 +89,98 @@ public class VisionManager {
 
             Vector2 cameraToTag = new Vector2(xdistField, ydistField);
 
-
-
             Vector2 aprilTagPos = new Vector2(Constants.APRIL_TAGS[id].getPosition().y, -Constants.APRIL_TAGS[id].getPosition().x);
             if (DriverStation.getAlliance().get() == Alliance.Blue) {
                 aprilTagPos = aprilTagPos.rotate(Math.PI);
             }
-            
-            Vector2 cameraPos = aprilTagPos.sub(cameraToTag);
 
-            Vector2 robotPos = cameraPos.sub(camera.robotToCamera.rotate(pigeonAngle - (Math.PI/2.0)));
+            Vector2 cameraPos = aprilTagPos.sub(cameraToTag);
+            Vector2 robotPos  = cameraPos.sub(camera.robotToCamera.rotate(pigeonAngle - (Math.PI / 2.0)));
 
             positions.add(robotPos);
         }
 
-        if (positions.isEmpty()) {
-            return Optional.empty();
-        }
+        if (positions.isEmpty()) return Optional.empty();
 
-        // Average out robotPos with all camera positions
         double sumX = 0, sumY = 0;
-        for (Vector2 position : positions) {
-            sumX += position.x;
-            sumY += position.y;
+        for (Vector2 p : positions) {
+            sumX += p.x;
+            sumY += p.y;
         }
 
-        Vector2 averagePosition = new Vector2(sumX / positions.size(), sumY / positions.size());
-        return Optional.of(averagePosition);
-    };
+        return Optional.of(new Vector2(sumX / positions.size(), sumY / positions.size()));
+    }
 
-    // gets the vision position as a Matrix instead of an Optional<Vector2>
-    public static Optional<Matrix<N2, N1>> getMatrixPosition(){
-
-        Matrix<N2, N1> mat = new Matrix<>(Nat.N2(), Nat.N1());
+    // Bug 2: cache getPosition() result instead of calling it twice
+    public static Optional<Matrix<N2, N1>> getMatrixPosition() {
         double pigeonAngle = Pigeon.getRotationRad();
+        Optional<Vector2> pos = getPosition(pigeonAngle);
 
-        if(getPosition(pigeonAngle).isPresent()){
-            // gets the non-null value
-            Vector2 position = getPosition(pigeonAngle).get();
-
+        if (pos.isPresent()) {
+            Vector2 position = pos.get();
+            Matrix<N2, N1> mat = new Matrix<>(Nat.N2(), Nat.N1());
             mat.set(0, 0, position.x);
             mat.set(1, 0, position.y);
-
-            // returns vision position as a matrix
             return Optional.of(mat);
-        } 
-        
+        }
+
         return Optional.empty();
     }
 
     public static Optional<Double> getRotation(double pigeonAngle) {
+        if (!enabled) return Optional.empty();
 
         List<Double> robotYaws = new ArrayList<>();
 
-        for (Camera camera : cameras) {
+        for (int i = 0; i < cameras.length; i++) {
+            Camera camera = cameras[i];
+            if (camera.isDisabled()) continue;
 
-            PhotonTrackedTarget target = camera.photonCamera.getLatestResult().getBestTarget();
+            // Bug 5: use cached result
+            PhotonPipelineResult result = latestResults[i];
+            if (result == null) continue;
 
-            if (target == null) continue; // Skip if no april tags are found
+            PhotonTrackedTarget target = result.getBestTarget();
+            if (target == null) continue;
 
-            // Calculate robot rotation
             Transform3d transform = target.getBestCameraToTarget();
             Rotation3d rotationTransform = transform.getRotation();
 
-            double robotYaw = rotationTransform.getZ() + camera.cameraYaw;
-
-            robotYaws.add(robotYaw);
-            
+            robotYaws.add(rotationTransform.getZ() + camera.cameraYaw);
         }
 
-        if (robotYaws.isEmpty()) {
-            return Optional.empty();
-        }
-            
-        // Average out robotYaw with other camera positions
-        double averageRotation = robotYaws.stream()
-            .mapToDouble(Double::doubleValue)
-            .average()
-            .getAsDouble();
+        if (robotYaws.isEmpty()) return Optional.empty();
 
-        return Optional.of(averageRotation);
+        double average = robotYaws.stream().mapToDouble(Double::doubleValue).average().getAsDouble();
+        return Optional.of(average);
     }
 
+    // Bug 4: only average timestamp/latency over cameras that have a valid result
     public static double getTimestampSeconds() {
-        double timestamp = 0;
-
-        for (Camera camera: cameras) {
-            timestamp += camera.photonCamera.getLatestResult().getTimestampSeconds();
+        double sum = 0;
+        int count = 0;
+        for (int i = 0; i < cameras.length; i++) {
+            if (cameras[i].isDisabled() || latestResults[i] == null) continue;
+            sum += latestResults[i].getTimestampSeconds();
+            count++;
         }
-
-        return timestamp /= cameras.length;
-
+        return count > 0 ? sum / count : 0;
     }
 
     public static double getLatency() {
-        double latency = 0;
-        for (Camera camera: cameras) {
-            latency += camera.photonCamera.getLatestResult().metadata.getLatencyMillis()/1000;
+        double sum = 0;
+        int count = 0;
+        for (int i = 0; i < cameras.length; i++) {
+            if (cameras[i].isDisabled() || latestResults[i] == null) continue;
+            sum += latestResults[i].metadata.getLatencyMillis() / 1000.0;
+            count++;
         }
-        return latency /= cameras.length;
+        return count > 0 ? sum / count : 0;
     }
 
-    public static void enableVision(){
-        enabled = true;
-    }
-    
-    public static void disableVision(){
-        enabled = false;
-    }
-
-    public static boolean isEnabled(){
-        return enabled;
-    }
-    
+    public static void enableVision()  { enabled = true; }
+    public static void disableVision() { enabled = false; }
+    public static boolean isEnabled()  { return enabled; }
 
     public static void disableLeftCam() {
         System.out.println("Disabled left camera");

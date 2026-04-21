@@ -1,5 +1,6 @@
 package frc.robot.swerve;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
@@ -18,128 +19,161 @@ import frc.robot.vision.VisionManager;
 
 /**
  * Manages the robot's field-relative position using a Kalman Filter.
- * This class fuses Odometry data (high frequency, prone to drift) with 
- * Vision data (lower frequency, high absolute accuracy) to provide a stable Pose.
+ * Fuses odometry (high frequency, prone to drift) with vision (lower frequency,
+ * high absolute accuracy) via retroactive correction: when a vision measurement
+ * arrives, we find the closest past odometry snapshot, apply the Kalman correction
+ * there, then re-apply all subsequent odometry deltas forward to the present.
  */
 public class SwervePosition {
-
-    // Final output states
-    private static Vector2 position = new Vector2(0, 0);
+    // Public-facing outputs
+    private static Vector2 position    = new Vector2(0, 0);
     private static Vector2 absVelocity = new Vector2(0, 0);
     private static Vector2 lastOdomPos = new Vector2(0, 0);
 
-    /*
-     * The State Estimate matrix [x, y]. 
-     * This is the "internal" version of our position used for math.
+    /**
+     * Current best-estimate state [x, y].
      */
     private static Matrix<N2, N1> stateEstimate = VecBuilder.fill(0, 0);
 
-    /** 
-     * The Covariance Matrix (P). Represents our confidence in the current position.
-     * Higher values mean we are less certain where we are.
+    /**
+     * Covariance matrix (P). Higher → less certain of position.
      */
     private static Matrix<N2, N2> uncertainty = Matrix.eye(Nat.N2()).times(0.1);
-    
-    /**
-     * Base Process Noise (Q). This is how much we "trust" odometry per meter traveled.
-     */
-    private static final double ODOM_TRUST_COEFFICIENT = 0.05; 
 
-    /** 
-     * Sensor Noise (R). This is how much we trust the vision system.
-     * A value of 0.01 means we trust vision a lot; 0.5 means vision is "noisy."
-     */
-    private static final Matrix<N2, N2> R_VISION = Matrix.eye(Nat.N2()).times(0.01);   
-    
+    /** How much uncertainty grows per meter of odometry travel. */
+    private static final double ODOM_TRUST_COEFFICIENT = 0.05;
+
+    /** Vision measurement noise (R). Lower → trust vision more. */
+    private static final Matrix<N2, N2> R_VISION = Matrix.eye(Nat.N2()).times(0.01);
+
     /**
-     * Node map with stored positions with correspoding time values.
+     * History of odometry snapshots, keyed by timestamp (seconds).
+     * Each entry stores [x, y] of the state estimate at that moment.
+     * TreeMap keeps entries sorted by time so we can do floorEntry() lookups.
      */
-    private static TreeMap<Matrix<N2, N1>, Double> poseHistory = new TreeMap<>();
+    private static final TreeMap<Double, Matrix<N2, N1>> poseHistory = new TreeMap<>();
+
+    /** How long (seconds) to retain history for retroactive correction. */
+    private static final double HISTORY_WINDOW = 0.5;
 
     public static void init() {
-        position = new Vector2(0, 0);
-        absVelocity = new Vector2(0, 0);
-        lastOdomPos = new Vector2(0, 0);
+        position      = new Vector2(0, 0);
+        absVelocity   = new Vector2(0, 0);
+        lastOdomPos   = new Vector2(0, 0);
         stateEstimate = VecBuilder.fill(0, 0);
-        
-        uncertainty = Matrix.eye(Nat.N2()).times(0.1);
-        
+        uncertainty   = Matrix.eye(Nat.N2()).times(0.1);
+        poseHistory.clear();
+
         Odometry.init();
     }
 
     /**
-     * The main loop for position tracking. 
-     * Should be called in a periodic method (e.g., Robot.robotPeriodic).
+     * Main update loop — call this every robot periodic tick.
      */
     public static void update() {
-        //Get Change
-        Vector2 currentOdomPos = Odometry.getPosition();
-        Vector2 odomDelta = currentOdomPos.sub(lastOdomPos);
-        double distanceTraveled = odomDelta.mag();
+        double now = RTime.now();
 
-        //Predict new position based on odometry
+        // 1. Compute odometry delta since last tick
+        Vector2 currentOdomPos  = Odometry.getPosition();
+        Vector2 odomDelta       = currentOdomPos.sub(lastOdomPos);
+        double  distanceTraveled = odomDelta.mag();
+
+        // 2. Predict: advance state with odometry
         predict(odomDelta, distanceTraveled);
-        
-        //remove all elements from .5 seconds ago
-        while (!poseHistory.isEmpty() && RTime.now() - poseHistory.firstEntry().getValue() > 0.5) {
+
+        // 3. Prune stale history
+        while (!poseHistory.isEmpty() && (now - poseHistory.firstKey()) > HISTORY_WINDOW) {
             poseHistory.pollFirstEntry();
         }
 
+        // 4. Store current estimate in history (BEFORE vision correction)
+        // Clone so later mutations to stateEstimate don't corrupt the stored snapshot.
+        poseHistory.put(now, stateEstimate.copy());
+
+        //5. Retroactive vision correction 
         Optional<Matrix<N2, N1>> visionMeasurement = VisionManager.getMatrixPosition();
         if (visionMeasurement.isPresent()) {
-            correct(visionMeasurement.get());
+            retroactiveCorrect(visionMeasurement.get(), VisionManager.getTimestampSeconds());
         }
 
-        //Save to position buffer
-        poseHistory.put(stateEstimate, VisionManager.getTimestampSeconds());
-
-        //Corrects stateEstimate based on latency
-        Double timeDifference = VisionManager.getTimestampSeconds() - VisionManager.getLatency();
-        Matrix<N2, N1> error = VisionManager.getMatrixPosition().get().minus(poseHistory.get(timeDifference));
-        stateEstimate.minus(error);
-
-        // Update the public position and velocity based on the internal state estimate
+        //6. Publish outputs
         position = new Vector2(stateEstimate.get(0, 0), stateEstimate.get(1, 0));
-        
+
         double dt = RTime.deltaTime();
         absVelocity = (dt > 0) ? odomDelta.div(dt) : new Vector2(0, 0);
-        
+
         lastOdomPos = currentOdomPos;
     }
 
     /**
-     * Prediction Step:
-     * We add the delta from odometry to our current estimate.
-     * We also increase uncertainty based on how far we moved.
+     * Prediction step: move estimate by the odometry delta and grow uncertainty.
      */
     private static void predict(Vector2 delta, double distance) {
-        // Move the estimate
         stateEstimate = stateEstimate.plus(VecBuilder.fill(delta.x, delta.y));
 
-        // Grow uncertainty dynamically: P = P + (distance * Q_coeff)
-        // This ensures that if we are sitting still, the uncertainty doesn't explode.
+        // Uncertainty grows proportional to distance traveled (avoids blow-up at rest)
         Matrix<N2, N2> dynamicProcessNoise = Matrix.eye(Nat.N2()).times(distance * ODOM_TRUST_COEFFICIENT);
         uncertainty = uncertainty.plus(dynamicProcessNoise);
     }
 
     /**
-     * Correction Step (The "Kalman" part):
-     * Merges the vision data with our predicted state.
+     * Correction step: fuse a measurement into the current stateEstimate.
+     * Returns the innovation (residual) so the caller can re-apply it if needed.
      */
-    private static void correct(Matrix<N2, N1> measurement) {
-        // Calculate Kalman Gain (K) ue How much do we trust vision vs. our prediction?
-        // K = uncertainty / (uncertainty + vision_noise)
-        Matrix<N2, N2> kalmanGain = uncertainty.times((uncertainty.plus(R_VISION)).inv());
-        
-        // Calculate the difference between vision and prediction (Innovation)
-        Matrix<N2, N1> innovation = measurement.minus(stateEstimate);
-        
-        // Adjust the estimate based on the gain: x = x + K * innovation
-        stateEstimate = stateEstimate.plus(kalmanGain.times(innovation));
+    private static Matrix<N2, N1> correct(Matrix<N2, N1> estimate, Matrix<N2, N1> measurement) {
+        // Kalman gain: K = P / (P + R)
+        Matrix<N2, N2> kalmanGain = uncertainty.times(uncertainty.plus(R_VISION).inv());
 
-        // Update the uncertainty: Because we have a new measurement, we are now MORE certain.
-        // P = (I - K) * P
+        // Innovation: difference between vision and prediction
+        Matrix<N2, N1> innovation = measurement.minus(estimate);
+
+        // Corrected estimate: x = x + K * innovation
+        Matrix<N2, N1> corrected = estimate.plus(kalmanGain.times(innovation));
+
+        // Reduce uncertainty: P = (I - K) * P
         uncertainty = Matrix.eye(Nat.N2()).minus(kalmanGain).times(uncertainty);
+
+        // Update the live stateEstimate with the same delta
+        Matrix<N2, N1> delta = corrected.minus(estimate);
+        stateEstimate = stateEstimate.plus(delta);
+
+        return delta; 
+    }
+
+    /**
+     * Retroactive correction:
+     *  1. Find the history snapshot nearest to (and at-or-before) the vision timestamp.
+     *  2. Apply the Kalman correction to that historical state.
+     *  3. Propagate the correction delta forward through all subsequent history entries
+     *     and into the live stateEstimate.
+     *
+     * This keeps the whole trajectory consistent with the vision fix.
+     */
+    private static void retroactiveCorrect(Matrix<N2, N1> measurement, double visionTimestamp) {
+        if (poseHistory.isEmpty()) {
+            // No history yet — just correct in place
+            correct(stateEstimate.copy(), measurement);
+            return;
+        }
+
+        // Find the snapshot closest to when the vision frame was actually captured
+        Map.Entry<Double, Matrix<N2, N1>> entry = poseHistory.floorEntry(visionTimestamp);
+        if (entry == null) {
+            // Vision timestamp is older than everything we have — use oldest entry
+            entry = poseHistory.firstEntry();
+        }
+
+        double historicalTimestamp = entry.getKey();
+        Matrix<N2, N1> historicalEstimate = entry.getValue();
+
+        // Apply the Kalman update at the historical snapshot; capture the delta
+        Matrix<N2, N1> correctionDelta = correct(historicalEstimate, measurement);
+
+        // Propagate the same delta to every subsequent history snapshot
+        for (Map.Entry<Double, Matrix<N2, N1>> future : poseHistory.tailMap(historicalTimestamp, false).entrySet()) {
+            future.setValue(future.getValue().plus(correctionDelta));
+        }
+
     }
 
     public static Vector2 getPosition() {
@@ -153,16 +187,17 @@ public class SwervePosition {
     public static void setPosition(Vector2 newPosition) {
         Odometry.setPosition(newPosition);
         stateEstimate = VecBuilder.fill(newPosition.x, newPosition.y);
-        position = newPosition;
-        lastOdomPos = newPosition;
+        position      = newPosition;
+        lastOdomPos   = newPosition;
+        poseHistory.clear();
 
-        // Reset uncertainty because we've been told exactly where we are
+        // High confidence since we were explicitly told our position
         uncertainty = Matrix.eye(Nat.N2()).times(0.01);
     }
 
     public static Pose2d getPose() {
         return new Pose2d(
-            new Translation2d(position.x, position.y), 
+            new Translation2d(position.x, position.y),
             Rotation2d.fromRadians(Pigeon.getRotationRad())
         );
     }
