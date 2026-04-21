@@ -2,11 +2,7 @@ package frc.robot.auto.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.Tuning;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.states.ShooterState;
 import frc.robot.subsystems.states.ShooterTarget;
@@ -15,21 +11,32 @@ import frc.robot.swerve.SwerveManager;
 import frc.robot.swerve.SwervePID;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.auto.ChickenPlannable;
 
-public class Shoot extends Command{
+public class Shoot extends Command {
 
-    private double lastShotTime;
-    private boolean reachedShooting; 
-    
+    private double startTime;
+    private final double duration;
+
+    @ChickenPlannable
+    public Shoot() {
+        this(4.0); // Default 4 second duration
+    }
+
+    @ChickenPlannable
+    public Shoot(double duration) {
+        this.duration = duration;
+    }
+
     @Override
     public void initialize() {
-        System.out.println("shooting");
-        lastShotTime = RTime.now();
+        startTime = RTime.now();
         ShooterManager.shoot();
     }
 
     @Override
     public void execute() {
+        // Aiming and Swerve Control
         ShooterTarget target = ShooterManager.getTarget();
         Vector2 shotAim = target.pos.sub(Odometry.getPosition());
         double targetAngle = Math.atan2(shotAim.y, shotAim.x) + Math.PI;
@@ -37,13 +44,11 @@ public class Shoot extends Command{
         SwervePID.setDestState(Odometry.getPosition(), targetAngle);
         SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), SwervePID.updateOutputVel());
 
+        // Feeding Logic
         if (ShooterManager.getShooterState() == ShooterState.SHOOTING) {
-            reachedShooting = true;
-            Intake.startFeeding(Math.sin(Timer.getFPGATimestamp())*.5+.5);
-        }
-
-        if (!reachedShooting || Shooter.getVelocity() < Shooter.getTargetSpeed() - Constants.Shooter.RPM_DROP) {
-            lastShotTime = RTime.now(); 
+            // Oscillating feed speed
+            double feedSpeed = Math.sin(Timer.getFPGATimestamp() * 10) * 0.5 + 0.5;
+            Intake.startFeeding(feedSpeed);
         }
     }
 
@@ -55,7 +60,7 @@ public class Shoot extends Command{
 
     @Override
     public boolean isFinished() {
-        return RTime.now() - lastShotTime > Constants.Shooter.BALL_TIMEOUT; 
+        // Command finishes strictly when the time duration has elapsed
+        return (RTime.now() - startTime) > duration;
     }
-
 }

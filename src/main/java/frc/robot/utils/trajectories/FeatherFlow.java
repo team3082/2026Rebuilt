@@ -3,6 +3,7 @@ package frc.robot.utils.trajectories;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,15 +18,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
-import frc.robot.auto.commands.RotateAndDriveTo;
-import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherPath.FeatherActionDescriptor;
 
 public class FeatherFlow {
     private static Map<String, FeatherPath[]> trajectories = new HashMap<>();
-
+    
     public static void init() {
         File directory = new File(Filesystem.getDeployDirectory(), "FeatherFlow");
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".ff"));
@@ -86,6 +85,7 @@ public class FeatherFlow {
         
         List<Vector2> allPoints = new ArrayList<>();
         List<Double> allCurvatures = new ArrayList<>();
+        List<Double> allSampleTs = new ArrayList<>();
         
         for (int i = 0; i < beziers.size(); i++) {
             CubicBezierCurve bezier = beziers.get(i);
@@ -98,6 +98,9 @@ public class FeatherFlow {
             for (int j = start; j < pts.length; j++) {
                 allPoints.add(pts[j]);
                 allCurvatures.add(curvs[j]);
+                double localT = (pts.length > 1) ? ((double) j / (pts.length - 1)) : 0.0;
+                double globalT = (i + localT) / beziers.size();
+                allSampleTs.add(Math.max(0.0, Math.min(1.0, globalT)));
             }
         }
         
@@ -144,6 +147,14 @@ public class FeatherFlow {
                                     splitValues.add(globalT);
                                 }
                                 break;
+                            case "motionLimits":
+                                descriptor.maxVelocity = attr.has("velocity")
+                                    ? attr.get("velocity").asDouble()
+                                    : 110.0;
+                                descriptor.maxAcceleration = attr.has("acceleration")
+                                    ? attr.get("acceleration").asDouble()
+                                    : 110.0;
+                                break;
                         }
                         
                         actions.add(descriptor);
@@ -154,8 +165,9 @@ public class FeatherFlow {
         
         // Split path at stop points
         List<RobotPath> paths;
-        if (!splitValues.isEmpty()) {
-            paths = fullPath.split(splitValues);
+        List<Double> normalizedSplitValues = normalizeSplitTs(splitValues);
+        if (!normalizedSplitValues.isEmpty()) {
+            paths = fullPath.split(normalizedSplitValues);
         } else {
             paths = List.of(fullPath);
         }
@@ -165,9 +177,9 @@ public class FeatherFlow {
         for (FeatherActionDescriptor action : actions) {
             if (action.type.equals("rotate")) {
                 if(!flipped){
-                    rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading + 90)});
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians((360-(action.heading-90))+180)});
                 } else {
-                    rotateKeyframes.add(new double[]{action.t, Math.toRadians((360-(action.heading+90))+180)});
+                    rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading - 90)});
                 }
             }
         }
@@ -186,14 +198,7 @@ public class FeatherFlow {
         // by walking the precomputed fullDist array
         List<double[]> rotateByDist = new ArrayList<>();
         for (double[] kf : rotateKeyframes) {
-            double globalT = kf[0];
-            // fullDist is indexed by point, fullPath has N points sampled uniformly
-            // across all bezier segments — map globalT to a point index and interpolate
-            double pointIndex = globalT * (allPts.size() - 1);
-            int lo = (int) Math.floor(pointIndex);
-            int hi = Math.min(lo + 1, allPts.size() - 1);
-            double frac = pointIndex - lo;
-            double dist = fullDist[lo] + frac * (fullDist[hi] - fullDist[lo]);
+            double dist = interpolateDistanceAtT(allSampleTs, fullDist, kf[0]);
             rotateByDist.add(new double[]{dist, kf[1]});
         }
         // rotateByDist is already sorted since rotateKeyframes was sorted by t
@@ -204,8 +209,16 @@ public class FeatherFlow {
         double startRotation = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(0)[1];
         double endRotation   = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(rotateByDist.size() - 1)[1];
 
+        List<FeatherActionDescriptor> motionLimitFrames = new ArrayList<>();
+        for (FeatherActionDescriptor action : actions) {
+            if ("motionLimits".equals(action.type)) {
+                motionLimitFrames.add(action);
+            }
+        }
+        motionLimitFrames.sort((a, b) -> Double.compare(a.t, b.t));
+
         List<ProfiledPath> profiledPaths = new ArrayList<>();
-        List<Double> sortedSplits = new ArrayList<>(splitValues);
+        List<Double> sortedSplits = new ArrayList<>(normalizedSplitValues);
         sortedSplits.sort(Double::compareTo);
         double segmentDistOffset = 0.0;
 
@@ -213,6 +226,8 @@ public class FeatherFlow {
             RobotPath segPath = paths.get(segIdx);
             List<Vector2> segPts = segPath.getPoints();
             int pointCount = segPts.size();
+            double segmentStartT = (segIdx == 0) ? 0.0 : sortedSplits.get(segIdx - 1);
+            double segmentEndT = (segIdx < sortedSplits.size()) ? sortedSplits.get(segIdx) : 1.0;
 
             // Compute cumulative arc-length within this segment
             double[] segDist = new double[pointCount];
@@ -222,10 +237,30 @@ public class FeatherFlow {
             }
 
             double[] targetHeadings = new double[pointCount];
+            double[] pointMaxVelocities = new double[pointCount];
+            double[] pointMaxAccelerations = new double[pointCount];
+            double segmentSpanT = segmentEndT - segmentStartT;
 
             for (int i = 0; i < pointCount; i++) {
                 // True arc-length distance of this point along the full path
                 double d = segmentDistOffset + segDist[i];
+
+                double pointT = (pointCount <= 1 || segmentSpanT <= 1e-9)
+                    ? segmentStartT
+                    : segmentStartT + ((double) i / (pointCount - 1)) * segmentSpanT;
+
+                double maxVelocityForPoint = 110.0;
+                double maxAccelerationForPoint = 110.0;
+                for (FeatherActionDescriptor frame : motionLimitFrames) {
+                    if (frame.t <= pointT) {
+                        maxVelocityForPoint = frame.maxVelocity;
+                        maxAccelerationForPoint = frame.maxAcceleration;
+                    } else {
+                        break;
+                    }
+                }
+                pointMaxVelocities[i] = maxVelocityForPoint;
+                pointMaxAccelerations[i] = maxAccelerationForPoint;
 
                 if (rotateByDist.isEmpty()) {
                     targetHeadings[i] = 0.0;
@@ -269,13 +304,62 @@ public class FeatherFlow {
             }
 
             profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
-                segPath, 110, 3, 120, 110, targetHeadings
+                segPath, 170, 3, 170, 170, targetHeadings, pointMaxVelocities, pointMaxAccelerations
             ));
 
             segmentDistOffset += segDist[pointCount - 1];
         }
         
         return new FeatherPath(profiledPaths, actions);
+    }
+
+    private static List<Double> normalizeSplitTs(List<Double> splitValues) {
+        if (splitValues.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Double> sorted = new ArrayList<>();
+        for (double t : splitValues) {
+            sorted.add(Math.max(0.0, Math.min(1.0, t)));
+        }
+        sorted.sort(Double::compareTo);
+
+        List<Double> deduped = new ArrayList<>();
+        for (double t : sorted) {
+            if (deduped.isEmpty() || Math.abs(deduped.get(deduped.size() - 1) - t) > 1e-9) {
+                if (t > 1e-9 && t < 1.0 - 1e-9) {
+                    deduped.add(t);
+                }
+            }
+        }
+        return deduped;
+    }
+
+    private static double interpolateDistanceAtT(List<Double> sampleTs, double[] fullDist, double t) {
+        if (sampleTs.isEmpty()) {
+            return 0.0;
+        }
+
+        double clampedT = Math.max(0.0, Math.min(1.0, t));
+        int idx = Collections.binarySearch(sampleTs, clampedT);
+        if (idx >= 0) {
+            return fullDist[idx];
+        }
+
+        int insertion = -idx - 1;
+        if (insertion <= 0) {
+            return fullDist[0];
+        }
+        if (insertion >= sampleTs.size()) {
+            return fullDist[fullDist.length - 1];
+        }
+
+        int lo = insertion - 1;
+        int hi = insertion;
+        double t0 = sampleTs.get(lo);
+        double t1 = sampleTs.get(hi);
+        double alpha = (Math.abs(t1 - t0) > 1e-9) ? (clampedT - t0) / (t1 - t0) : 0.0;
+        return fullDist[lo] + alpha * (fullDist[hi] - fullDist[lo]);
     }
     
     private static Vector2 parsePosition(JsonNode posNode) {

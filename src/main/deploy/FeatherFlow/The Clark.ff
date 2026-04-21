@@ -1,6 +1,6 @@
 {
-  "id": "1774364882730",
-  "name": "3 Piece Left",
+  "id": "1776448960450",
+  "name": "The Clark",
   "anchorPoints": [
     {
       "position": {
@@ -8,7 +8,95 @@
         "y": 292
       },
       "handleOutOffset": {
+        "x": -3.1721443472049633,
+        "y": 0.15269835127680445
+      },
+      "handleInOffset": {
         "x": 0,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": -49.38529619563319,
+        "y": -4.6793489894673375
+      },
+      "handleInOffset": {
+        "x": 25.318487565706548,
+        "y": 2.398973952411086
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 332.8008878455067,
+        "y": 214.26931913506505
+      },
+      "handleOutOffset": {
+        "x": 0.10956225195548176,
+        "y": -29.295495618101164
+      },
+      "handleInOffset": {
+        "x": -0.16009830777977918,
+        "y": 42.80816787093634
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 359.1387234086653,
+        "y": 169.92404408729573
+      },
+      "handleOutOffset": {
+        "x": 22.0065010089142,
+        "y": 8.494496448479229
+      },
+      "handleInOffset": {
+        "x": -9.089516424857301,
+        "y": -3.5085479948887874
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 43.680265124182576,
+        "y": 23.840314178425338
+      },
+      "handleInOffset": {
+        "x": -67.06008679766279,
+        "y": -36.6008203829251
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 3.0487257951249487,
         "y": 0
       },
       "handleInOffset": {
@@ -22,34 +110,43 @@
     },
     {
       "position": {
-        "x": 415,
-        "y": 292
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
       },
       "handleOutOffset": {
-        "x": -40.369578079378755,
-        "y": -0.40127483313972334
+        "x": -23.722206342529052,
+        "y": -20.79220519122475
       },
       "handleInOffset": {
-        "x": 72.76798064761448,
-        "y": 0.723315939415324
+        "x": 27.597326290071198,
+        "y": 24.18869740305812
       },
       "isCurved": true,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772253494052"
+      "snapPointId": "snap-1772774974899"
     },
     {
       "position": {
-        "x": 347.002978195749,
-        "y": 190.72227974717455
+        "x": 424.3870584681975,
+        "y": 187.27626590247507
       },
       "handleOutOffset": {
+<<<<<<< HEAD:src/main/deploy/FeatherFlow/3 Piece Left.ff
         "x": 8.283616701120753,
         "y": -44.10344794695928
       },
       "handleInOffset": {
         "x": -17.814347581254367,
         "y": 94.84675349024687
+=======
+        "x": 0.11702307385857831,
+        "y": -8.203687773173764
+      },
+      "handleInOffset": {
+        "x": -0.6310438763943665,
+        "y": 44.23817254509075
+>>>>>>> feature-velocity-granular:src/main/deploy/FeatherFlow/The Clark.ff
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -57,14 +154,15 @@
     },
     {
       "position": {
-        "x": 415,
-        "y": 292
+        "x": 424.78793617808554,
+        "y": 132.4064971991058
       },
       "handleOutOffset": {
-        "x": 20,
-        "y": 0
+        "x": -1.4219105301439237,
+        "y": 19.119343095842197
       },
       "handleInOffset": {
+<<<<<<< HEAD:src/main/deploy/FeatherFlow/3 Piece Left.ff
         "x": -20,
         "y": 0
       },
@@ -120,6 +218,10 @@
       "handleInOffset": {
         "x": 48.16240912430294,
         "y": 0.7622994976145208
+=======
+        "x": 0.16212690115159728,
+        "y": -2.1799964079802785
+>>>>>>> feature-velocity-granular:src/main/deploy/FeatherFlow/The Clark.ff
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -127,21 +229,21 @@
     },
     {
       "position": {
-        "x": 415,
-        "y": 292
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
       },
       "handleOutOffset": {
-        "x": 15.980427856871131,
-        "y": 1.1403602396559904
+        "x": 21.078921497580957,
+        "y": 16.704642323310434
       },
       "handleInOffset": {
-        "x": -0.6081310695294633,
-        "y": -0.04339611544833133
+        "x": -43.16822599269292,
+        "y": -34.20999385677882
       },
       "isCurved": true,
       "handlesAligned": true,
       "name": "",
-      "snapPointId": "snap-1772253494052"
+      "snapPointId": "snap-1772774974899"
     },
     {
       "position": {
@@ -149,12 +251,12 @@
         "y": 287.3
       },
       "handleOutOffset": {
-        "x": 0,
-        "y": 0
+        "x": 12.923690272161924,
+        "y": -20.215694689647783
       },
       "handleInOffset": {
-        "x": 0,
-        "y": 0
+        "x": -8.321385829353948,
+        "y": 13.016606849774032
       },
       "isCurved": true,
       "handlesAligned": true,
@@ -163,8 +265,8 @@
   ],
   "controlPoints": [
     {
-      "id": 1774364440359,
-      "u": 1,
+      "id": 1776526673629,
+      "u": 0.99,
       "color": "blue",
       "attributes": [
         {
@@ -175,8 +277,8 @@
       "name": ""
     },
     {
-      "id": 1772253964202,
-      "u": 1.67,
+      "id": 1776526681711,
+      "u": 2.01,
       "color": "blue",
       "attributes": [
         {
@@ -187,32 +289,8 @@
       "name": ""
     },
     {
-      "id": 1774362462455,
-      "u": 2.08,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 0
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1774362500556,
-      "u": 2.52,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 60
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1774364793845,
-      "u": 2.8,
+      "id": 1776526708046,
+      "u": 2.99,
       "color": "blue",
       "attributes": [
         {
@@ -223,36 +301,20 @@
       "name": ""
     },
     {
-      "id": 1772253830774,
-      "u": 3.01,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 180
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253609080,
-      "u": 4.09,
+      "id": 1776526525149,
+      "u": 4.99,
       "color": "green",
       "attributes": [
         {
           "type": "command",
           "stopping": true
-        },
-        {
-          "type": "rotate",
-          "heading": 180
         }
       ],
       "name": ""
     },
     {
-      "id": 1772253847831,
-      "u": 5,
+      "id": 1776526788454,
+      "u": 5.98,
       "color": "blue",
       "attributes": [
         {
@@ -263,84 +325,36 @@
       "name": ""
     },
     {
-      "id": 1774362545207,
-      "u": 5.39,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 270
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253983849,
-      "u": 6,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 180
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1774362562289,
-      "u": 6.33,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 90
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1774364783244,
-      "u": 6.7,
-      "color": "blue",
-      "attributes": [
-        {
-          "type": "rotate",
-          "heading": 180
-        }
-      ],
-      "name": ""
-    },
-    {
-      "id": 1772253854435,
+      "id": 1776526815738,
       "u": 7,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
-          "heading": 180
+          "heading": 270
         }
       ],
       "name": ""
     },
     {
-      "id": 1772253677315,
-      "u": 7.921,
-      "color": "green",
+      "id": 1776526595786,
+      "u": 7.91,
+      "color": "blue",
       "attributes": [
         {
-          "type": "rotate",
-          "heading": 180
+          "type": "stop",
+          "duration": 0
         },
         {
-          "type": "command",
-          "stopping": true
+          "type": "rotate",
+          "heading": 270
         }
       ],
       "name": ""
     },
     {
-      "id": 1772253858294,
-      "u": 7.999,
+      "id": 1776526851407,
+      "u": 8.99,
       "color": "blue",
       "attributes": [
         {
@@ -349,8 +363,25 @@
         }
       ],
       "name": ""
+    },
+    {
+      "id": 1776526901237,
+      "u": 9.99,
+      "color": "green",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": true
+        }
+      ],
+      "name": ""
     }
   ],
+<<<<<<< HEAD:src/main/deploy/FeatherFlow/3 Piece Left.ff
   "created": "2026-03-24T15:08:02.730Z",
   "lastModified": "2026-03-28T20:41:54.429Z"
+=======
+  "created": "2026-04-17T18:02:40.450Z",
+  "lastModified": "2026-04-18T16:47:55.592Z"
+>>>>>>> feature-velocity-granular:src/main/deploy/FeatherFlow/The Clark.ff
 }

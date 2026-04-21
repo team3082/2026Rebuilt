@@ -3,7 +3,6 @@ package frc.robot.auto.commands;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.ProfiledPath;
 import frc.robot.utils.trajectories.ProfiledPoint;
-import frc.robot.Constants;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
@@ -64,9 +63,10 @@ public class HolonomicDriveController {
         ProfiledPoint lookaheadPoint = path.getPointAtTime(lookaheadTime);
         ProfiledPoint currentPoint = path.getPointAtTime(currentTime);
         Vector2 lookaheadPos = lookaheadPoint.getPosition();
-        Vector2 desiredVelocity = currentPoint.getVelocity()
-                .rotate(-Math.PI / 2)
-                .mul(1.0 / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
+        // Vector2 desiredVelocity = currentPoint.getVelocity()
+        //         .rotate(-Math.PI / 2)
+        //         .mul(1.0 / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
+        Vector2 desiredVelocity = new Vector2();
 
         // --- Feedback: PID correcting error toward the lookahead position ---
         Vector2 currentPos = SwervePosition.getPosition();

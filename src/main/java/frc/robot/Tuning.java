@@ -42,8 +42,8 @@ public final class Tuning {
     
     // Holonomic Drive Controller
     public static final double holonomic_pos_kp = 0.05;
-    public static final double holonomic_pos_ki = 0.0001;
-    public static final double holonomic_pos_kd = 0;
+    public static final double holonomic_pos_ki = 0.00001;
+    public static final double holonomic_pos_kd = 0.001;
 
     public static final double holonomic_rot_kp = 0.45;
     public static final double holonomic_rot_ki = 0.03;
@@ -152,5 +152,5 @@ public final class Tuning {
         public static final double ROLLER_KV = 0.13;
     }
 
-    public static double holonomic_lookahead_time = 0;
+    public static double holonomic_lookahead_time = 0.2;
 }

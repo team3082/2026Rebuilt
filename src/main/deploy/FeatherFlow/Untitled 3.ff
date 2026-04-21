@@ -1,0 +1,203 @@
+{
+  "id": "1776564469350",
+  "name": "Untitled 3",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": -2.636644967427953,
+        "y": -19.825440810124192
+      },
+      "handleInOffset": {
+        "x": 5.55743298118432,
+        "y": 41.78740785574212
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 48.03448146941571,
+        "y": 10.690226741309687
+      },
+      "handleInOffset": {
+        "x": -42.02806617813568,
+        "y": -9.353479900248509
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 328.3915809286,
+        "y": 211.2972762623313
+      },
+      "handleOutOffset": {
+        "x": 49.928693771516805,
+        "y": 78.45773134741347
+      },
+      "handleInOffset": {
+        "x": -18.978789913432667,
+        "y": -29.823187587105682
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 354.29042208280924,
+        "y": 171.5346845250367
+      },
+      "handleOutOffset": {
+        "x": -19.47224224117708,
+        "y": -4.564184713716023
+      },
+      "handleInOffset": {
+        "x": 60.34162990568336,
+        "y": 14.143740685077944
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 426.9139766595609,
+        "y": 189.41450765522958
+      },
+      "handleOutOffset": {
+        "x": -19.5906064021153,
+        "y": -4.025933531170003
+      },
+      "handleInOffset": {
+        "x": 28.56882477835461,
+        "y": 5.8709866994663
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 430.38495537094974,
+        "y": 130.17091459697858
+      },
+      "handleOutOffset": {
+        "x": -5.444871089246148,
+        "y": -19.244567514534864
+      },
+      "handleInOffset": {
+        "x": 18.422887006602423,
+        "y": 65.11457975771731
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 510,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 20,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -20,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    }
+  ],
+  "controlPoints": [],
+  "created": "2026-04-19T02:07:49.350Z",
+  "lastModified": "2026-04-19T02:25:41.939Z"
+}
