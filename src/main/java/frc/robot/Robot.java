@@ -22,6 +22,7 @@ import frc.robot.utils.Vector2;
 import frc.robot.utils.auto.CommandLoader;
 import frc.robot.utils.auto.CommandLoader.CommandConstructorInfo;
 import frc.robot.utils.trajectories.FeatherFlow;
+import frc.robot.vision.VisionManager;
 
 public class Robot extends TimedRobot {
   @SuppressWarnings("resource")
@@ -59,47 +60,6 @@ public class Robot extends TimedRobot {
     
     // Controls
     OI.init();
-<<<<<<< HEAD
-=======
-
-    Logger.recordMetadata("ProjectName", "2026Rebuilt"); // Set a metadata value
-    if (isReal()) {
-      Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
-      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-      new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
-    } else if (Constants.REPLAY) {
-      setUseTiming(true);
-      String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the user)
-      Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-      Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
-    } else {
-      Logger.addDataReceiver(new NT4Publisher());
-    }
-
-    Logger.start(); // Start logging
-
-    ArrayList<CommandConstructorInfo> info = CommandLoader.loadCommandConstructors();
-    info.forEach(System.out::println);
-    SmartDashboard.putData(new Field2d());
-
-    try {
-      ObjectMapper mapper = new ObjectMapper();
-      Path target = Path.of("src/main/deploy/command_constructors.json");
-      Path tmp = Files.createTempFile(target.getParent() == null ? Path.of(".") : target.getParent(),
-                                      "command_constructors", ".tmp");
-      // write to temp file first
-      mapper.writerWithDefaultPrettyPrinter().writeValue(tmp.toFile(), info);
-      // then move into place (atomic if supported)
-      try {
-        Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-      } catch (AtomicMoveNotSupportedException ex) {
-        Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING);
-      }
-      System.out.println("Wrote JSON to " + target.toAbsolutePath());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
->>>>>>> feature-velocity-granular
   }
 
   @Override
@@ -111,6 +71,7 @@ public class Robot extends TimedRobot {
     Indexer.update();
     Intake.update();
     Telemetry.update();
+    VisionManager.poll();
     SwervePosition.update();
     SwerveManager.update();
     // LEDManager.update();

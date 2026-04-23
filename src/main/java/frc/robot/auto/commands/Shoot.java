@@ -50,6 +50,8 @@ public class Shoot extends Command {
             double feedSpeed = Math.sin(Timer.getFPGATimestamp() * 10) * 0.5 + 0.5;
             Intake.startFeeding(feedSpeed);
         }
+
+        System.out.println("TEST");
     }
 
     @Override

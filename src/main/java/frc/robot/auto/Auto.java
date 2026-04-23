@@ -75,24 +75,14 @@ public class Auto {
     }
 
     @AutoRoutine()
-    public SequentialCommandGroup StupidAuto() {
+    public SequentialCommandGroup CluckRun() {
                 Pigeon.setYaw(-90);
 
         return new SequentialCommandGroup(
-            FeatherFlow.buildFeatherAuto("Untitled",
+            FeatherFlow.buildFeatherAuto("CluckRun",
             new Shoot(),
             new Shoot())
         ); 
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup CenterToDepot() {
-        return new SequentialCommandGroup(
-            new StartIntake(),
-            FeatherFlow.buildFeatherAuto("Center to Depot", 
-                new Shoot(),
-                new Shoot()
-            ));
     }
 
     /**

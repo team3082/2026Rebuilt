@@ -108,13 +108,13 @@ public class Telemetry {
 
     public static int count = 0;
     public static void update() {
-        count++;
-        if (count % 5 == 0) {
+        // count++;
+        // if (count % 5 == 0) {
             updateField();
             updateSwerve();
             updateSubsystems();
             count = 0;
-        }
+        // }
     }
 
     private static void updateSwerve() {
