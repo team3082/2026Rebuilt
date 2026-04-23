@@ -88,10 +88,10 @@ public final class Tuning {
         public static final double HOOD_KI = 0.000;
         public static final double HOOD_DEADBAND = 0.2;
 
-        public static final double FLYWHEEL_P = 0.4;
+        public static final double FLYWHEEL_P = 0.5;
         public static final double FLYWHEEL_I = 0.0;
-        public static final double FLYWHEEL_D = 0.03;
-        public static final double FLYWHEEL_KV = 0.12;
+        public static final double FLYWHEEL_D = 0.0;
+        public static final double FLYWHEEL_KV = 0.1315;
 
         public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
         
@@ -128,12 +128,12 @@ public final class Tuning {
     }
 
     public static final class Indexer {
-        public static final double SPINDEXER_SPEED = 0.4;
-        public static final double HANDOFF_SPEED = -0.4;
+        public static final double SPINDEXER_SPEED = 0.8;
+        public static final double HANDOFF_SPEED = -0.8;
     }
 
     public static final class Intake {
-        public static final double INTAKE_SPEED = -42.5;
+        public static final double INTAKE_SPEED = -35;
         public static final double FEED_SPEED = -50;
         public static final double REVERSE_SPEED = 40;
         

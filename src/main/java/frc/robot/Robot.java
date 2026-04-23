@@ -3,8 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 // AUTO
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Indexer;
@@ -19,15 +18,12 @@ import frc.robot.swerve.SwervePID;
 import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
-import frc.robot.utils.auto.CommandLoader;
-import frc.robot.utils.auto.CommandLoader.CommandConstructorInfo;
 import frc.robot.utils.trajectories.FeatherFlow;
 import frc.robot.vision.VisionManager;
 
 public class Robot extends TimedRobot {
   @SuppressWarnings("resource")
   public Robot() {
-
     if (Robot.isReal()){
       try {
         Thread.sleep(5000);
