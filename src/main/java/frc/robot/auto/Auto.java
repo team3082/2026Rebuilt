@@ -3,9 +3,7 @@ package frc.robot.auto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.auto.commands.RotateAndDriveTo;
 import frc.robot.auto.commands.Shoot;
-import frc.robot.auto.commands.StartIntake;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
 import frc.robot.utils.trajectories.FeatherFlow;
@@ -20,69 +18,24 @@ public class Auto {
     public static RoutineManager routineManager;
 
     @AutoRoutine()
-    public SequentialCommandGroup Left3Piece() {
-        Pigeon.setYaw(90);
-        return new SequentialCommandGroup(
-            new StartIntake(),
-            FeatherFlow.buildFeatherAuto("3 Piece Left",
-                true, 
-                new Shoot(),
-                new Shoot(),
-                new Shoot()
-            )
-        );
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup ShootNoMove() {
-        return new SequentialCommandGroup(
-            new Shoot()
-        );
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup OutpostFromCenter() {
-        Pigeon.setYaw(0);
-        return new SequentialCommandGroup(
-            new StartIntake(),
-            FeatherFlow.buildFeatherAuto("Untitled", 
-                new Shoot()
-            )
-        );
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup Right3Piece() {
+    public SequentialCommandGroup CluckRunRight() {
         Pigeon.setYaw(-90);
+
         return new SequentialCommandGroup(
-            new StartIntake(),
-            FeatherFlow.buildFeatherAuto("3 Piece Right", 
-                new Shoot(),
+            FeatherFlow.buildFeatherAuto("CluckRunRight",
                 new Shoot(),
                 new Shoot()
             )
-        );
+        ); 
     }
 
     @AutoRoutine()
-    public SequentialCommandGroup DepotToCenter() {
+    public SequentialCommandGroup CluckRunLeft() {
+
         return new SequentialCommandGroup(
-            new StartIntake(),
-            FeatherFlow.buildFeatherAuto("Depot to Center", 
-                new Shoot(),
+            FeatherFlow.buildFeatherAuto("CluckRunLeft", true,
                 new Shoot(),
                 new Shoot()
-            ));
-    }
-
-    @AutoRoutine()
-    public SequentialCommandGroup CluckRun() {
-                Pigeon.setYaw(-90);
-
-        return new SequentialCommandGroup(
-            FeatherFlow.buildFeatherAuto("CluckRun",
-            new SequentialCommandGroup(new Shoot()),
-            new SequentialCommandGroup(new Shoot())
             )
         ); 
     }

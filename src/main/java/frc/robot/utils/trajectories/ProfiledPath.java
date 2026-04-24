@@ -33,7 +33,7 @@ public class ProfiledPath {
         double curvature = p0.getCurvature() * (1 - ratio) + p1.getCurvature() * ratio;
         double acceleration = p0.getAcceleration() * (1 - ratio) + p1.getAcceleration() * ratio;
         double distance = p0.getDistance() * (1 - ratio) + p1.getDistance() * ratio;
-        double heading = p0.getHeading() * (1 - ratio) + p1.getHeading() * ratio;
+        double heading = interpolateHeading(p0.getHeading(), p1.getHeading(), ratio);
         double rotVel = p0.getRotationalVelocity() * (1 - ratio) + p1.getRotationalVelocity() * ratio;
 
         ProfiledPoint result = new ProfiledPoint(position, velocity, curvature, acceleration, t, distance);
@@ -52,5 +52,16 @@ public class ProfiledPath {
 
     public double getDuration() {
         return profiledPoints.get(profiledPoints.size()-1).getTime();
+    }
+
+    private static double interpolateHeading(double startHeading, double endHeading, double ratio) {
+        double delta = endHeading - startHeading;
+        while (delta > Math.PI) {
+            delta -= 2.0 * Math.PI;
+        }
+        while (delta < -Math.PI) {
+            delta += 2.0 * Math.PI;
+        }
+        return startHeading + delta * ratio;
     }
 }

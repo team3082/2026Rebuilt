@@ -1,0 +1,179 @@
+{
+  "id": "1777068607229",
+  "name": "CoopSteal",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 500,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": 7.467423056538763,
+        "y": -1.8289911488138683e-15
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": -2.7081949063027793,
+        "y": 3.316582223470865e-16
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 220.11313719888324,
+        "y": 192.400564854777
+      },
+      "handleOutOffset": {
+        "x": -8.709969216061393e-17,
+        "y": -0.5416234400910158
+      },
+      "handleInOffset": {
+        "x": 2.7586939381558718e-14,
+        "y": 97.38504978939002
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 220.11313719888324,
+        "y": 125.79606136984455
+      },
+      "handleOutOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 428.2741922368329,
+        "y": 291.6073433627495
+      },
+      "handleOutOffset": {
+        "x": 6.308045356866112,
+        "y": -1.5450255110324815e-15
+      },
+      "handleInOffset": {
+        "x": -138.7307472790011,
+        "y": 7.859844450089522e-14
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772774974899"
+    },
+    {
+      "position": {
+        "x": 500,
+        "y": 292
+      },
+      "handleOutOffset": {
+        "x": 31.516639778664402,
+        "y": -7.719350404964301e-15
+      },
+      "handleInOffset": {
+        "x": -1.127232833127847,
+        "y": 1.3804620809838202e-16
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772253433219"
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1777068714159,
+      "u": 0.1,
+      "color": "purple",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 3
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777068769700,
+      "u": 1,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777068776755,
+      "u": 2,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777068806803,
+      "u": 3,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 270
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777068785349,
+      "u": 4,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 0
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-04-24T22:10:07.229Z",
+  "lastModified": "2026-04-24T22:16:00.823Z",
+  "compiledVersion": 1,
+  "compiledAt": "2026-04-24T22:10:07.269Z",
+  "compiledFileName": "Untitled.fftraj.json"
+}

@@ -1,0 +1,148 @@
+{
+  "id": "1777067664486",
+  "name": "CluckScapeStart",
+  "anchorPoints": [
+    {
+      "position": {
+        "x": 510,
+        "y": 25
+      },
+      "handleOutOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": 69.98532099276359,
+        "y": -1.7141459868217598e-14
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772141201226"
+    },
+    {
+      "position": {
+        "x": 415,
+        "y": 25
+      },
+      "handleOutOffset": {
+        "x": -78.1595192313097,
+        "y": 9.571780504951942e-15
+      },
+      "handleInOffset": {
+        "x": 4.61061271765598,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": "",
+      "snapPointId": "snap-1772209472910"
+    },
+    {
+      "position": {
+        "x": 336.63095617902627,
+        "y": 71.18245173336732
+      },
+      "handleOutOffset": {
+        "x": 6.817745184582214e-15,
+        "y": 24.067419914502985
+      },
+      "handleInOffset": {
+        "x": -7.920713782413746e-16,
+        "y": -4.925441342428983
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 384.7627719901709,
+        "y": 131.48611874332238
+      },
+      "handleOutOffset": {
+        "x": 24.853340547343244,
+        "y": -6.0873127898846064e-15
+      },
+      "handleInOffset": {
+        "x": -22.77874291697987,
+        "y": 1.2905385403567286e-14
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    },
+    {
+      "position": {
+        "x": 437.30762462334616,
+        "y": 98.07000127238237
+      },
+      "handleOutOffset": {
+        "x": 0.8256752813953712,
+        "y": 0
+      },
+      "handleInOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "isCurved": true,
+      "handlesAligned": true,
+      "name": ""
+    }
+  ],
+  "controlPoints": [
+    {
+      "id": 1777067840864,
+      "u": 1,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777067886824,
+      "u": 1.29,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 23
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777067849876,
+      "u": 2,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 90
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777067860535,
+      "u": 3,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "rotate",
+          "heading": 180
+        }
+      ],
+      "name": ""
+    }
+  ],
+  "created": "2026-04-24T21:54:24.486Z",
+  "lastModified": "2026-04-24T22:07:10.038Z",
+  "compiledVersion": 1,
+  "compiledAt": "2026-04-24T21:54:24.505Z",
+  "compiledFileName": "Untitled.fftraj.json"
+}
