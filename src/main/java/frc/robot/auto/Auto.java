@@ -3,6 +3,7 @@ package frc.robot.auto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.auto.commands.RotateAndDriveTo;
 import frc.robot.auto.commands.Shoot;
 import frc.robot.auto.commands.StartIntake;
 import frc.robot.auto.routineManager.AutoRoutine;
@@ -80,8 +81,9 @@ public class Auto {
 
         return new SequentialCommandGroup(
             FeatherFlow.buildFeatherAuto("CluckRun",
-            new Shoot(),
-            new Shoot())
+            new SequentialCommandGroup(new Shoot()),
+            new SequentialCommandGroup(new Shoot())
+            )
         ); 
     }
 

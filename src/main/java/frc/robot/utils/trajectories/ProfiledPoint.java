@@ -1,7 +1,10 @@
 package frc.robot.utils.trajectories;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import frc.robot.utils.Vector2;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProfiledPoint {
     private Vector2 position;
     private Vector2 velocity;
@@ -12,6 +15,13 @@ public class ProfiledPoint {
     private double heading;             // radians, tangent angle of the path
     private double rotationalVelocity;  // rad/s
 
+    // Add these fields so Jackson can map "x" and "y" from the JSON
+    @JsonProperty("x")
+    private double x;
+
+    @JsonProperty("y")
+    private double y;
+
     public ProfiledPoint() {
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
@@ -21,6 +31,30 @@ public class ProfiledPoint {
         this.distance = 0;
         this.heading = 0;
         this.rotationalVelocity = 0;
+        this.x = 0;
+        this.y = 0;
+    }
+
+    // JSON-mapped setters keep both the primitive fields and the Vector2 position in sync
+    public void setX(double x) {
+        this.x = x;
+        if (this.position == null) this.position = new Vector2(0, 0);
+        this.position.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        if (this.position == null) this.position = new Vector2(0, 0);
+        this.position.y = y;
+    }
+
+    // Getters return the Vector2 coordinates when available, otherwise the primitive fields
+    public double getX() {
+        return this.position != null ? this.position.x : this.x;
+    }
+
+    public double getY() {
+        return this.position != null ? this.position.y : this.y;
     }
 
     public ProfiledPoint(Vector2 position, Vector2 velocity, double curvature, double acceleration, double time, double distance) {
@@ -32,6 +66,13 @@ public class ProfiledPoint {
         this.distance = distance;
         this.heading = 0;
         this.rotationalVelocity = 0;
+        if (position != null) {
+            this.x = position.x;
+            this.y = position.y;
+        } else {
+            this.x = 0;
+            this.y = 0;
+        }
     }
 
     public Vector2 getPosition() {
@@ -60,6 +101,10 @@ public class ProfiledPoint {
     
     public void setPosition(Vector2 position) {
         this.position = position;
+        if (position != null) {
+            this.x = position.x;
+            this.y = position.y;
+        }
     }
 
     public void setVelocity(Vector2 velocity) {
@@ -97,4 +142,5 @@ public class ProfiledPoint {
     public void setRotationalVelocity(double rotationalVelocity) {
         this.rotationalVelocity = rotationalVelocity;
     }
+
 }

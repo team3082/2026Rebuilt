@@ -16,12 +16,13 @@ public class FeatherPath {
     }
 
     public static class FeatherActionDescriptor {
-        public double t;  
-        public String type;       
-        public double duration;    
-        public double heading;     
-        public boolean stopping;    
-        public double maxVelocity;
-        public double maxAcceleration;
+        public double t;                    // Normalized path parameter [0, 1]
+        public String type;                 // "stop", "command", "rotate", "motionLimits"
+        public double time;                 // Absolute cumulative time in trajectory
+        public double duration;             // For "stop" type
+        public double heading;              // For "rotate" type
+        public boolean stopping;            // For "command" type
+        public double maxVelocity;          // For "motionLimits" type
+        public double maxAcceleration;      // For "motionLimits" type
     }
 }

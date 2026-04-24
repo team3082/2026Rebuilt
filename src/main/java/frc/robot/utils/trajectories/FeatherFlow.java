@@ -1,25 +1,21 @@
 package frc.robot.utils.trajectories;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+ 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
+ 
 import frc.robot.auto.commands.FollowPath;
 import frc.robot.swerve.SwervePosition;
-import frc.robot.utils.Vector2;
+ 
 import frc.robot.utils.trajectories.FeatherPath.FeatherActionDescriptor;
 
 public class FeatherFlow {
@@ -51,338 +47,98 @@ public class FeatherFlow {
         }, "FeatherFlow Parser").start();
     }
 
-    private static FeatherPath loadFeatherFile(File file, boolean flipped) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(file);
-        
-        // Parse anchor points into cubic Bezier curves
-        JsonNode anchorPoints = root.get("anchorPoints");
-        if (anchorPoints == null || !anchorPoints.isArray() || anchorPoints.size() < 2) {
-            throw new IOException("Invalid or missing anchorPoints in " + file.getName());
+    private static FeatherPath loadFeatherFile(File file, boolean flipped) {
+        // Load compiled artifact-only. Legacy .ff recompute path removed.
+        String baseName = file.getName().replace(".ff", "");
+        File compiledFile = new File(file.getParent(), baseName + ".fftraj.json");
+        if (!compiledFile.exists()) {
+            throw new IllegalStateException("Compiled trajectory artifact not found for " + file.getName() + ". Expected " + baseName + ".fftraj.json in same directory.");
         }
-        
-        List<CubicBezierCurve> beziers = new ArrayList<>();
-        
-        // Create a bezier curve between each consecutive pair of anchor points
-        for (int i = 0; i < anchorPoints.size() - 1; i++) {
-            JsonNode current = anchorPoints.get(i);
-            JsonNode next = anchorPoints.get(i + 1);
 
-            Vector2 p0 = parsePosition(current.get("position"));
-            Vector2 p1 = p0.add(parseOffset(current.get("handleOutOffset")));
-            Vector2 p3 = parsePosition(next.get("position"));
-            Vector2 p2 = p3.add(parseOffset(next.get("handleInOffset")));
+        FeatherPath compiledPath = loadCompiledFeatherFile(compiledFile, flipped);
+        if (compiledPath == null) {
+            throw new IllegalStateException("Failed to load compiled trajectory artifact: " + compiledFile.getAbsolutePath());
+        }
+        System.out.println("[FeatherFlow] Loaded compiled artifact: " + baseName + ".fftraj.json");
+        return compiledPath;
+    }
+
+
+
+    /**
+     * Legacy .ff recompute path removed. Only compiled artifacts (.fftraj.json)
+     * are supported by this loader. If you need the legacy loader, it's
+     * preserved in the repository history.
+     */
+
+    /**
+     * Loads a FeatherPath from a precompiled trajectory artifact (.fftraj.json).
+     * This is the preferred loading path - no trajectory math computation needed.
+     * 
+     * @param file The compiled trajectory JSON file
+     * @param flipped Whether to load the flipped variant
+     * @return The loaded FeatherPath, or null if loading fails
+     */
+    private static FeatherPath loadCompiledFeatherFile(File file, boolean flipped) {
+        try {
+            CompiledTrajectory compiled = CompiledTrajectoryDeserializer.deserializeFile(file);
             
-            if(flipped){
-                p0.y = -p0.y;
-                p1.y = -p1.y;
-                p2.y = -p2.y;
-                p3.y = -p3.y;
+            if (compiled.formatVersion != 1) {
+                System.err.println("[FeatherFlow] Unsupported formatVersion: " + compiled.formatVersion);
+                return null;
             }
-
-            beziers.add(new CubicBezierCurve(p0, p1, p2, p3));
-        }
-        
-        List<Vector2> allPoints = new ArrayList<>();
-        List<Double> allCurvatures = new ArrayList<>();
-        List<Double> allSampleTs = new ArrayList<>();
-        
-        for (int i = 0; i < beziers.size(); i++) {
-            CubicBezierCurve bezier = beziers.get(i);
-            Vector2[] pts = bezier.getPoints();
-            double[] curvs = bezier.getCurvatures();
-
-            // Skip the first point of every curve except the first —
-            // it is identical to the last point of the previous curve.
-            int start = (i == 0) ? 0 : 1;
-            for (int j = start; j < pts.length; j++) {
-                allPoints.add(pts[j]);
-                allCurvatures.add(curvs[j]);
-                double localT = (pts.length > 1) ? ((double) j / (pts.length - 1)) : 0.0;
-                double globalT = (i + localT) / beziers.size();
-                allSampleTs.add(Math.max(0.0, Math.min(1.0, globalT)));
-            }
-        }
-        
-        RobotPath fullPath = new RobotPath(allPoints, allCurvatures);
-        
-        JsonNode controlPoints = root.get("controlPoints");
-        List<Double> splitValues = new ArrayList<>();
-        List<FeatherActionDescriptor> actions = new ArrayList<>();
-        
-        if (controlPoints != null && controlPoints.isArray()) {
-            for (JsonNode cp : controlPoints) {
-                double u = cp.get("u").asDouble();
             
-                int curveIndex = (int) u;
-                double localT = u - curveIndex;
-                curveIndex = Math.max(0, Math.min(curveIndex, beziers.size() - 1));
-                double globalT = (curveIndex + localT) / beziers.size();
-                globalT = Math.max(0.0, Math.min(1.0, globalT));
+            CompiledTrajectory.CompiledVariant variant = flipped 
+                ? compiled.variants.flipped 
+                : compiled.variants.normal;
+            
+            if (variant == null) {
+                System.err.println("[FeatherFlow] Variant not found in compiled artifact");
+                return null;
+            }
+            
+            // Convert compiled segments to ProfiledPath objects
+            List<ProfiledPath> profiledPaths = new ArrayList<>();
+            for (CompiledTrajectory.CompiledSegment segment : variant.segments) {
+                // Segments already contain fully profiled points
+                ArrayList<ProfiledPoint> points = new ArrayList<>(segment.pathPoints);
+                profiledPaths.add(new ProfiledPath(points));
+            }
+            
+            // Convert compiled events to FeatherActionDescriptor
+            List<FeatherActionDescriptor> actions = new ArrayList<>();
+            for (CompiledTrajectory.CompiledEvent event : variant.events) {
+                FeatherActionDescriptor descriptor = new FeatherActionDescriptor();
+                descriptor.t = event.t;
+                descriptor.type = event.type;
+                descriptor.time = event.time; // Absolute time in trajectory
                 
-                // Parse attributes for this control point
-                JsonNode attributes = cp.get("attributes");
-                if (attributes != null && attributes.isArray()) {
-                    for (JsonNode attr : attributes) {
-                        String type = attr.get("type").asText();
-                        
-                        FeatherActionDescriptor descriptor = new FeatherActionDescriptor();
-                        descriptor.t = globalT;
-                        descriptor.type = type;
-                        
-                        switch (type) {
-                            case "stop":
-                                descriptor.duration = attr.has("duration") ? 
-                                    attr.get("duration").asDouble() : 0.0;
-                                splitValues.add(globalT);
-                                break;
-                            case "rotate":
-                                descriptor.heading = attr.has("heading") ? 
-                                    attr.get("heading").asDouble() : 0.0;
-                                break;
-                            case "command":
-                                descriptor.stopping = attr.has("stopping") ? 
-                                    attr.get("stopping").asBoolean() : false;
-                                if (descriptor.stopping) {
-                                    splitValues.add(globalT);
-                                }
-                                break;
-                            case "motionLimits":
-                                descriptor.maxVelocity = attr.has("velocity")
-                                    ? attr.get("velocity").asDouble()
-                                    : 110.0;
-                                descriptor.maxAcceleration = attr.has("acceleration")
-                                    ? attr.get("acceleration").asDouble()
-                                    : 110.0;
-                                break;
-                        }
-                        
-                        actions.add(descriptor);
-                    }
-                }
-            }
-        }
-        
-        // Split path at stop points
-        List<RobotPath> paths;
-        List<Double> normalizedSplitValues = normalizeSplitTs(splitValues);
-        if (!normalizedSplitValues.isEmpty()) {
-            paths = fullPath.split(normalizedSplitValues);
-        } else {
-            paths = List.of(fullPath);
-        }
-
-        // Build a sorted list of (globalT, heading) pairs from "rotate" descriptors
-        List<double[]> rotateKeyframes = new ArrayList<>();
-        for (FeatherActionDescriptor action : actions) {
-            if (action.type.equals("rotate")) {
-                if(!flipped){
-                    rotateKeyframes.add(new double[]{action.t, Math.toRadians((360-(action.heading-90))+180)});
-                } else {
-                    rotateKeyframes.add(new double[]{action.t, Math.toRadians(action.heading - 90)});
-                }
-            }
-        }
-        rotateKeyframes.sort((a, b) -> Double.compare(a[0], b[0]));
-
-        // Compute full path arc-length distances once
-        List<Vector2> allPts = fullPath.getPoints();
-        double[] fullDist = new double[allPts.size()];
-        fullDist[0] = 0.0;
-        for (int i = 1; i < allPts.size(); i++) {
-            fullDist[i] = fullDist[i - 1] + allPts.get(i - 1).dist(allPts.get(i));
-        }
-        double totalPathDist = fullDist[allPts.size() - 1];
-
-        // Convert rotate keyframes from globalT → true arc-length distance
-        // by walking the precomputed fullDist array
-        List<double[]> rotateByDist = new ArrayList<>();
-        for (double[] kf : rotateKeyframes) {
-            double dist = interpolateDistanceAtT(allSampleTs, fullDist, kf[0]);
-            rotateByDist.add(new double[]{dist, kf[1]});
-        }
-        // rotateByDist is already sorted since rotateKeyframes was sorted by t
-
-        // Starting heading = first keyframe heading (path-planning convention).
-        // Ending heading   = last keyframe heading.
-        // If no keyframes, both default to 0.
-        double startRotation = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(0)[1];
-        double endRotation   = rotateByDist.isEmpty() ? 0.0 : rotateByDist.get(rotateByDist.size() - 1)[1];
-
-        List<FeatherActionDescriptor> motionLimitFrames = new ArrayList<>();
-        for (FeatherActionDescriptor action : actions) {
-            if ("motionLimits".equals(action.type)) {
-                motionLimitFrames.add(action);
-            }
-        }
-        motionLimitFrames.sort((a, b) -> Double.compare(a.t, b.t));
-
-        List<ProfiledPath> profiledPaths = new ArrayList<>();
-        List<Double> sortedSplits = new ArrayList<>(normalizedSplitValues);
-        sortedSplits.sort(Double::compareTo);
-        double segmentDistOffset = 0.0;
-
-        for (int segIdx = 0; segIdx < paths.size(); segIdx++) {
-            RobotPath segPath = paths.get(segIdx);
-            List<Vector2> segPts = segPath.getPoints();
-            int pointCount = segPts.size();
-            double segmentStartT = (segIdx == 0) ? 0.0 : sortedSplits.get(segIdx - 1);
-            double segmentEndT = (segIdx < sortedSplits.size()) ? sortedSplits.get(segIdx) : 1.0;
-
-            // Compute cumulative arc-length within this segment
-            double[] segDist = new double[pointCount];
-            segDist[0] = 0.0;
-            for (int i = 1; i < pointCount; i++) {
-                segDist[i] = segDist[i - 1] + segPts.get(i - 1).dist(segPts.get(i));
-            }
-
-            double[] targetHeadings = new double[pointCount];
-            double[] pointMaxVelocities = new double[pointCount];
-            double[] pointMaxAccelerations = new double[pointCount];
-            double segmentSpanT = segmentEndT - segmentStartT;
-
-            for (int i = 0; i < pointCount; i++) {
-                // True arc-length distance of this point along the full path
-                double d = segmentDistOffset + segDist[i];
-
-                double pointT = (pointCount <= 1 || segmentSpanT <= 1e-9)
-                    ? segmentStartT
-                    : segmentStartT + ((double) i / (pointCount - 1)) * segmentSpanT;
-
-                double maxVelocityForPoint = 110.0;
-                double maxAccelerationForPoint = 110.0;
-                for (FeatherActionDescriptor frame : motionLimitFrames) {
-                    if (frame.t <= pointT) {
-                        maxVelocityForPoint = frame.maxVelocity;
-                        maxAccelerationForPoint = frame.maxAcceleration;
-                    } else {
+                Map<String, Object> payload = event.payload;
+                switch (event.type) {
+                    case "stop":
+                        descriptor.duration = ((Number) payload.get("duration")).doubleValue();
                         break;
-                    }
-                }
-                pointMaxVelocities[i] = maxVelocityForPoint;
-                pointMaxAccelerations[i] = maxAccelerationForPoint;
-
-                if (rotateByDist.isEmpty()) {
-                    targetHeadings[i] = 0.0;
-                    continue;
-                }
-
-                // Before first keyframe → hold first keyframe heading
-                if (d <= rotateByDist.get(0)[0]) {
-                    targetHeadings[i] = rotateByDist.get(0)[1];
-                    continue;
-                }
-
-                // After last keyframe → hold last keyframe heading
-                if (d >= rotateByDist.get(rotateByDist.size() - 1)[0]) {
-                    targetHeadings[i] = rotateByDist.get(rotateByDist.size() - 1)[1];
-                    continue;
-                }
-
-                // Between two keyframes → find them and interpolate shortest-path
-                double prevD = rotateByDist.get(0)[0];
-                double prevH = rotateByDist.get(0)[1];
-                double nextD = rotateByDist.get(rotateByDist.size() - 1)[0];
-                double nextH = rotateByDist.get(rotateByDist.size() - 1)[1];
-
-                for (int k = 0; k < rotateByDist.size() - 1; k++) {
-                    if (rotateByDist.get(k)[0] <= d && rotateByDist.get(k + 1)[0] > d) {
-                        prevD = rotateByDist.get(k)[0];
-                        prevH = rotateByDist.get(k)[1];
-                        nextD = rotateByDist.get(k + 1)[0];
-                        nextH = rotateByDist.get(k + 1)[1];
+                    case "rotate":
+                        descriptor.heading = ((Number) payload.get("heading")).doubleValue();
                         break;
-                    }
+                    case "command":
+                        descriptor.stopping = (boolean) payload.get("stopping");
+                        break;
+                    case "motionLimits":
+                        descriptor.maxVelocity = ((Number) payload.get("maxVelocity")).doubleValue();
+                        descriptor.maxAcceleration = ((Number) payload.get("maxAcceleration")).doubleValue();
+                        break;
                 }
-
-                double span  = nextD - prevD;
-                double alpha = (span > 1e-9) ? (d - prevD) / span : 0.0;
-                double delta = nextH - prevH;
-                while (delta >  Math.PI) delta -= 2 * Math.PI;
-                while (delta < -Math.PI) delta += 2 * Math.PI;
-                targetHeadings[i] = prevH + alpha * delta;
+                actions.add(descriptor);
             }
-
-            profiledPaths.add(ProfiledPath.generateSimplifiedProfile(
-                segPath, 170, 3, 170, 170, targetHeadings, pointMaxVelocities, pointMaxAccelerations
-            ));
-
-            segmentDistOffset += segDist[pointCount - 1];
+            
+            return new FeatherPath(profiledPaths, actions);
+        } catch (Exception e) {
+            System.err.println("[FeatherFlow] Failed to load compiled artifact: " + e.getMessage());
+            return null;
         }
-        
-        return new FeatherPath(profiledPaths, actions);
     }
 
-    private static List<Double> normalizeSplitTs(List<Double> splitValues) {
-        if (splitValues.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        List<Double> sorted = new ArrayList<>();
-        for (double t : splitValues) {
-            sorted.add(Math.max(0.0, Math.min(1.0, t)));
-        }
-        sorted.sort(Double::compareTo);
-
-        List<Double> deduped = new ArrayList<>();
-        for (double t : sorted) {
-            if (deduped.isEmpty() || Math.abs(deduped.get(deduped.size() - 1) - t) > 1e-9) {
-                if (t > 1e-9 && t < 1.0 - 1e-9) {
-                    deduped.add(t);
-                }
-            }
-        }
-        return deduped;
-    }
-
-    private static double interpolateDistanceAtT(List<Double> sampleTs, double[] fullDist, double t) {
-        if (sampleTs.isEmpty()) {
-            return 0.0;
-        }
-
-        double clampedT = Math.max(0.0, Math.min(1.0, t));
-        int idx = Collections.binarySearch(sampleTs, clampedT);
-        if (idx >= 0) {
-            return fullDist[idx];
-        }
-
-        int insertion = -idx - 1;
-        if (insertion <= 0) {
-            return fullDist[0];
-        }
-        if (insertion >= sampleTs.size()) {
-            return fullDist[fullDist.length - 1];
-        }
-
-        int lo = insertion - 1;
-        int hi = insertion;
-        double t0 = sampleTs.get(lo);
-        double t1 = sampleTs.get(hi);
-        double alpha = (Math.abs(t1 - t0) > 1e-9) ? (clampedT - t0) / (t1 - t0) : 0.0;
-        return fullDist[lo] + alpha * (fullDist[hi] - fullDist[lo]);
-    }
-    
-    private static Vector2 parsePosition(JsonNode posNode) {
-        if (posNode == null) {
-            throw new IllegalArgumentException("Position node is null");
-        }
-
-        return new Vector2(
-            posNode.get("x").asDouble() - (Constants.FIELD_WIDTH/2),
-            -((Constants.FIELD_HEIGHT/2) -posNode.get("y").asDouble())
-        );
-
-    }
-    
-    private static Vector2 parseOffset(JsonNode offsetNode) {
-        if (offsetNode == null) {
-            return new Vector2(0, 0); 
-        }
-        return new Vector2(
-            offsetNode.get("x").asDouble(),
-            offsetNode.get("y").asDouble()
-        );
-    }
 
     /**
      * Gets a loaded FeatherPath by name.
@@ -404,6 +160,10 @@ public class FeatherFlow {
     
     /**
      * Builds a sequential command group from a FeatherPath and provided commands.
+     * 
+     * For compiled trajectories, uses precomputed absolute times from the artifact.
+     * For legacy trajectories, falls back to normalized t-based timing.
+     * 
      * @param pathName Name of the path to follow
      * @param commands Commands to be associated with command-type actions in the path (in order)
      * @return SequentialCommandGroup containing the path following commands
@@ -420,17 +180,38 @@ public class FeatherFlow {
         
         int commandIndex = 0;
         
+        // Determine if we have absolute timing (from compiled artifact) or legacy timing
+        boolean hasAbsoluteTiming = hasAbsoluteTimingData(featherPath);
+        
         for (int pathIndex = 0; pathIndex < featherPath.paths.size(); pathIndex++) {
             ProfiledPath currentPath = featherPath.paths.get(pathIndex);
             
             double segmentStartT = pathIndex == 0 ? 0.0 : getPathSegmentStartT(featherPath, pathIndex);
             double segmentEndT = getPathSegmentEndT(featherPath, pathIndex);
+            
+            double segmentStartTime = pathIndex == 0 ? 0.0 : getPathSegmentStartTime(featherPath, pathIndex);
+            double segmentEndTime = getPathSegmentEndTime(featherPath, pathIndex);
         
             List<FeatherEvent> eventsForSegment = new ArrayList<>();
             
             for (FeatherActionDescriptor action : featherPath.actions) {
-                if (action.t >= segmentStartT && action.t < segmentEndT) {
-                    double normalizedT = (action.t - segmentStartT) / (segmentEndT - segmentStartT);
+                boolean inSegment = hasAbsoluteTiming
+                    ? (action.time >= segmentStartTime && action.time < segmentEndTime)
+                    : (action.t >= segmentStartT && action.t < segmentEndT);
+                
+                if (inSegment) {
+                    double normalizedT;
+                    if (hasAbsoluteTiming) {
+                        // Use precomputed absolute time
+                        normalizedT = (segmentEndTime - segmentStartTime) > 1e-9
+                            ? (action.time - segmentStartTime) / (segmentEndTime - segmentStartTime)
+                            : 0.5;
+                    } else {
+                        // Fall back to normalized t
+                        normalizedT = (segmentEndT - segmentStartT) > 1e-9
+                            ? (action.t - segmentStartT) / (segmentEndT - segmentStartT)
+                            : 0.5;
+                    }
                     
                     if (action.type.equals("command") && !action.stopping) {
                         if (commandIndex < commands.length) {
@@ -438,7 +219,7 @@ public class FeatherFlow {
                             commandIndex++;
                         }
                     } else if (action.type.equals("rotate")) {
-                        //TODO
+                        //TODO: Handle rotate actions
                     }
                 }
             }
@@ -450,7 +231,11 @@ public class FeatherFlow {
             group.addCommands(new FollowPath(currentPath, events));
             
             for (FeatherActionDescriptor action : featherPath.actions) {
-                if (Math.abs(action.t - segmentEndT) < 0.001) {
+                boolean atSegmentEnd = hasAbsoluteTiming
+                    ? (Math.abs(action.time - segmentEndTime) < 0.001)
+                    : (Math.abs(action.t - segmentEndT) < 0.001);
+                
+                if (atSegmentEnd) {
                     if (action.type.equals("stop")) {
                         group.addCommands(new WaitCommand(action.duration));
                     } else if (action.type.equals("command") && action.stopping) {
@@ -497,5 +282,67 @@ public class FeatherFlow {
             return splitPoints.get(segmentIndex);
         }
         return 1.0; 
+    }
+
+    /**
+     * Checks if actions have precomputed absolute timing (from compiled artifacts).
+     * Legacy trajectories have time field = 0.
+     */
+    private static boolean hasAbsoluteTimingData(FeatherPath featherPath) {
+        if (featherPath.actions.isEmpty()) {
+            return false;
+        }
+        
+        // If any action has non-zero time, we have absolute timing
+        for (FeatherActionDescriptor action : featherPath.actions) {
+            if (action.time > 1e-9) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets the start time for a path segment using precomputed absolute times.
+     */
+    private static double getPathSegmentStartTime(FeatherPath featherPath, int segmentIndex) {
+        if (segmentIndex == 0) return 0.0;
+        
+        List<Double> splitTimes = new ArrayList<>();
+        for (FeatherActionDescriptor action : featherPath.actions) {
+            if (action.type.equals("stop") || (action.type.equals("command") && action.stopping)) {
+                splitTimes.add(action.time);
+            }
+        }
+        splitTimes.sort(Double::compareTo);
+        
+        if (segmentIndex - 1 < splitTimes.size()) {
+            return splitTimes.get(segmentIndex - 1);
+        }
+        return 0.0;
+    }
+
+    /**
+     * Gets the end time for a path segment using precomputed absolute times.
+     */
+    private static double getPathSegmentEndTime(FeatherPath featherPath, int segmentIndex) {
+        List<Double> splitTimes = new ArrayList<>();
+        for (FeatherActionDescriptor action : featherPath.actions) {
+            if (action.type.equals("stop") || (action.type.equals("command") && action.stopping)) {
+                splitTimes.add(action.time);
+            }
+        }
+        splitTimes.sort(Double::compareTo);
+        
+        if (segmentIndex < splitTimes.size()) {
+            return splitTimes.get(segmentIndex);
+        }
+        
+        // Return total trajectory time
+        double maxTime = 0.0;
+        for (FeatherActionDescriptor action : featherPath.actions) {
+            maxTime = Math.max(maxTime, action.time);
+        }
+        return maxTime > 0 ? maxTime : Double.MAX_VALUE;
     }
 }
