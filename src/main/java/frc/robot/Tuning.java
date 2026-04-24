@@ -88,9 +88,9 @@ public final class Tuning {
         public static final double HOOD_KI = 0.000;
         public static final double HOOD_DEADBAND = 0.2;
 
-        public static final double FLYWHEEL_P = 0.5;
+        public static final double FLYWHEEL_P = 0.6;
         public static final double FLYWHEEL_I = 0.0;
-        public static final double FLYWHEEL_D = 0.0;
+        public static final double FLYWHEEL_D = 0.001;
         public static final double FLYWHEEL_KV = 0.1315;
 
         public static final double FLYWHEEL_SPEED_DEADBAND = 100; // bro this is in rpm who set it to 0.1
@@ -101,10 +101,10 @@ public final class Tuning {
         public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
             new ShooterTableValue(75.0, Math.toRadians(25.0), 2125),  //g
             new ShooterTableValue(90.0, Math.toRadians(25.0), 2150),  //g
-            new ShooterTableValue(106.0, Math.toRadians(25.0), 2250), //g
-            new ShooterTableValue(120.0, Math.toRadians(25.0), 2375), //g
+            new ShooterTableValue(106.0, Math.toRadians(25.0), 2250), //
+            new ShooterTableValue(120.0, Math.toRadians(25.0), 2350), //g
             new ShooterTableValue(136.0, Math.toRadians(25.0), 2425), //g
-            new ShooterTableValue(150.0, Math.toRadians(25.0), 2550), //g final rpm
+            new ShooterTableValue(150.0, Math.toRadians(25.0), 2520), //g
             new ShooterTableValue(165.0, Math.toRadians(30.0), 2550), //g
             new ShooterTableValue(187.0, Math.toRadians(34.0), 2650), //prettygood
             new ShooterTableValue(220.0, Math.toRadians(38.0), 2700)  //g
