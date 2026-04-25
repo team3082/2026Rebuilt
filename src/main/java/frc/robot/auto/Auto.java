@@ -3,6 +3,8 @@ package frc.robot.auto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.auto.commands.FullForceSwerve;
+import frc.robot.auto.commands.RotateToTag;
 import frc.robot.auto.commands.Shoot;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
@@ -33,12 +35,34 @@ public class Auto {
     public SequentialCommandGroup CluckRunLeft() {
 
         return new SequentialCommandGroup(
-            FeatherFlow.buildFeatherAuto("CluckRunLeft", true,
+            FeatherFlow.buildFeatherAuto("CluckRunLeft", true, true,
                 new Shoot(),
                 new Shoot()
             )
         ); 
     }
+
+    @AutoRoutine()
+    public SequentialCommandGroup CluckScape() {
+
+        return new SequentialCommandGroup(
+            FeatherFlow.buildFeatherAuto("CluckScapeStart",
+                new Shoot(),
+                new Shoot()
+            ),
+
+            new SequentialCommandGroup(
+                new FullForceSwerve(),
+                new RotateToTag(1, false)
+            ),
+
+            FeatherFlow.buildFeatherAuto("CluckScapeEnd", false, false, 
+                new Shoot(),
+                new Shoot()
+            )
+        ); 
+    }
+    
 
     /**
      * Gets the auto selector from {@link RoutineManager}

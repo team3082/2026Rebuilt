@@ -155,7 +155,7 @@ public class FeatherFlow {
     }
 
     public static SequentialCommandGroup buildFeatherAuto(String pathName, Command... commands) {
-        return buildFeatherAuto(pathName, false, commands);
+        return buildFeatherAuto(pathName, false, true, commands);
     }
     
     /**
@@ -168,16 +168,18 @@ public class FeatherFlow {
      * @param commands Commands to be associated with command-type actions in the path (in order)
      * @return SequentialCommandGroup containing the path following commands
      */
-    public static SequentialCommandGroup buildFeatherAuto(String pathName, boolean flipped,  Command... commands) {
+    public static SequentialCommandGroup buildFeatherAuto(String pathName, boolean flipped, boolean resetOdo,  Command... commands) {
         System.out.println("[FeatherFlow] Building auto for path: " + pathName);
         FeatherPath featherPath = getPath(pathName, flipped);
         
         SequentialCommandGroup group = new SequentialCommandGroup();
 
-        group.addCommands(new InstantCommand(()->{
-            SwervePosition.setPosition(featherPath.paths.get(0).getStartPoint());
-        }));
-        
+        if (resetOdo) {
+            group.addCommands(new InstantCommand(()->{
+                SwervePosition.setPosition(featherPath.paths.get(0).getStartPoint());
+            }));
+        }
+
         int commandIndex = 0;
         
         // Determine if we have absolute timing (from compiled artifact) or legacy timing

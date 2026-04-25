@@ -74,7 +74,7 @@
     },
     {
       "position": {
-        "x": 437.30762462334616,
+        "x": 430.61,
         "y": 98.07000127238237
       },
       "handleOutOffset": {
@@ -141,8 +141,8 @@
     }
   ],
   "created": "2026-04-24T21:54:24.486Z",
-  "lastModified": "2026-04-24T22:07:10.038Z",
+  "lastModified": "2026-04-25T15:46:30.577Z",
   "compiledVersion": 1,
-  "compiledAt": "2026-04-24T21:54:24.505Z",
-  "compiledFileName": "Untitled.fftraj.json"
+  "compiledAt": "2026-04-25T15:46:09.726Z",
+  "compiledFileName": "CluckScapeStart.fftraj.json"
 }

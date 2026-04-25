@@ -103,5 +103,13 @@
   "snapSettings": {
     "enabled": true,
     "radius": 6
+  },
+  "motionSettings": {
+    "maxTranslationalVelocity": 100,
+    "maxRotationalVelocity": 5,
+    "maxWheelSpeed": 100,
+    "maxAcceleration": 100,
+    "maxLateralAcceleration": 100,
+    "swerveRadius": 16
   }
 }
