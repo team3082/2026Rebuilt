@@ -50,7 +50,8 @@ public class HolonomicDriveController {
      * @return Velocity command as a percentage (-1 to 1) per axis.
      */
     public Vector2 calculate() {
-        double currentTime = RTime.now() - startTime;
+        ProfiledPoint nearestPoint = path.getClosestProfiledPoint(SwervePosition.getPosition());
+        double currentTime = nearestPoint.getTime();
 
         if (currentTime >= path.getDuration()) {
             currentTime = path.getDuration();
@@ -62,6 +63,8 @@ public class HolonomicDriveController {
         double lookaheadTime = Math.min(currentTime + Tuning.holonomic_lookahead_time, path.getDuration());
         ProfiledPoint lookaheadPoint = path.getPointAtTime(lookaheadTime);
         ProfiledPoint currentPoint = path.getPointAtTime(currentTime);
+            ProfiledPoint nearestPoint = path.getClosestProfiledPoint(SwervePosition.getPosition());
+            double currentTime = (nearestPoint != null) ? nearestPoint.getTime() : (RTime.now() - startTime);
         Vector2 lookaheadPos = lookaheadPoint.getPosition();
         // Vector2 desiredVelocity = currentPoint.getVelocity()
         //         .rotate(-Math.PI / 2)
@@ -82,12 +85,11 @@ public class HolonomicDriveController {
         }
 
         // Log against the *current* desired position for error visibility
-        Vector2 desiredPos = path.getPointAtTime(currentTime).getPosition();
-        // SmartDashboard.putNumber("Holonomic/xPosError", desiredPos.x - currentPos.x);
-        // SmartDashboard.putNumber("Holonomic/yPosError", desiredPos.y - currentPos.y);
-        // SmartDashboard.putNumber("Holonomic/ffMag", desiredVelocity.mag());
-        // SmartDashboard.putNumber("Holonomic/feedbackMag", feedbackVector.mag());
-        // SmartDashboard.putNumber("Holonomic/combinedMag", combined.mag());
+            Vector2 desiredPos = path.getPointAtTime(currentTime).getPosition();
+        Vector2 posError = desiredPos.sub(currentPos);
+        SmartDashboard.putNumber("Holonomic/errorMag", posError.mag());
+        SmartDashboard.putNumber("Holonomic/feedbackMag", feedbackVector.mag());
+
 
         return combined;
     }
@@ -125,6 +127,7 @@ public class HolonomicDriveController {
         SmartDashboard.putNumber("Holonomic/headingError", desiredHeading - currentHeading);
         SmartDashboard.putNumber("Holonomic/rotFeedback", rotFeedback);
         SmartDashboard.putNumber("Holonomic/rotOutput", rotOutput);
+         
 
         return rotOutput;
     }

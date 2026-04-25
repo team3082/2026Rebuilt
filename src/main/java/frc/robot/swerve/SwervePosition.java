@@ -91,10 +91,10 @@ public class SwervePosition {
         poseHistory.put(now, stateEstimate.copy());
 
         //5. Retroactive vision correction 
-        Optional<Matrix<N2, N1>> visionMeasurement = VisionManager.getMatrixPosition();
-        if (visionMeasurement.isPresent()) {
-            retroactiveCorrect(visionMeasurement.get(), VisionManager.getTimestampSeconds());
-        }
+        // Optional<Matrix<N2, N1>> visionMeasurement = VisionManager.getMatrixPosition();
+        // if (visionMeasurement.isPresent()) {
+        //     retroactiveCorrect(visionMeasurement.get(), VisionManager.getTimestampSeconds());
+        // }
 
         //6. Publish outputs
         position = new Vector2(stateEstimate.get(0, 0), stateEstimate.get(1, 0));

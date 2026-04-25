@@ -24,6 +24,7 @@ public class Auto {
         Pigeon.setYaw(-90);
 
         return new SequentialCommandGroup(
+ 
             FeatherFlow.buildFeatherAuto("CluckRunRight",
                 new Shoot(),
                 new Shoot()
