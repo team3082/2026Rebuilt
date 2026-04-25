@@ -102,7 +102,7 @@ public class ShooterManager {
     }
 
     public static void zeroHood() {
-        shooterState = ShooterState.ZEROING;
+        Shooter.zeroHood();
     }
 
     private static void setShooterAngleAndSpeed() {

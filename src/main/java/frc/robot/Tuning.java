@@ -115,7 +115,7 @@ public final class Tuning {
             new ShooterTableValue(60.0, Math.toRadians(40.0), 1900),
             new ShooterTableValue(150.0, Math.toRadians(40.0), 2450),//g
             new ShooterTableValue(180.0, Math.toRadians(40.0), 2600),//g
-            new ShooterTableValue(240.0, Math.toRadians(40.0), 32900),
+            new ShooterTableValue(240.0, Math.toRadians(40.0), 3200),
             new ShooterTableValue(300.0, Math.toRadians(40.0), 3400),
             new ShooterTableValue(360.0, Math.toRadians(40.0), 3800),
             new ShooterTableValue(420.0, Math.toRadians(40.0), 4100),
@@ -133,7 +133,7 @@ public final class Tuning {
     }
 
     public static final class Intake {
-        public static final double INTAKE_SPEED = -35;
+        public static final double INTAKE_SPEED = -45;
         public static final double FEED_SPEED = -50;
         public static final double REVERSE_SPEED = 40;
         

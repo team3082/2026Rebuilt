@@ -87,6 +87,10 @@ public class Shooter {
         }
     }
 
+    public static void zeroHood() {
+        hoodMotor.setPosition(0);
+    }
+
     /**
      * Sets the target hood angle.
      * @param angle Target angle in radians
