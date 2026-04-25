@@ -53,7 +53,7 @@ public class Auto {
 
             new SequentialCommandGroup(
                 new FullForceSwerve(),
-                new RotateToTag(1, false)
+                new RotateToTag(.1, false)
             ),
 
             FeatherFlow.buildFeatherAuto("CluckScapeEnd", false, false, 
