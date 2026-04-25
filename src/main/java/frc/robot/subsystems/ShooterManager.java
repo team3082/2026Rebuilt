@@ -31,6 +31,8 @@ public class ShooterManager {
 
     public static void update() { 
 
+        setTarget(AutoTarget.getTarget());
+
         switch (shooterState) {
             case IDLE:
                 Shooter.setTargetAngle(0);

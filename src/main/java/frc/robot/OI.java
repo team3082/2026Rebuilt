@@ -6,7 +6,6 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.ShooterManager;
 import frc.robot.subsystems.Intake.IntakeState;
-import frc.robot.subsystems.ShooterManager.ShooterManagerState;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.Odometry;

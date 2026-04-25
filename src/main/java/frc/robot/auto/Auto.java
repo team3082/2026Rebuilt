@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.commands.FullForceSwerve;
 import frc.robot.auto.commands.RotateToTag;
 import frc.robot.auto.commands.Shoot;
+import frc.robot.auto.commands.StartIntake;
 import frc.robot.auto.routineManager.AutoRoutine;
 import frc.robot.auto.routineManager.RoutineManager;
 import frc.robot.utils.trajectories.FeatherFlow;
@@ -24,6 +25,7 @@ public class Auto {
         Pigeon.setYaw(-90);
 
         return new SequentialCommandGroup(
+            new StartIntake(),
             FeatherFlow.buildFeatherAuto("CluckRunRight",
                 new Shoot(),
                 new Shoot()
@@ -33,9 +35,12 @@ public class Auto {
 
     @AutoRoutine()
     public SequentialCommandGroup CluckRunLeft() {
+        Pigeon.setYaw(90);
 
         return new SequentialCommandGroup(
-            FeatherFlow.buildFeatherAuto("CluckRunLeft", true, true,
+            new StartIntake(),
+
+            FeatherFlow.buildFeatherAuto("CluckRunLeft", true, false,
                 new Shoot(),
                 new Shoot()
             )
@@ -46,6 +51,8 @@ public class Auto {
     public SequentialCommandGroup CluckScape() {
 
         return new SequentialCommandGroup(
+            new StartIntake(),
+
             FeatherFlow.buildFeatherAuto("CluckScapeStart",
                 new Shoot(),
                 new Shoot()
