@@ -127,7 +127,7 @@
     },
     {
       "position": {
-        "x": 422.86195057927324,
+        "x": 410,
         "y": 177.14290343814758
       },
       "handleOutOffset": {
@@ -343,8 +343,8 @@
     }
   ],
   "created": "2026-04-24T22:16:10.275Z",
-  "lastModified": "2026-04-25T16:11:06.700Z",
+  "lastModified": "2026-04-25T16:50:46.919Z",
   "compiledVersion": 1,
-  "compiledAt": "2026-04-25T16:10:57.020Z",
+  "compiledAt": "2026-04-25T16:50:04.781Z",
   "compiledFileName": "CluckRunLeft.fftraj.json"
 }
