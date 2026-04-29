@@ -40,21 +40,19 @@ public final class Tuning {
     public static final double CURVE_DEADBAND = 0.5; // bro this is inches who had it at 0.001
     public static final double ROT_DEADBAND = 0.005; // radians
     
-    // Holonomic Drive Controller Current
-    public static final double holonomic_pos_kp = 0.05;
-    public static final double holonomic_pos_ki = 0.00001;
-    public static final double holonomic_pos_kd = 0.01;
+    // Holonomic Drive Controller
+    public static final double holonomic_pos_kp = 0.04;
+    public static final double holonomic_pos_ki = 0;
+    public static final double holonomic_pos_kd = 0.02;
 
     public static final double holonomic_rot_kp = 0.45;
-    public static final double holonomic_rot_ki = 0.03;
+    public static final double holonomic_rot_ki = 0.0;
     public static final double holonomic_rot_kd = 0.06;
 
 
     public static final double holonomic_vel_kp = 0.05;
     public static final double holonomic_vel_ki = 0.0;
     public static final double holonomic_vel_kd = 0.0;
-
-
 
     // Holonomic Drive Controller 10k
     // public static final double holonomic_pos_kp = 0.05;
@@ -119,7 +117,7 @@ public final class Tuning {
             new ShooterTableValue(75.0, Math.toRadians(25.0), 2125),  //g
             new ShooterTableValue(90.0, Math.toRadians(25.0), 2150),  //g
             new ShooterTableValue(106.0, Math.toRadians(25.0), 2250), //
-            new ShooterTableValue(120.0, Math.toRadians(25.0), 2350), //g
+            new ShooterTableValue(120.0, Math.toRadians(25.0), 2320), //g
             new ShooterTableValue(136.0, Math.toRadians(25.0), 2425), //g
             new ShooterTableValue(150.0, Math.toRadians(25.0), 2520), //g
             new ShooterTableValue(165.0, Math.toRadians(30.0), 2550), //g
@@ -128,16 +126,16 @@ public final class Tuning {
         };
 
         public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = {
-            new ShooterTableValue(0.0, Math.toRadians(50.0), 800),
-            new ShooterTableValue(60.0, Math.toRadians(50.0), 1000),
-            new ShooterTableValue(120.0, Math.toRadians(50.0), 1300),
-            new ShooterTableValue(180.0, Math.toRadians(50.0), 1600),
-            new ShooterTableValue(240.0, Math.toRadians(50.0), 2000),
-            new ShooterTableValue(300.0, Math.toRadians(50.0), 2300),
-            new ShooterTableValue(360.0, Math.toRadians(50.0), 2600),
-            new ShooterTableValue(420.0, Math.toRadians(50.0), 3000),
-            new ShooterTableValue(480.0, Math.toRadians(50.0), 3300),
-            new ShooterTableValue(540.0, Math.toRadians(50.0), 3600)
+            new ShooterTableValue(0.0, Math.toRadians(40.0), 800),
+            new ShooterTableValue(60.0, Math.toRadians(40.0), 1900),
+            new ShooterTableValue(150.0, Math.toRadians(40.0), 2450),//g
+            new ShooterTableValue(180.0, Math.toRadians(40.0), 2600),//g
+            new ShooterTableValue(240.0, Math.toRadians(40.0), 3200),
+            new ShooterTableValue(300.0, Math.toRadians(40.0), 3400),
+            new ShooterTableValue(360.0, Math.toRadians(40.0), 3800),
+            new ShooterTableValue(420.0, Math.toRadians(40.0), 4100),
+            new ShooterTableValue(480.0, Math.toRadians(40.0), 4500),
+            new ShooterTableValue(540.0, Math.toRadians(40.0), 4900)
         };
 
         public static final double LOOK_AHEAD_TIME_K = 0.5;
@@ -145,12 +143,12 @@ public final class Tuning {
     }
 
     public static final class Indexer {
-        public static final double SPINDEXER_SPEED = 0.8;
-        public static final double HANDOFF_SPEED = -0.8;
+        public static final double SPINDEXER_SPEED = 0.65;
+        public static final double HANDOFF_SPEED = -0.65;
     }
 
     public static final class Intake {
-        public static final double INTAKE_SPEED = -35;
+        public static final double INTAKE_SPEED = -45;
         public static final double FEED_SPEED = -50;
         public static final double REVERSE_SPEED = 40;
         

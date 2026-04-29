@@ -41,10 +41,10 @@ public class SwervePosition {
     private static Matrix<N2, N2> uncertainty = Matrix.eye(Nat.N2()).times(0.1);
 
     /** How much uncertainty grows per meter of odometry travel. */
-    private static final double ODOM_TRUST_COEFFICIENT = 0.05;
+    private static final double ODOM_TRUST_COEFFICIENT = 10000;
 
     /** Vision measurement noise (R). Lower → trust vision more. */
-    private static final Matrix<N2, N2> R_VISION = Matrix.eye(Nat.N2()).times(0.01);
+    private static final Matrix<N2, N2> R_VISION = Matrix.eye(Nat.N2()).times(0.0000000000001);
 
     /**
      * History of odometry snapshots, keyed by timestamp (seconds).
@@ -90,7 +90,7 @@ public class SwervePosition {
         // Clone so later mutations to stateEstimate don't corrupt the stored snapshot.
         poseHistory.put(now, stateEstimate.copy());
 
-        //5. Retroactive vision correction 
+        // //5. Retroactive vision correction 
         // Optional<Matrix<N2, N1>> visionMeasurement = VisionManager.getMatrixPosition();
         // if (visionMeasurement.isPresent()) {
         //     retroactiveCorrect(visionMeasurement.get(), VisionManager.getTimestampSeconds());
