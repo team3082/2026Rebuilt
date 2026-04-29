@@ -1,8 +1,8 @@
 package frc.robot.auto.commands;
 
 import frc.robot.utils.Vector2;
+import frc.robot.utils.trajectories.PathPoint;
 import frc.robot.utils.trajectories.ProfiledPath;
-import frc.robot.utils.trajectories.ProfiledPoint;
 import frc.robot.Constants;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
@@ -61,8 +61,8 @@ public class HolonomicDriveController {
         // Using the lookahead point for FF keeps it temporally consistent with
         // the feedback term, preventing the mismatch that causes waypoint oscillation.
         double lookaheadTime = Math.min(currentTime + Tuning.holonomic_lookahead_time, path.getDuration());
-        ProfiledPoint lookaheadPoint = path.getPointAtTime(lookaheadTime);
-        ProfiledPoint currentPoint = path.getPointAtTime(currentTime);
+        PathPoint lookaheadPoint = path.getPointAtTime(lookaheadTime);
+        PathPoint currentPoint = path.getPointAtTime(currentTime);
         Vector2 lookaheadPos = lookaheadPoint.getPosition();
         Vector2 desiredVelocity = currentPoint.getVelocity()
                 .rotate(-Math.PI / 2)
@@ -111,7 +111,7 @@ public class HolonomicDriveController {
             return 0.0;
         }
 
-        ProfiledPoint desiredPoint = path.getPointAtTime(currentTime + 0.005);
+        PathPoint desiredPoint = path.getPointAtTime(currentTime + 0.005);
         double desiredHeading = desiredPoint.getHeading();
         double desiredRotVel  = desiredPoint.getRotationalVelocity();
         double currentHeading = Pigeon.getRotationRad();

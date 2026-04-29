@@ -1,28 +1,40 @@
 package frc.robot.utils.trajectories;
 
 import java.util.List;
+import frc.robot.utils.Vector2;
 
-/**
- * Simple holder for a parsed feather trajectory file.
- * Contains the split RobotPaths and a list of action descriptors parsed from the .ff file.
- */
 public class FeatherPath {
-    public final List<ProfiledPath> paths;
-    public final List<FeatherActionDescriptor> actions;
 
-    public FeatherPath(List<ProfiledPath> paths, List<FeatherActionDescriptor> actions) {
+    public final List<ProfiledPath> paths; // kept as "paths" to match original field name
+    public final List<FeatherActionDescriptor> actions;
+    public final double totalTime;
+
+    public FeatherPath(List<ProfiledPath> paths, List<FeatherActionDescriptor> actions, double totalTime) {
         this.paths = paths;
         this.actions = actions;
+        this.totalTime = totalTime;
+    }
+
+    public Vector2 getStartPosition() {
+        if (paths.isEmpty())
+            return new Vector2(0, 0);
+        return paths.get(0).getStartPoint();
+    }
+
+    public double getStartHeading() {
+        if (paths.isEmpty())
+            return 0;
+        return paths.get(0).getStartHeading();
     }
 
     public static class FeatherActionDescriptor {
-        public double t;                    // Normalized path parameter [0, 1]
-        public String type;                 // "stop", "command", "rotate", "motionLimits"
-        public double time;                 // Absolute cumulative time in trajectory
-        public double duration;             // For "stop" type
-        public double heading;              // For "rotate" type
-        public boolean stopping;            // For "command" type
-        public double maxVelocity;          // For "motionLimits" type
-        public double maxAcceleration;      // For "motionLimits" type
+        public double t;
+        public String type;
+        public double time;
+        public double duration;
+        public double heading;
+        public boolean stopping;
+        public double maxVelocity;
+        public double maxAcceleration;
     }
 }

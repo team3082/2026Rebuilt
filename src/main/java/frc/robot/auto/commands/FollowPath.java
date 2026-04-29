@@ -7,8 +7,8 @@ import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherEvent;
+import frc.robot.utils.trajectories.PathPoint;
 import frc.robot.utils.trajectories.ProfiledPath;
-import frc.robot.utils.trajectories.ProfiledPoint;
 
 /**
  * Command that follows a {@link RobotPath} using a {@link PurePursuit} algorithm
@@ -70,7 +70,7 @@ public class FollowPath extends Command {
     SwerveManager.rotateAndDrive(rotOutput, driveVector);
 
     double duration = path.getDuration();
-    // ProfiledPoint point = path.getPointAtTime(elapsed);
+    // PathPoint point = path.getPointAtTime(elapsed);
     // SwervePosition.setPosition(point.getPosition());
     // Pigeon.setSimulatedRot(point.getHeading());
 

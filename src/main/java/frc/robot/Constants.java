@@ -116,6 +116,8 @@ public class Constants {
     public static final double METERSTOINCHES = 39.3701;
     public static final double FIELD_HEIGHT = 317.7;
     public static final double FIELD_WIDTH = 651.2; 
+    public static final double FIELD_HEIGHT_METERS = FIELD_HEIGHT / METERSTOINCHES;
+    public static final double FIELD_WIDTH_METERS = FIELD_WIDTH / METERSTOINCHES;
 
     public static final boolean REPLAY = false;
     public static final double ROTATAIONAL_DEADBAND = 0;

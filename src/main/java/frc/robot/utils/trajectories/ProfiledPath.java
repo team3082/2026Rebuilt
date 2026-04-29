@@ -1,166 +1,115 @@
 package frc.robot.utils.trajectories;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import frc.robot.utils.Vector2;
 
 public class ProfiledPath {
-    private ArrayList<ProfiledPoint> profiledPoints;
 
-    public ProfiledPath(ArrayList<ProfiledPoint> profiledPoints) {
-        this.profiledPoints = profiledPoints;
+    private final List<PathPoint> points;
+
+    public ProfiledPath(List<PathPoint> points) {
+        this.points = points;
     }
-    
-    public ProfiledPoint getPointAtTime(double t){
-        int closestIndex = 0;
-        for (int index = 0; index < profiledPoints.size() - 1; index++) {
-            if (profiledPoints.get(index).getTime() <= t) {
-                closestIndex = index;
-            } else {
+
+    public PathPoint getPointAtTime(double t) {
+        if (points.size() == 1)
+            return points.get(0).copy();
+        int lo = 0;
+        for (int i = 0; i < points.size() - 1; i++) {
+            if (points.get(i).getTime() <= t)
+                lo = i;
+            else
                 break;
+        }
+        int hi = Math.min(lo + 1, points.size() - 1);
+        if (lo == hi)
+            return points.get(lo).copy();
+        PathPoint p0 = points.get(lo), p1 = points.get(hi);
+        double dt = p1.getTime() - p0.getTime();
+        double a = dt > 1e-9 ? (t - p0.getTime()) / dt : 0.0;
+        return interpolate(p0, p1, a);
+    }
+
+    public PathPoint getClosestPoint(Vector2 robotPos) {
+        if (points.isEmpty())
+            return null;
+        if (points.size() == 1)
+            return points.get(0).copy();
+        double minDist = Double.POSITIVE_INFINITY;
+        int bestIdx = 0;
+        double bestA = 0;
+        for (int i = 0; i < points.size() - 1; i++) {
+            Vector2 a = points.get(i).getPosition(), b = points.get(i + 1).getPosition();
+            Vector2 ab = b.sub(a), ar = robotPos.sub(a);
+            double abLenSq = ab.x * ab.x + ab.y * ab.y;
+            double alpha = abLenSq > 0 ? Math.max(0, Math.min(1, (ar.x * ab.x + ar.y * ab.y) / abLenSq)) : 0;
+            double dist = a.add(ab.mul(alpha)).dist(robotPos);
+            if (dist < minDist) {
+                minDist = dist;
+                bestIdx = i;
+                bestA = alpha;
             }
         }
-        ProfiledPoint p0 = profiledPoints.get(closestIndex);
-        ProfiledPoint p1 = profiledPoints.get(closestIndex + 1);
-        
-     
-        // Calculate how far we are into the segment (0.0 to 1.0).
-        double ratio = (t - p0.getTime()) / (p1.getTime() - p0.getTime());
-
-        // Linearly interpolate all values.
-        Vector2 position = p0.getPosition().mul(1 - ratio).add(p1.getPosition().mul(ratio));
-        Vector2 velocity = p0.getVelocity().mul(1 - ratio).add(p1.getVelocity().mul(ratio));
-        double curvature = p0.getCurvature() * (1 - ratio) + p1.getCurvature() * ratio;
-        double acceleration = p0.getAcceleration() * (1 - ratio) + p1.getAcceleration() * ratio;
-        double distance = p0.getDistance() * (1 - ratio) + p1.getDistance() * ratio;
-        double heading = interpolateHeading(p0.getHeading(), p1.getHeading(), ratio);
-        double rotVel = p0.getRotationalVelocity() * (1 - ratio) + p1.getRotationalVelocity() * ratio;
-
-        ProfiledPoint result = new ProfiledPoint(position, velocity, curvature, acceleration, t, distance);
-        result.setHeading(heading);
-        result.setRotationalVelocity(rotVel);
-        return result;
+        return interpolate(points.get(bestIdx), points.get(bestIdx + 1), bestA);
     }
-    
-    /**
-     * Returns the shortest distance from the given robot position to this path.
-     * The path is treated as a polyline connecting the sequence of ProfiledPoints.
-     * If the path has fewer than 2 points, distance to the single point (or 0 if empty)
-     * is returned.
-     *
-     * @param robotPos robot position in the same coordinate frame as ProfiledPoint positions
-     * @return shortest distance (double)
-     */
-    public double getClosestPointToRobotDistance(Vector2 robotPos) {
-        if (profiledPoints == null || profiledPoints.isEmpty()) return 0.0;
-        if (profiledPoints.size() == 1) return profiledPoints.get(0).getPosition().dist(robotPos);
 
+    public double getClosestPointDistance(Vector2 robotPos) {
+        if (points.isEmpty())
+            return 0;
+        if (points.size() == 1)
+            return points.get(0).getPosition().dist(robotPos);
         double minDist = Double.POSITIVE_INFINITY;
-
-        for (int i = 0; i < profiledPoints.size() - 1; i++) {
-          
+        for (int i = 0; i < points.size() - 1; i++) {
+            Vector2 a = points.get(i).getPosition(), b = points.get(i + 1).getPosition();
+            Vector2 ab = b.sub(a), ap = robotPos.sub(a);
+            double abLenSq = ab.x * ab.x + ab.y * ab.y;
+            double alpha = abLenSq > 0 ? Math.max(0, Math.min(1, (ap.x * ab.x + ap.y * ab.y) / abLenSq)) : 0;
+            double dist = a.add(ab.mul(alpha)).dist(robotPos);
+            if (dist < minDist)
+                minDist = dist;
         }
-
         return minDist;
     }
 
-    /** Convenience overload accepting coordinates */
-    public double getClosestPointToRobotDistance(double rx, double ry) {
-        return getClosestPointToRobotDistance(new Vector2(rx, ry));
-    }
-
-    /**
-     * Finds and returns a ProfiledPoint on this path that is closest to the given robot
-     * position. The returned ProfiledPoint is an interpolated point on the segment
-     * between the two nearest sample points (so time, distance and other values
-     * are interpolated linearly).
-     *
-     * @param robotPos robot position in the same coordinate frame as ProfiledPoint positions
-     * @return interpolated ProfiledPoint nearest to robotPos, or null if path is empty
-     */
-    public ProfiledPoint getClosestProfiledPoint(Vector2 robotPos) {
-        if (profiledPoints == null || profiledPoints.isEmpty()) return null;
-        if (profiledPoints.size() == 1) {
-            ProfiledPoint single = profiledPoints.get(0);
-            // return a copy
-            ProfiledPoint copy = new ProfiledPoint(single.getPosition().copy(), single.getVelocity() != null ? single.getVelocity().copy() : new Vector2(), single.getCurvature(), single.getAcceleration(), single.getTime(), single.getDistance());
-            copy.setHeading(single.getHeading());
-            copy.setRotationalVelocity(single.getRotationalVelocity());
-            return copy;
-        }
-
-        double minDist = Double.POSITIVE_INFINITY;
-        int bestIndex = 0;
-        double bestT = 0.0;
-
-        for (int i = 0; i < profiledPoints.size() - 1; i++) {
-            Vector2 a = profiledPoints.get(i).getPosition();
-            Vector2 b = profiledPoints.get(i + 1).getPosition();
-            Vector2 ab = b.sub(a);
-            Vector2 ar = robotPos.sub(a);
-
-            double abLenSq = ab.x * ab.x + ab.y * ab.y;
-            double t = 0.0;
-            if (abLenSq > 0) {
-                t = (ar.x * ab.x + ar.y * ab.y) / abLenSq;
-            }
-            t = Math.max(0.0, Math.min(1.0, t));
-
-            Vector2 closest = a.add(ab.mul(t));
-            double dist = closest.dist(robotPos);
-            if (dist < minDist) {
-                minDist = dist;
-                bestIndex = i;
-                bestT = t;
-            }
-        }
-
-        ProfiledPoint p0 = profiledPoints.get(bestIndex);
-        ProfiledPoint p1 = profiledPoints.get(bestIndex + 1);
-
-        // Interpolate fields
-        Vector2 position = p0.getPosition().mul(1 - bestT).add(p1.getPosition().mul(bestT));
-        Vector2 velocity = (p0.getVelocity() != null && p1.getVelocity() != null)
-                ? p0.getVelocity().mul(1 - bestT).add(p1.getVelocity().mul(bestT))
-                : new Vector2(0, 0);
-        double curvature = p0.getCurvature() * (1 - bestT) + p1.getCurvature() * bestT;
-        double acceleration = p0.getAcceleration() * (1 - bestT) + p1.getAcceleration() * bestT;
-        double time = p0.getTime() * (1 - bestT) + p1.getTime() * bestT;
-        double distance = p0.getDistance() * (1 - bestT) + p1.getDistance() * bestT;
-        double heading = interpolateHeading(p0.getHeading(), p1.getHeading(), bestT);
-        double rotVel = p0.getRotationalVelocity() * (1 - bestT) + p1.getRotationalVelocity() * bestT;
-
-        ProfiledPoint result = new ProfiledPoint(position, velocity, curvature, acceleration, time, distance);
-        result.setHeading(heading);
-        result.setRotationalVelocity(rotVel);
-        return result;
-    }
-
-    /** Convenience overload accepting coordinates */
-    public ProfiledPoint getClosestProfiledPoint(double rx, double ry) {
-        return getClosestProfiledPoint(new Vector2(rx, ry));
-    }
-    
     public Vector2 getStartPoint() {
-       return profiledPoints.get(0).getPosition();
+        return points.get(0).getPosition();
     }
 
     public double getStartHeading() {
-        return profiledPoints.get(0).getHeading();
+        return points.get(0).getHeading();
     }
 
     public double getDuration() {
-        return profiledPoints.get(profiledPoints.size()-1).getTime();
+        return points.get(points.size() - 1).getTime();
     }
 
-    private static double interpolateHeading(double startHeading, double endHeading, double ratio) {
-        double delta = endHeading - startHeading;
-        while (delta > Math.PI) {
-            delta -= 2.0 * Math.PI;
-        }
-        while (delta < -Math.PI) {
-            delta += 2.0 * Math.PI;
-        }
-        return startHeading + delta * ratio;
+    public List<PathPoint> getPoints() {
+        return points;
+    }
+
+    private static PathPoint interpolate(PathPoint p0, PathPoint p1, double a) {
+        PathPoint out = new PathPoint();
+        out.position = p0.position.mul(1 - a).add(p1.position.mul(a));
+        out.velocity = p0.velocity.mul(1 - a).add(p1.velocity.mul(a));
+        out.curvature = lerp(p0.curvature, p1.curvature, a);
+        out.acceleration = lerp(p0.acceleration, p1.acceleration, a);
+        out.s = lerp(p0.s, p1.s, a);
+        out.time = lerp(p0.time, p1.time, a);
+        out.heading = lerpHeading(p0.heading, p1.heading, a);
+        out.rotationalVelocity = lerp(p0.rotationalVelocity, p1.rotationalVelocity, a);
+        return out;
+    }
+
+    private static double lerp(double a, double b, double t) {
+        return a + (b - a) * t;
+    }
+
+    private static double lerpHeading(double h0, double h1, double t) {
+        double d = h1 - h0;
+        while (d > Math.PI)
+            d -= 2 * Math.PI;
+        while (d < -Math.PI)
+            d += 2 * Math.PI;
+        return h0 + d * t;
     }
 }
