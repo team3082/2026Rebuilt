@@ -2,6 +2,8 @@ package frc.robot.utils.trajectories;
 
 import java.util.*;
 
+import frc.robot.utils.Vector2;
+
 public class Trajectory {
 
     private static final int OVERSAMPLING_FACTOR = 100;
@@ -12,39 +14,6 @@ public class Trajectory {
     // =========================================================================
     // Public types
     // =========================================================================
-
-    public static class Vector2 {
-        public double x, y;
-
-        public Vector2() {
-        }
-
-        public Vector2(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public Vector2 add(Vector2 o) {
-            return new Vector2(x + o.x, y + o.y);
-        }
-
-        public Vector2 sub(Vector2 o) {
-            return new Vector2(x - o.x, y - o.y);
-        }
-
-        public Vector2 mul(double s) {
-            return new Vector2(x * s, y * s);
-        }
-
-        public double magnitude() {
-            return Math.hypot(x, y);
-        }
-
-        public Vector2 normalize() {
-            double m = magnitude();
-            return m > 1e-9 ? new Vector2(x / m, y / m) : new Vector2();
-        }
-    }
 
     public static class MotionSettings {
         public double maxTranslationalVelocity = 170.0;
@@ -377,7 +346,7 @@ public class Trajectory {
             for (int j = 1; j <= OVERSAMPLING_FACTOR; j++) {
                 double tp = (double) j / OVERSAMPLING_FACTOR;
                 Vector2 pos = curve.position(tp);
-                sLocal += pos.sub(last).magnitude();
+                sLocal += pos.sub(last).mag();
                 lut[j][0] = sLocal;
                 lut[j][1] = tp;
                 last = pos;
@@ -391,7 +360,7 @@ public class Trajectory {
                 Vector2 pos = curve.position(t);
                 if (!first && !path.isEmpty()) {
                     TrajPoint lp = path.get(path.size() - 1);
-                    if (pos.sub(new Vector2(lp.x, lp.y)).magnitude() < 1e-9) {
+                    if (pos.sub(new Vector2(lp.x, lp.y)).mag() < 1e-9) {
                         sAlong += SAMPLING_DISTANCE;
                         continue;
                     }
@@ -412,7 +381,7 @@ public class Trajectory {
         Vector2 lpos = anchors.get(anchors.size() - 1).position;
         if (!path.isEmpty()) {
             TrajPoint lp = path.get(path.size() - 1);
-            double d = lpos.sub(new Vector2(lp.x, lp.y)).magnitude();
+            double d = lpos.sub(new Vector2(lp.x, lp.y)).mag();
             if (d > 1e-9) {
                 TrajPoint pp = new TrajPoint();
                 pp.x = lpos.x;
@@ -544,7 +513,7 @@ public class Trajectory {
             double ds = dist[i] - dist[i - 1], vAvg = (vel[i] + vel[i - 1]) / 2, dt = vAvg > EPSILON ? ds / vAvg : 0;
             time += dt;
             TrajPoint p = pts.get(i);
-            p.velocity = new Vector2(pts.get(i).x - pts.get(i - 1).x, pts.get(i).y - pts.get(i - 1).y).normalize()
+            p.velocity = new Vector2(pts.get(i).x - pts.get(i - 1).x, pts.get(i).y - pts.get(i - 1).y).norm()
                     .mul(vel[i]);
             p.time = time;
             p.heading = headings[i];
@@ -762,7 +731,7 @@ public class Trajectory {
 
         double curvature(double t) {
             Vector2 d = derivative(t), dd = secondDerivative(t);
-            double den = Math.pow(d.magnitude(), 3);
+            double den = Math.pow(d.mag(), 3);
             return Math.abs(den) < 1e-9 ? 0 : (d.x * dd.y - d.y * dd.x) / den;
         }
     }

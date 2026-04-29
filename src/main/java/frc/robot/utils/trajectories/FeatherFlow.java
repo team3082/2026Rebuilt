@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.auto.commands.FollowPath;
 import frc.robot.swerve.SwervePosition;
+import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.FeatherPath.FeatherActionDescriptor;
 import frc.robot.utils.trajectories.FeatherPathDefinition.AnchorPoint;
 import frc.robot.utils.trajectories.FeatherPathDefinition.ControlPoint;
@@ -321,9 +322,9 @@ public class FeatherFlow {
         List<Trajectory.AnchorPoint> out = new ArrayList<>();
         for (AnchorPoint a : raw) {
             Trajectory.AnchorPoint ta = new Trajectory.AnchorPoint();
-            ta.position = new Trajectory.Vector2(a.position.x, a.position.y);
-            ta.handleInOffset = new Trajectory.Vector2(a.handleInOffset.x, a.handleInOffset.y);
-            ta.handleOutOffset = new Trajectory.Vector2(a.handleOutOffset.x, a.handleOutOffset.y);
+            ta.position = new Vector2(a.position.x, a.position.y);
+            ta.handleInOffset = new Vector2(a.handleInOffset.x, a.handleInOffset.y);
+            ta.handleOutOffset = new Vector2(a.handleOutOffset.x, a.handleOutOffset.y);
             ta.isCurved = a.isCurved;
             ta.handlesAligned = a.handlesAligned;
             ta.name = a.name;
