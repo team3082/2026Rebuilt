@@ -41,32 +41,32 @@ public final class Tuning {
     public static final double ROT_DEADBAND = 0.005; // radians
     
     // Holonomic Drive Controller
-    public static final double holonomic_pos_kp = 0.04;
-    public static final double holonomic_pos_ki = 0;
-    public static final double holonomic_pos_kd = 0.02;
-
-    public static final double holonomic_rot_kp = 0.45;
-    public static final double holonomic_rot_ki = 0.0;
-    public static final double holonomic_rot_kd = 0.06;
-
-
-    public static final double holonomic_vel_kp = 0.05;
-    public static final double holonomic_vel_ki = 0.0;
-    public static final double holonomic_vel_kd = 0.0;
-
-    // Holonomic Drive Controller 10k
-    // public static final double holonomic_pos_kp = 0.05;
-    // public static final double holonomic_pos_ki = 0.0001;
-    // public static final double holonomic_pos_kd = 0;
+    // public static final double holonomic_pos_kp = 0.04;
+    // public static final double holonomic_pos_ki = 0;
+    // public static final double holonomic_pos_kd = 0.02;
 
     // public static final double holonomic_rot_kp = 0.45;
-    // public static final double holonomic_rot_ki = 0.03;
+    // public static final double holonomic_rot_ki = 0.0;
     // public static final double holonomic_rot_kd = 0.06;
 
 
     // public static final double holonomic_vel_kp = 0.05;
     // public static final double holonomic_vel_ki = 0.0;
     // public static final double holonomic_vel_kd = 0.0;
+
+    // Holonomic Drive Controller 10k
+    public static final double holonomic_pos_kp = 0.05;
+    public static final double holonomic_pos_ki = 0;
+    public static final double holonomic_pos_kd = 0;
+
+    public static final double holonomic_rot_kp = 0.45;
+    public static final double holonomic_rot_ki = 0.03;
+    public static final double holonomic_rot_kd = 0.06;
+
+
+    public static final double holonomic_vel_kp = 0.05;
+    public static final double holonomic_vel_ki = 0.0;
+    public static final double holonomic_vel_kd = 0.0;
 
 
     // Trapezoidal Tuning

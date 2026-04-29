@@ -69,16 +69,16 @@ public class HolonomicDriveController {
                 .mul(1.0 / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
 
         // --- Feedback: PID correcting error toward the lookahead position current
-        // Vector2 currentPos = SwervePosition.getPosition();
-        // double xFeedback = xPositionPID.calculate(currentPos.x, currentPoint.getPosition().x);
-        // double yFeedback = yPositionPID.calculate(currentPos.y, currentPoint.getPosition().y);
-        // Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI / 2);
+        Vector2 currentPos = SwervePosition.getPosition();
+        double xFeedback = xPositionPID.calculate(currentPos.x, currentPoint.getPosition().x);
+        double yFeedback = yPositionPID.calculate(currentPos.y, currentPoint.getPosition().y);
+        Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI / 2);
 
         // --- Feedback: PID correcting error toward the lookahead position  10k
-        Vector2 currentPos = SwervePosition.getPosition();
-        double xFeedback = xPositionPID.calculate(currentPos.x, lookaheadPos.x);
-        double yFeedback = yPositionPID.calculate(currentPos.y, lookaheadPos.y);
-        Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI / 2);
+        // Vector2 currentPos = SwervePosition.getPosition();
+        // double xFeedback = xPositionPID.calculate(currentPos.x, lookaheadPos.x);
+        // double yFeedback = yPositionPID.calculate(currentPos.y, lookaheadPos.y);
+        // Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI / 2);
 
         // Sum FF and FB — FF drives the motion, FB corrects for drift.
         // Clamp to unit magnitude only if the sum exceeds it.
@@ -88,10 +88,13 @@ public class HolonomicDriveController {
         }
 
         // Log against the *current* desired position for error visibility
-            Vector2 desiredPos = path.getPointAtTime(currentTime).getPosition();
+        Vector2 desiredPos = path.getPointAtTime(currentTime).getPosition();
         Vector2 posError = desiredPos.sub(currentPos);
         SmartDashboard.putNumber("Holonomic/errorMag", posError.mag());
+        SmartDashboard.putNumber("Holonomic/errorDirection", Math.toDegrees(posError.norm().atan2()));
         SmartDashboard.putNumber("Holonomic/feedbackMag", feedbackVector.mag());
+        SmartDashboard.putNumber("Holonomic/feedbackDirection", Math.toDegrees(feedbackVector.norm().atan2()));
+
 
 
         return combined;

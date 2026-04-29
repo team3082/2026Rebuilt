@@ -98,7 +98,7 @@ public class FollowPath extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    SwerveManager.rotateAndDriveFF(0, new Vector2());
+    SwerveManager.rotateAndDrive(0, new Vector2());
 
     for (FeatherEvent event : events) {
       if (event.command.isScheduled()) {
