@@ -3,6 +3,7 @@ package frc.robot.auto.commands;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.ProfiledPath;
 import frc.robot.utils.trajectories.ProfiledPoint;
+import frc.robot.Constants;
 import frc.robot.Tuning;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
@@ -50,8 +51,7 @@ public class HolonomicDriveController {
      * @return Velocity command as a percentage (-1 to 1) per axis.
      */
     public Vector2 calculate() {
-        ProfiledPoint nearestPoint = path.getClosestProfiledPoint(SwervePosition.getPosition());
-        double currentTime = nearestPoint.getTime();
+        double currentTime = RTime.now() - startTime;
 
         if (currentTime >= path.getDuration()) {
             currentTime = path.getDuration();
@@ -63,18 +63,15 @@ public class HolonomicDriveController {
         double lookaheadTime = Math.min(currentTime + Tuning.holonomic_lookahead_time, path.getDuration());
         ProfiledPoint lookaheadPoint = path.getPointAtTime(lookaheadTime);
         ProfiledPoint currentPoint = path.getPointAtTime(currentTime);
-            ProfiledPoint nearestPoint = path.getClosestProfiledPoint(SwervePosition.getPosition());
-            double currentTime = (nearestPoint != null) ? nearestPoint.getTime() : (RTime.now() - startTime);
         Vector2 lookaheadPos = lookaheadPoint.getPosition();
-        // Vector2 desiredVelocity = currentPoint.getVelocity()
-        //         .rotate(-Math.PI / 2)
-        //         .mul(1.0 / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
-        Vector2 desiredVelocity = new Vector2();
+        Vector2 desiredVelocity = currentPoint.getVelocity()
+                .rotate(-Math.PI / 2)
+                .mul(1.0 / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
 
         // --- Feedback: PID correcting error toward the lookahead position ---
         Vector2 currentPos = SwervePosition.getPosition();
-        double xFeedback = xPositionPID.calculate(currentPos.x, lookaheadPos.x);
-        double yFeedback = yPositionPID.calculate(currentPos.y, lookaheadPos.y);
+        double xFeedback = xPositionPID.calculate(currentPos.x, currentPoint.getPosition().x);
+        double yFeedback = yPositionPID.calculate(currentPos.y, currentPoint.getPosition().y);
         Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI / 2);
 
         // Sum FF and FB — FF drives the motion, FB corrects for drift.

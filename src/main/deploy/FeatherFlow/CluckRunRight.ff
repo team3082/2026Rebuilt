@@ -222,13 +222,13 @@
       "name": ""
     },
     {
-      "id": 1777064238434,
+      "id": 1777394597018,
       "u": 3,
       "color": "blue",
       "attributes": [
         {
           "type": "rotate",
-          "heading": 174
+          "heading": 168
         }
       ],
       "name": ""
@@ -331,8 +331,8 @@
     }
   ],
   "created": "2026-04-23T21:07:22.121Z",
-  "lastModified": "2026-04-25T16:50:43.012Z",
+  "lastModified": "2026-04-28T16:44:23.054Z",
   "compiledVersion": 1,
-  "compiledAt": "2026-04-25T16:11:02.971Z",
+  "compiledAt": "2026-04-25T18:39:53.169Z",
   "compiledFileName": "CluckRunRight.fftraj.json"
 }
