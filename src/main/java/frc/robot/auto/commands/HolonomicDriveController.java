@@ -68,10 +68,16 @@ public class HolonomicDriveController {
                 .rotate(-Math.PI / 2)
                 .mul(1.0 / Constants.Swerve.PERCENT_OUT_TO_MOVE_VEL);
 
-        // --- Feedback: PID correcting error toward the lookahead position ---
+        // --- Feedback: PID correcting error toward the lookahead position current
+        // Vector2 currentPos = SwervePosition.getPosition();
+        // double xFeedback = xPositionPID.calculate(currentPos.x, currentPoint.getPosition().x);
+        // double yFeedback = yPositionPID.calculate(currentPos.y, currentPoint.getPosition().y);
+        // Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI / 2);
+
+        // --- Feedback: PID correcting error toward the lookahead position  10k
         Vector2 currentPos = SwervePosition.getPosition();
-        double xFeedback = xPositionPID.calculate(currentPos.x, currentPoint.getPosition().x);
-        double yFeedback = yPositionPID.calculate(currentPos.y, currentPoint.getPosition().y);
+        double xFeedback = xPositionPID.calculate(currentPos.x, lookaheadPos.x);
+        double yFeedback = yPositionPID.calculate(currentPos.y, lookaheadPos.y);
         Vector2 feedbackVector = new Vector2(xFeedback, yFeedback).rotate(-Math.PI / 2);
 
         // Sum FF and FB — FF drives the motion, FB corrects for drift.
