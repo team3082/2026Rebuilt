@@ -148,6 +148,18 @@ public class FeatherFlow {
         List<Trajectory.ControlPoint> cps = convertControlPoints(def.controlPoints);
         Trajectory.MotionSettings settings = convertMotionSettings(def.motionSettings);
 
+        //flip rotations
+        if (flipped){
+            for (Trajectory.ControlPoint controlPoint : cps){
+                for(Trajectory.ControlPointAttribute attribute : controlPoint.attributes){
+                    if(attribute.type == Trajectory.ControlPointAttributeType.ROTATE){
+                        //invert rotation
+                        attribute.heading = -attribute.heading + 180;
+                    }
+                }
+            }
+        }
+
         Trajectory.TrajectoryResult result = Trajectory.computeTravelTime(anchors, cps, settings);
 
         if (result.points.isEmpty())

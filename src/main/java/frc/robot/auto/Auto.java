@@ -34,13 +34,25 @@ public class Auto {
         Pigeon.setYaw(-90);
 
         return new SequentialCommandGroup(
- 
+            new StartIntake(),
             FeatherFlow.buildFeatherAuto("CluckRunRight",
                 new Shoot(),
                 new Shoot()
             )
         ); 
     }
+
+    @AutoRoutine
+    public SequentialCommandGroup backupAndShoot(){
+        Pigeon.setYaw(0);
+
+        return new SequentialCommandGroup(
+            new RotateAndDriveTo(
+                Pigeon.getRotationRad(), SwervePosition.getPosition().add(new Vector2(5*12, 0))
+            ),
+            new Shoot()
+        );
+    }   
 
     @AutoRoutine()
     public SequentialCommandGroup CluckRunLeft() {
