@@ -104,6 +104,8 @@ public class OI {
             ShooterManager.setManualTower();
         } else if (operatorStick.getRawButton(manualTrenchToggle)) {
             ShooterManager.setManualTrench();
+        } else if (operatorStick.getRawButton(LogitechF310.BUTTON_X)) {
+            ShooterManager.setManualPass();
         } else {
             ShooterManager.setNormalAiming();
         }

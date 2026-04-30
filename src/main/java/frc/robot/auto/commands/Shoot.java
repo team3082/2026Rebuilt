@@ -20,7 +20,7 @@ public class Shoot extends Command {
 
     @ChickenPlannable
     public Shoot() {
-        this(4.5); // Default 4 second duration
+        this(6); // Default 4 second duration
     }
 
     @ChickenPlannable

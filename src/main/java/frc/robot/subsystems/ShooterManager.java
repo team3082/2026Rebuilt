@@ -15,6 +15,7 @@ public class ShooterManager {
         NORMAL,
         MANUAL_TOWER,
         MANUAL_TRENCH,
+        MANUAL_PASS,
     }
 
     // default to safe values so Telemetry static init can't NPE before init() is called
@@ -79,6 +80,10 @@ public class ShooterManager {
         targetingState = ShooterManagerState.MANUAL_TRENCH;
     }
 
+    public static void setManualPass() {
+        targetingState = ShooterManagerState.MANUAL_PASS;
+    }
+
     public static void shoot() {
         if (shooterState != ShooterState.SHOOTING) {
             shooterState = ShooterState.REVVING;
@@ -129,6 +134,10 @@ public class ShooterManager {
                 Shooter.setTargetSpeed(2350);
                 Shooter.setTargetAngle(0);
                 break;
+
+            case MANUAL_PASS:
+                Shooter.setTargetSpeed(4400);
+                Shooter.setTargetAngle(Math.toRadians(15.0));
         }
         
     }

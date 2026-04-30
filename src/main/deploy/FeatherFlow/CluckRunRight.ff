@@ -92,7 +92,7 @@
     {
       "position": {
         "x": 500,
-        "y": 292
+        "y": 290
       },
       "handleOutOffset": {
         "x": 0,
@@ -180,7 +180,7 @@
     {
       "position": {
         "x": 500,
-        "y": 292
+        "y": 290
       },
       "handleOutOffset": {
         "x": -70.36039786724174,
@@ -362,7 +362,7 @@
     }
   ],
   "created": "2026-04-23T21:07:22.121Z",
-  "lastModified": "2026-04-30T00:04:55.076Z",
+  "lastModified": "2026-04-30T14:18:27.389Z",
   "compiledVersion": 1,
   "compiledAt": "2026-04-25T18:39:53.169Z",
   "compiledFileName": "CluckRunRight.fftraj.json"

@@ -5,7 +5,7 @@
     {
       "position": {
         "x": 500,
-        "y": 292
+        "y": 290
       },
       "handleOutOffset": {
         "x": 0,
@@ -93,7 +93,7 @@
     {
       "position": {
         "x": 500,
-        "y": 292
+        "y": 290
       },
       "handleOutOffset": {
         "x": 31.516639778664402,
@@ -172,7 +172,7 @@
     }
   ],
   "created": "2026-04-24T22:10:07.229Z",
-  "lastModified": "2026-04-25T15:46:22.335Z",
+  "lastModified": "2026-04-30T14:09:45.743Z",
   "compiledVersion": 1,
   "compiledAt": "2026-04-25T15:37:18.710Z",
   "compiledFileName": "CoopSteal.fftraj.json"
