@@ -48,7 +48,7 @@ public class Auto {
 
         return new SequentialCommandGroup(
             new RotateAndDriveTo(
-                Pigeon.getRotationRad(), SwervePosition.getPosition().add(new Vector2(5*12, 0))
+                Pigeon.getRotationRad(), parsePosition(new Vector2(570.25, 159.07))
             ),
             new Shoot()
         );
