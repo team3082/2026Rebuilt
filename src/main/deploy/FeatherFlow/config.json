@@ -25,12 +25,12 @@
     {
       "position": {
         "x": 500,
-        "y": 290
+        "y": 292
       },
       "name": "Trench Right Alliance Side",
       "color": "blue",
       "enabled": true,
-      "locked": false,
+      "locked": true,
       "id": "snap-1772253433219"
     },
     {
@@ -105,10 +105,10 @@
     "radius": 6
   },
   "motionSettings": {
-    "maxTranslationalVelocity": 125,
+    "maxTranslationalVelocity": 120,
     "maxRotationalVelocity": 5,
-    "maxWheelSpeed": 125,
-    "maxAcceleration": 125,
+    "maxWheelSpeed": 120,
+    "maxAcceleration": 120,
     "maxLateralAcceleration": 120,
     "swerveRadius": 16
   }
