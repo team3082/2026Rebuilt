@@ -39,7 +39,7 @@
     },
     {
       "position": {
-        "x": 337.08450069268315,
+        "x": 340,
         "y": 224.75148064373911
       },
       "handleOutOffset": {
@@ -252,8 +252,8 @@
       "attributes": [
         {
           "type": "motionLimits",
-          "velocity": 100,
-          "acceleration": 100
+          "velocity": 110,
+          "acceleration": 110
         }
       ],
       "name": ""
@@ -342,8 +342,8 @@
       "attributes": [
         {
           "type": "motionLimits",
-          "velocity": 100,
-          "acceleration": 100
+          "velocity": 110,
+          "acceleration": 110
         }
       ],
       "name": ""
@@ -374,7 +374,7 @@
     }
   ],
   "created": "2026-04-29T22:47:37.518Z",
-  "lastModified": "2026-04-29T22:56:52.049Z",
+  "lastModified": "2026-04-30T00:06:03.204Z",
   "compiledVersion": 1,
   "compiledAt": "2026-04-25T18:39:53.169Z",
   "compiledFileName": "CluckRunLeft.fftraj.json"
