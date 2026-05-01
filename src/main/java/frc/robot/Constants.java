@@ -131,7 +131,7 @@ public class Constants {
 
         public static final double FLYWHEEL_DIAMETER = 4.0;
 
-        public static final double HOOD_MAX_ANGLE = Math.toRadians(35.0);
+        public static final double HOOD_MAX_ANGLE = Math.toRadians(27.0);
         public static final double HOOD_ANGLE_OFFSET = Math.toRadians(25.0);
 
         public static final double RPM_DROP = 50; // amount that rpm drops when ball is shot

@@ -161,7 +161,7 @@
     },
     {
       "position": {
-        "x": 415,
+        "x": 410,
         "y": 292
       },
       "handleOutOffset": {
@@ -174,8 +174,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "Second Return",
-      "snapPointId": "snap-1772253494052"
+      "name": "Second Return"
     },
     {
       "position": {
@@ -382,7 +381,7 @@
     }
   ],
   "created": "2026-04-23T21:07:22.121Z",
-  "lastModified": "2026-05-01T15:02:59.709Z",
+  "lastModified": "2026-05-01T22:27:09.432Z",
   "compiledVersion": 1,
   "compiledAt": "2026-04-25T18:39:53.169Z",
   "compiledFileName": "CluckRunRight.fftraj.json"

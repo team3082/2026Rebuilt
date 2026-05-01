@@ -96,7 +96,7 @@ public class Shooter {
      * @param angle Target angle in radians
      */
     public static void setTargetAngle(double angle) {
-        targetHoodAngle = angle;
+        targetHoodAngle = Math.min(angle, Constants.Shooter.HOOD_MAX_ANGLE);
     }
 
     public static double getTargetAngle() {
