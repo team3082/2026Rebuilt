@@ -105,10 +105,10 @@
     "radius": 6
   },
   "motionSettings": {
-    "maxTranslationalVelocity": 120,
+    "maxTranslationalVelocity": 150,
     "maxRotationalVelocity": 5,
-    "maxWheelSpeed": 120,
-    "maxAcceleration": 120,
+    "maxWheelSpeed": 150,
+    "maxAcceleration": 150,
     "maxLateralAcceleration": 120,
     "swerveRadius": 16
   }

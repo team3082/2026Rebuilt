@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Swerve;
 import frc.robot.auto.commands.FollowCurve;
@@ -18,6 +21,7 @@ import frc.robot.auto.routineManager.RoutineManager;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.kade.LinearBezier;
 import frc.robot.utils.trajectories.FeatherFlow;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.swerve.SwervePosition;
 
@@ -37,7 +41,13 @@ public class Auto {
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("CluckRunRight",
                 new Shoot(),
-                new Shoot()
+                new ParallelCommandGroup(
+                    new InstantCommand(()->{
+                        Intake.reverse();
+                    }),
+                    new WaitCommand(.3)
+                )
+                
             )
         ); 
     }
@@ -60,7 +70,12 @@ public class Auto {
         return new SequentialCommandGroup(
             FeatherFlow.buildFeatherAuto("CluckRunLeft", true, true,
                 new Shoot(),
-                new Shoot()
+                new ParallelCommandGroup(
+                    new InstantCommand(()->{
+                        Intake.reverse();
+                    }),
+                    new WaitCommand(.3)
+                )
             )
         ); 
     }
