@@ -370,19 +370,31 @@
     },
     {
       "id": 1777065284225,
-      "u": 10,
+      "u": 9.43,
       "color": "red",
       "attributes": [
         {
           "type": "command",
-          "stopping": true
+          "stopping": false
+        }
+      ],
+      "name": ""
+    },
+    {
+      "id": 1777647799203,
+      "u": 10,
+      "color": "blue",
+      "attributes": [
+        {
+          "type": "stop",
+          "duration": 0.5
         }
       ],
       "name": ""
     }
   ],
   "created": "2026-04-30T22:55:04.740Z",
-  "lastModified": "2026-04-30T23:00:20.970Z",
+  "lastModified": "2026-05-01T18:29:12.452Z",
   "compiledVersion": 1,
   "compiledAt": "2026-04-25T18:39:53.169Z",
   "compiledFileName": "CluckRunLeft.fftraj.json"

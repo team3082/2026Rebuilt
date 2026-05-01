@@ -7,6 +7,7 @@ import frc.robot.subsystems.states.ShooterState;
 import frc.robot.subsystems.states.ShooterTarget;
 import frc.robot.swerve.Odometry;
 import frc.robot.swerve.SwervePID;
+import frc.robot.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 
 public class ShooterManager {
@@ -146,7 +147,8 @@ public class ShooterManager {
         Vector2 shooterPos = Odometry.getPosition();
 
         // gets distance between shooter and target
-        double distance = target.pos.sub(shooterPos).mag();
+        Vector2 targetPosition = new Vector2(target.pos.x, SwervePosition.getPosition().y);
+        double distance = targetPosition.sub(shooterPos).mag();
 
         // based on distance, uses shooter table to set flywheel speeds for different ranges of distances
         for (int i = Tuning.Shooter.SHOOTER_TABLE_PASSING.length - 1; i >= 0; i--) {

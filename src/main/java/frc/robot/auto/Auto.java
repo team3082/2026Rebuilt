@@ -41,12 +41,10 @@ public class Auto {
             new StartIntake(),
             FeatherFlow.buildFeatherAuto("CluckRunRight",
                 new Shoot(),
-                new ParallelCommandGroup(
-                    new InstantCommand(()->{
-                        Intake.reverse();
-                    }),
-                    new WaitCommand(.3)
-                )
+                new InstantCommand(()->{
+                    System.out.println("OUTAKEE");
+                    Intake.reverse();
+                })
                 
             )
         ); 
@@ -70,12 +68,10 @@ public class Auto {
         return new SequentialCommandGroup(
             FeatherFlow.buildFeatherAuto("CluckRunLeft", true, true,
                 new Shoot(),
-                new ParallelCommandGroup(
-                    new InstantCommand(()->{
-                        Intake.reverse();
-                    }),
-                    new WaitCommand(.3)
-                )
+                new InstantCommand(()->{
+                    System.out.println("OUTAKEE");
+                    Intake.reverse();
+                })
             )
         ); 
     }

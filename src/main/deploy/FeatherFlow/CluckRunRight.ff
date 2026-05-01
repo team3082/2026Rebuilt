@@ -17,7 +17,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "Start"
     },
     {
       "position": {
@@ -34,7 +34,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "First Out",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -52,7 +52,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "FIrst Furthest"
     },
     {
       "position": {
@@ -69,7 +69,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "First Lowest"
     },
     {
       "position": {
@@ -86,7 +86,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "First Return",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -104,7 +104,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Shoot",
       "snapPointId": "snap-1772253433219"
     },
     {
@@ -122,7 +122,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Second Out",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -140,7 +140,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "Second Bottom"
     },
     {
       "position": {
@@ -157,7 +157,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "Second Bottom"
     },
     {
       "position": {
@@ -174,7 +174,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": "",
+      "name": "Second Return",
       "snapPointId": "snap-1772253494052"
     },
     {
@@ -192,7 +192,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "Outake"
     },
     {
       "position": {
@@ -209,7 +209,7 @@
       },
       "isCurved": true,
       "handlesAligned": true,
-      "name": ""
+      "name": "Neutral Zone"
     }
   ],
   "controlPoints": [
@@ -228,7 +228,7 @@
           "acceleration": 120
         }
       ],
-      "name": ""
+      "name": "Starting Rotation/Limit"
     },
     {
       "id": 1777064225487,
@@ -240,7 +240,7 @@
           "heading": 277
         }
       ],
-      "name": ""
+      "name": "Rotation Middle"
     },
     {
       "id": 1777394597018,
@@ -252,12 +252,12 @@
           "heading": 168
         }
       ],
-      "name": ""
+      "name": "Rotation Bottom"
     },
     {
       "id": 1777502677940,
       "u": 3.7,
-      "color": "blue",
+      "color": "purple",
       "attributes": [
         {
           "type": "motionLimits",
@@ -265,19 +265,19 @@
           "acceleration": 100
         }
       ],
-      "name": ""
+      "name": "Slow Down Limit"
     },
     {
       "id": 1777064261918,
       "u": 4,
-      "color": "purple",
+      "color": "blue",
       "attributes": [
         {
           "type": "rotate",
           "heading": 180
         }
       ],
-      "name": ""
+      "name": "Shoot Rotation"
     },
     {
       "id": 1777064288588,
@@ -294,7 +294,7 @@
           "acceleration": 150
         }
       ],
-      "name": ""
+      "name": "Shoot/Speed Up"
     },
     {
       "id": 1777064372246,
@@ -306,7 +306,7 @@
           "heading": 180
         }
       ],
-      "name": ""
+      "name": "Rotate Out"
     },
     {
       "id": 1777064308332,
@@ -315,10 +315,10 @@
       "attributes": [
         {
           "type": "rotate",
-          "heading": 252
+          "heading": 263
         }
       ],
-      "name": ""
+      "name": "Intake Rotate"
     },
     {
       "id": 1777064327215,
@@ -330,7 +330,7 @@
           "heading": -44
         }
       ],
-      "name": ""
+      "name": "Return Rotate"
     },
     {
       "id": 1777064406779,
@@ -342,7 +342,7 @@
           "heading": 58
         }
       ],
-      "name": ""
+      "name": "Return Rotate"
     },
     {
       "id": 1777064491287,
@@ -354,7 +354,19 @@
           "heading": 180
         }
       ],
-      "name": ""
+      "name": "Return ROtate"
+    },
+    {
+      "id": 1777646732014,
+      "u": 9.34,
+      "color": "red",
+      "attributes": [
+        {
+          "type": "command",
+          "stopping": false
+        }
+      ],
+      "name": "Outake"
     },
     {
       "id": 1777065284225,
@@ -362,15 +374,15 @@
       "color": "red",
       "attributes": [
         {
-          "type": "command",
-          "stopping": true
+          "type": "stop",
+          "duration": 0.5
         }
       ],
       "name": ""
     }
   ],
   "created": "2026-04-23T21:07:22.121Z",
-  "lastModified": "2026-04-30T23:00:40.115Z",
+  "lastModified": "2026-05-01T15:02:59.709Z",
   "compiledVersion": 1,
   "compiledAt": "2026-04-25T18:39:53.169Z",
   "compiledFileName": "CluckRunRight.fftraj.json"

@@ -132,6 +132,10 @@ public class OI {
         Vector2 shotAim = shotTarget.sub(predictedPos);
 
         double targetAngle = Math.atan2(shotAim.y, shotAim.x) + Math.PI;
+        
+        if(target == ShooterTarget.PASS_LEFT || target == ShooterTarget.PASS_RIGHT){
+            targetAngle = Math.toRadians(180);
+        }
 
         SwervePID.setDestState(Odometry.getPosition(), targetAngle);
 
