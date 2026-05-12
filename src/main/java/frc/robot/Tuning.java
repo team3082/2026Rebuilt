@@ -114,15 +114,15 @@ public final class Tuning {
         public static final double HOOD_ZEROING_SPEED = -0.2;
 
         public static final ShooterTableValue[] SHOOTER_TABLE_HUB = {
-            new ShooterTableValue(75.0, Math.toRadians(25.0), 2125),  //g
-            new ShooterTableValue(90.0, Math.toRadians(25.0), 2150),  //g
-            new ShooterTableValue(106.0, Math.toRadians(25.0), 2250), //
-            new ShooterTableValue(120.0, Math.toRadians(25.0), 2320), //g
-            new ShooterTableValue(136.0, Math.toRadians(25.0), 2425), //g
-            new ShooterTableValue(150.0, Math.toRadians(25.0), 2520), //g
-            new ShooterTableValue(165.0, Math.toRadians(30.0), 2550), //g
-            new ShooterTableValue(187.0, Math.toRadians(34.0), 2650), //prettygood
-            new ShooterTableValue(220.0, Math.toRadians(38.0), 2700)  //g
+            new ShooterTableValue(75.0, Math.toRadians(25.0), 1925),  //g
+            new ShooterTableValue(90.0, Math.toRadians(25.0), 1950),  //g
+            new ShooterTableValue(106.0, Math.toRadians(25.0), 2100), //g
+            new ShooterTableValue(120.0, Math.toRadians(25.0), 2120), //g
+            new ShooterTableValue(136.0, Math.toRadians(25.0), 2225), //g
+            new ShooterTableValue(150.0, Math.toRadians(25.0), 2370), //g
+            new ShooterTableValue(165.0, Math.toRadians(30.0), 2430), //g
+            new ShooterTableValue(187.0, Math.toRadians(34.0), 2530), //
+            new ShooterTableValue(220.0, Math.toRadians(38.0), 2725)  //
         };
 
         public static final ShooterTableValue[] SHOOTER_TABLE_PASSING = {
